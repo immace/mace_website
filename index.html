@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Мацэ — Графический и Веб-дизайнер</title>
+  <style>
+    :root { --accent:#8ECDF3; --gap:16px; --maxw:1000px; }
+    :root {
+  --accent: #8ECDF3; /* небесно-голубой */
+  --gap: 16px;
+  --maxw: 1000px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+}
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 14px;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.hero {
+  padding: 10vh 0 6vh;
+}
+
+h1 {
+  font-size: clamp(32px, 6.5vw, 76px);
+  margin: 0;
+  line-height: 0.96;
+}
+
+.accent {
+  width: 56px;
+  height: 6px;
+  background: var(--accent);
+  margin-top: 14px;
+}
+
+section {
+  padding: 7vh 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+}
+
+.card {
+  grid-column: span 4;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+@media (max-width: 920px) {
+  .card {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    grid-column: span 12;
+  }
+}
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.contacts a {
+  margin-right: 10px;
+}
+
+footer {
+  border-top: 1px solid #eee;
+  padding: 14px 0;
+  color: #777;
+  font-size: 14px;
+}
+
+  </style>
+</head>
+<body>
+  <header><div class="wrap nav"><div>Мацэ</div><nav><a href="#portfolio">Портфолио</a></nav></div></header>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Мацэ — Графический и Веб-дизайнер</h1>
+      <div class="accent"></div>
+    </section>
+    <section id="portfolio">
+      <div class="grid">
+        <figure class="card"><img src="assets/thumb-01.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-02.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-03.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-04.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-05.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-06.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-07.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-08.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-09.jpg" alt="Работа" loading="lazy"/></figure><figure class="card"><img src="assets/thumb-10.jpg" alt="Работа" loading="lazy"/></figure>
+      </div>
+    </section>
+    <section id="contacts">
+      <a href="mailto:mace4681@gmail.com">mace4681@gmail.com</a> ·
+      <a href="https://instagram.com/immalcev" target="_blank">insta: @immalcev</a> ·
+      <a href="https://instagram.com/authent.art" target="_blank">@authent.art</a>
+    </section>
+  </main>
+  <footer><div class="wrap">© Мацэ</div></footer>
+</body>
+</html>
