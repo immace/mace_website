@@ -200,7 +200,6 @@ footer {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  height: 40vh;
 }
 
 .carousel-track {
@@ -212,9 +211,18 @@ footer {
 
 .carousel-track img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
   flex-shrink: 0;
+}
+
+@media (min-width: 769px) {
+  .carousel {
+    height: 40vh;
+  }
+
+  .carousel-track img {
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 @media (max-width: 768px) {
