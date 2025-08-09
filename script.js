@@ -128,6 +128,115 @@ document.addEventListener('DOMContentLoaded', () => {
 
   observer.observe(hero);
 
+  function setupCarousel(carousel) {
+    const track = carousel.querySelector('.carousel-track');
+    const slides = Array.from(track.children);
+    if (slides.length === 0) return;
+
+    const firstClone = slides[0].cloneNode(true);
+    const lastClone = slides[slides.length - 1].cloneNode(true);
+    firstClone.dataset.clone = 'first';
+    lastClone.dataset.clone = 'last';
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, track.firstChild);
+
+    let index = 1;
+    let width = carousel.clientWidth;
+    track.style.transform = `translateX(-${width * index}px)`;
+
+    function updateWidth() {
+      width = carousel.clientWidth;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${width * index}px)`;
+    }
+    window.addEventListener('resize', updateWidth);
+
+    let intervalId;
+    const startAuto = () => {
+      intervalId = setInterval(() => moveToSlide(index + 1), 3000);
+    };
+    const stopAuto = () => clearInterval(intervalId);
+
+    function moveToSlide(newIndex) {
+      index = newIndex;
+      track.style.transition = 'transform 0.5s ease';
+      track.style.transform = `translateX(-${width * index}px)`;
+    }
+
+    track.addEventListener('transitionend', () => {
+      const slides = track.children;
+      if (slides[index].dataset.clone === 'last') {
+        index = slides.length - 2;
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${width * index}px)`;
+      }
+      if (slides[index].dataset.clone === 'first') {
+        index = 1;
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${width * index}px)`;
+      }
+    });
+
+    let startX = 0;
+    let delta = 0;
+    let isDown = false;
+
+    const handlePointerMove = (e) => {
+      if (!isDown) return;
+      delta = e.clientX - startX;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(${-width * index + delta}px)`;
+    };
+
+    const handlePointerUp = () => {
+      if (!isDown) return;
+      isDown = false;
+      track.style.transition = 'transform 0.5s ease';
+      if (Math.abs(delta) > width / 4) {
+        if (delta > 0) {
+          moveToSlide(index - 1);
+        } else {
+          moveToSlide(index + 1);
+        }
+      } else {
+        moveToSlide(index);
+      }
+      delta = 0;
+      startAuto();
+    };
+
+    carousel.addEventListener('pointerdown', (e) => {
+      startX = e.clientX;
+      isDown = true;
+      stopAuto();
+    });
+    carousel.addEventListener('pointermove', handlePointerMove);
+    carousel.addEventListener('pointerup', handlePointerUp);
+    carousel.addEventListener('pointerleave', handlePointerUp);
+    carousel.addEventListener('pointercancel', handlePointerUp);
+
+    const adjustHeight = () => {
+      const mobile = window.innerWidth <= 768;
+      const portrait = Array.from(track.querySelectorAll('img')).some(img => img.naturalHeight > img.naturalWidth);
+      const h = mobile && portrait ? '60vh' : '44vh';
+      carousel.style.height = h;
+    };
+
+    const images = track.querySelectorAll('img');
+    let loaded = 0;
+    images.forEach(img => {
+      img.addEventListener('load', () => {
+        loaded++;
+        if (loaded === images.length) {
+          adjustHeight();
+        }
+      });
+    });
+    window.addEventListener('resize', adjustHeight);
+
+    startAuto();
+  }
+
   // Generate portfolio posts with image carousels
   const assetFiles = [
     'Айдентика-Ростов-1.jpg',
@@ -198,8 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
       img.alt = `${post.category} ${post.name}`;
       track.appendChild(img);
     });
-    // Duplicate images for seamless scroll
-    track.innerHTML += track.innerHTML;
     carousel.appendChild(track);
     wrapper.appendChild(carousel);
 
@@ -207,8 +314,8 @@ document.addEventListener('DOMContentLoaded', () => {
     bottomTitle.className = 'post-description';
     bottomTitle.textContent = post.name;
     wrapper.appendChild(bottomTitle);
-
     portfolio.appendChild(wrapper);
+    setupCarousel(carousel);
   });
 });
 
