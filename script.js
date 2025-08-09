@@ -1,9 +1,8 @@
-// Name scramble animation and role rotation
+// Name scramble animation and header visibility
 
 document.addEventListener('DOMContentLoaded', () => {
   const nameEl = document.getElementById('name');
-  let roleEl = document.getElementById('role');
-  const roleWrapper = document.querySelector('.role-wrapper');
+  const headerNameEl = document.getElementById('header-name');
 
   // TextScramble class for letter shuffling effect
   class TextScramble {
@@ -62,51 +61,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const phrases = [
     'Дима Мальцев',
-    'Дима',
-    'Маце',
     'Мацэ'
   ];
 
-  const fx = new TextScramble(nameEl);
+  const fxMain = new TextScramble(nameEl);
+  const fxHeader = new TextScramble(headerNameEl);
   let counter = 0;
   function next() {
-    fx.setText(phrases[counter]).then(() => {
-      setTimeout(next, 8000);
+    const phrase = phrases[counter];
+    Promise.all([
+      fxMain.setText(phrase),
+      fxHeader.setText(phrase)
+    ]).then(() => {
+      setTimeout(next, 15000);
     });
     counter = (counter + 1) % phrases.length;
   }
   next();
 
-  // Role rotation
-  const roles = [
-    'Графический дизайнер',
-    'Веб-дизайнер',
-    'Иллюстратор',
-    'Дизайнер шрифтов',
-    'Дизайнер айдентики',
-    'Дизайнер постеров'
-  ];
-  let roleIndex = 0;
-  roleEl.textContent = roles[roleIndex];
+  const header = document.querySelector('header');
+  const hero = document.querySelector('.hero');
 
-  function changeRole() {
-    const nextIndex = (roleIndex + 1) % roles.length;
-    const next = document.createElement('span');
-    next.textContent = roles[nextIndex];
-    next.classList.add('slide-in');
-    roleWrapper.appendChild(next);
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        header.classList.remove('visible');
+      } else {
+        header.classList.add('visible');
+      }
+    });
+  });
 
-    roleEl.classList.add('slide-out');
-
-    setTimeout(() => {
-      roleWrapper.removeChild(roleEl);
-      next.id = 'role';
-      roleEl = next;
-    }, 500);
-
-    roleIndex = nextIndex;
-  }
-
-  setInterval(changeRole, 5000);
+  observer.observe(hero);
 });
 
