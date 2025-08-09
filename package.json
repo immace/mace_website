@@ -1,0 +1,12 @@
+{
+  "name": "mace_website",
+  "version": "1.0.0",
+  "description": "My website project",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [],
+  "author": "immace",
+  "license": "MIT"
+}
