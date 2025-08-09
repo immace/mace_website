@@ -183,13 +183,11 @@ footer {
 }
 
 /* Instagram-style posts */
+/*. Instagram-style posts */
 .posts {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
 }
 
 .post {
@@ -200,9 +198,10 @@ footer {
 .carousel {
   position: relative;
   overflow: hidden;
-  width: 100%;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   height: 44vh;
-  margin: 0 auto;
 }
 
 .carousel-track {
@@ -224,6 +223,7 @@ footer {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    height: auto;
   }
 
   .carousel::-webkit-scrollbar {
@@ -236,41 +236,50 @@ footer {
 
   .carousel-track img {
     width: 100%;
+    height: auto;
     border: 1px solid #eee;
     border-radius: 16px;
     scroll-snap-align: center;
   }
 
   .carousel-indicators {
-    position: absolute;
+    position: sticky;
     bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
     display: flex;
+    justify-content: center;
     gap: 6px;
+    pointer-events: none;
   }
 
   .carousel-indicators span {
-    width: 8px;
-    height: 8px;
-    background: #ccc;
+    width: 6px;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
   }
 
   .carousel-indicators span.active {
+    width: 8px;
+    height: 8px;
     background: var(--sky);
   }
 }
 
 .post-title {
-  margin: 8px 0;
+  margin: 8px auto;
   font-size: 24px;
+  max-width: var(--maxw);
+  padding: 0 14px;
 }
 
 .post-description {
-  margin: 8px 0 0;
+  margin: 8px auto 0;
   font-size: 16px;
   color: #555;
+  max-width: var(--maxw);
+  padding: 0 14px;
 }
 
 @media (min-width: 1024px) {
