@@ -133,12 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const images = Array.from(track.children);
     if (images.length === 0) return;
 
-    // duplicate images for seamless looping
-    images.forEach(img => track.appendChild(img.cloneNode(true)));
+    const mobile = window.innerWidth <= 768;
 
-    // adjust height depending on image orientation and viewport
     const adjustHeight = () => {
-      const mobile = window.innerWidth <= 768;
       const portrait = images.some(img => img.naturalHeight > img.naturalWidth);
       const h = mobile && portrait ? '60vh' : '44vh';
       carousel.style.height = h;
@@ -154,6 +151,31 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
     window.addEventListener('resize', adjustHeight);
+
+    if (mobile) {
+      if (images.length > 1) {
+        const indicators = document.createElement('div');
+        indicators.className = 'carousel-indicators';
+        images.forEach((_, i) => {
+          const dot = document.createElement('span');
+          if (i === 0) dot.classList.add('active');
+          indicators.appendChild(dot);
+        });
+        carousel.appendChild(indicators);
+
+        const updateIndicators = () => {
+          const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+          indicators.querySelectorAll('span').forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+          });
+        };
+        carousel.addEventListener('scroll', updateIndicators);
+      }
+      return;
+    }
+
+    // duplicate images for seamless looping on desktop
+    images.forEach(img => track.appendChild(img.cloneNode(true)));
 
     // continuous animation using requestAnimationFrame
     let pos = 0;
