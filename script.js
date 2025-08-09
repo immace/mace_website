@@ -1,12 +1,14 @@
-// Name scramble animation and header visibility
+// ============================
+//  Script for mace.art
+// ============================
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ----------------------------
+  // 1) Text scramble (имя в хиро и в шапке)
+  // ----------------------------
   const nameEl = document.getElementById('name');
   const headerNameEl = document.getElementById('header-name');
-  let roleEl = document.getElementById('role');
-  const roleWrapper = document.querySelector('.role-wrapper');
 
-  // TextScramble class for letter shuffling effect
   class TextScramble {
     constructor(el) {
       this.el = el;
@@ -16,14 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setText(newText) {
       const oldText = this.el.innerText;
       const length = Math.max(oldText.length, newText.length);
-      const promise = new Promise(resolve => this.resolve = resolve);
+      const promise = new Promise(resolve => (this.resolve = resolve));
       this.queue = [];
       for (let i = 0; i < length; i++) {
         const from = oldText[i] || '';
         const to = newText[i] || '';
         const start = Math.floor(Math.random() * 20);
         const end = start + Math.floor(Math.random() * 20);
-        this.queue.push({from, to, start, end});
+        this.queue.push({ from, to, start, end });
       }
       cancelAnimationFrame(this.frameRequest);
       this.frame = 0;
@@ -34,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let output = '';
       let complete = 0;
       for (let i = 0, n = this.queue.length; i < n; i++) {
-        let {from, to, start, end, char} = this.queue[i];
+        let { from, to, start, end, char } = this.queue[i];
         if (this.frame >= end) {
           complete++;
           output += to;
@@ -61,27 +63,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const phrases = [
-    'Дима Мальцев',
-    'Мацэ'
-  ];
-
+  const phrases = ['Дима Мальцев', 'Мацэ'];
   const fxMain = new TextScramble(nameEl);
   const fxHeader = new TextScramble(headerNameEl);
-  let counter = 0;
-  function next() {
-    const phrase = phrases[counter];
-    Promise.all([
-      fxMain.setText(phrase),
-      fxHeader.setText(phrase)
-    ]).then(() => {
-      setTimeout(next, 15000);
+  let p = 0;
+  const loopPhrases = () => {
+    const phrase = phrases[p];
+    Promise.all([fxMain.setText(phrase), fxHeader.setText(phrase)]).then(() => {
+      setTimeout(loopPhrases, 15000);
     });
-    counter = (counter + 1) % phrases.length;
-  }
-  next();
+    p = (p + 1) % phrases.length;
+  };
+  loopPhrases();
 
-  // Role rotation
+  // ----------------------------
+  // 2) Role rotator (смена профессий)
+  // ----------------------------
+  const roleWrapper = document.querySelector('.role-wrapper');
+  let roleEl = document.getElementById('role');
   const roles = [
     'Графический дизайнер',
     'Веб-дизайнер',
@@ -110,30 +109,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     roleIndex = nextIndex;
   }
-
   setInterval(changeRole, 5000);
 
+  // ----------------------------
+  // 3) Плавающая шапка: скрывать/показывать
+  // ----------------------------
   const header = document.querySelector('header');
   const hero = document.querySelector('.hero');
-
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        header.classList.remove('visible');
-      } else {
-        header.classList.add('visible');
-      }
+      if (entry.isIntersecting) header.classList.remove('visible');
+      else header.classList.add('visible');
     });
   });
-
   observer.observe(hero);
 
+  // ----------------------------
+  // 4) Карусель
+  //    - на десктопе: высота 40vh, img по высоте контейнера (без обрезки)
+  //    - на мобиле: горизонтальный скролл + индикаторы
+  // ----------------------------
   function setupCarousel(carousel) {
     const track = carousel.querySelector('.carousel-track');
     const images = Array.from(track.children);
     if (images.length === 0) return;
+
     const mobile = window.innerWidth <= 768;
+
     if (mobile) {
+      // мобильная версия — обычный скролл и точки
       if (images.length > 1) {
         const indicators = document.createElement('div');
         indicators.className = 'carousel-indicators';
@@ -152,37 +156,43 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         carousel.addEventListener('scroll', updateIndicators);
       }
-      return;
+      return; // без автопрокрутки на мобиле
     }
 
-    // desktop specific styles
+    // ===== DESKTOP =====
+    // высоту карусели задаём (дублируем CSS на всякий случай)
     carousel.style.height = '40vh';
+    // трек должен наследовать высоту карусели
+    track.style.height = '100%';
+    track.style.alignItems = 'center';
+
+    // убираем инлайновые размеры у изображений — всё делает CSS
     images.forEach(img => {
-      img.style.height = '100%';
-      img.style.objectFit = 'contain';
+      img.style.height = '';
+      img.style.width = '';
+      img.style.objectFit = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
     });
 
-    // duplicate images for seamless looping on desktop
-    images.forEach(img => {
-      const clone = img.cloneNode(true);
-      track.appendChild(clone);
-    });
+    // дублируем изображения для бесшовного цикла
+    images.forEach(img => track.appendChild(img.cloneNode(true)));
 
-    // continuous animation using requestAnimationFrame
+    // плавная бесконечная прокрутка
     let pos = 0;
     const step = () => {
-      pos -= 0.5;
+      pos -= 0.5; // скорость
       const resetAt = track.scrollWidth / 2;
-      if (-pos >= resetAt) {
-        pos = 0;
-      }
+      if (-pos >= resetAt) pos = 0;
       track.style.transform = `translateX(${pos}px)`;
       requestAnimationFrame(step);
     };
     step();
   }
 
-  // Generate portfolio posts with image carousels
+  // ----------------------------
+  // 5) Генерация постов и запуск каруселей
+  // ----------------------------
   const assetFiles = [
     'Айдентика-Ростов-1.jpg',
     'Айдентика-Ростов-2.jpg',
@@ -211,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'Постер-Форма-1.jpg'
   ];
 
+  // группируем файлы в посты
   const postsMap = {};
   assetFiles.forEach(file => {
     const [section, postName, indexExt] = file.split('-');
@@ -226,13 +237,14 @@ document.addEventListener('DOMContentLoaded', () => {
     postsMap[key].images.push({ src: `assets/${file}`, index });
   });
 
-  const posts = Object.values(postsMap);
-  posts.forEach(post => {
-    post.images.sort((a, b) => a.index - b.index);
-    post.images = post.images.map(i => i.src);
+  const posts = Object.values(postsMap).map(p => {
+    p.images.sort((a, b) => a.index - b.index);
+    p.images = p.images.map(i => i.src);
+    return p;
   });
 
   const portfolio = document.getElementById('portfolio');
+
   posts.forEach(post => {
     const wrapper = document.createElement('div');
     wrapper.className = 'post';
@@ -244,14 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const carousel = document.createElement('div');
     carousel.className = 'carousel';
+
     const track = document.createElement('div');
     track.className = 'carousel-track';
+
     post.images.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
       img.alt = `${post.category} ${post.name}`;
       track.appendChild(img);
     });
+
     carousel.appendChild(track);
     wrapper.appendChild(carousel);
 
@@ -259,8 +274,9 @@ document.addEventListener('DOMContentLoaded', () => {
     bottomTitle.className = 'post-description';
     bottomTitle.textContent = post.name;
     wrapper.appendChild(bottomTitle);
+
     portfolio.appendChild(wrapper);
+
     setupCarousel(carousel);
   });
 });
-
