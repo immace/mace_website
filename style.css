@@ -186,6 +186,9 @@ footer {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .post {
