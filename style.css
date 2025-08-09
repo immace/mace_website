@@ -57,10 +57,54 @@ h1 {
   font-weight: 700;
 }
 
+.hero-title {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+}
+
+.name-wrapper {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.dash {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.role-wrapper {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  display: block;
+  overflow: hidden;
+  line-height: 1.2em;
+  height: 1.2em;
+  position: relative;
+}
+
+#name {
+  display: block;
+  font-weight: 200;
+}
+
+.role-wrapper span {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+#role {
+  display: block;
+}
+
 #header-name {
   font-size: clamp(32px, 6.5vw, 76px);
   line-height: 0.96;
-  font-weight: 700;
+  font-weight: 200;
 }
 
 .accent {
@@ -117,6 +161,32 @@ footer {
 
 .dud {
   color: #aaa;
+}
+
+.slide-in {
+  animation: slide-in 0.5s forwards;
+}
+
+.slide-out {
+  animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
 }
 
 
