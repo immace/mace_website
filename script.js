@@ -164,7 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const index = parseInt(indexExt.split('.')[0], 10);
     if (!postsMap[key]) {
       postsMap[key] = {
-        title: `${section} ${postName.replace(/_/g, ' ')}`,
+        category: section,
+        name: postName.replace(/_/g, ' '),
         images: []
       };
     }
@@ -181,37 +182,33 @@ document.addEventListener('DOMContentLoaded', () => {
   posts.forEach(post => {
     const wrapper = document.createElement('div');
     wrapper.className = 'post';
+
+    const topTitle = document.createElement('h3');
+    topTitle.className = 'post-title';
+    topTitle.textContent = post.category;
+    wrapper.appendChild(topTitle);
+
     const carousel = document.createElement('div');
     carousel.className = 'carousel';
+    const track = document.createElement('div');
+    track.className = 'carousel-track';
     post.images.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.alt = post.title;
-      carousel.appendChild(img);
+      img.alt = `${post.category} ${post.name}`;
+      track.appendChild(img);
     });
+    // Duplicate images for seamless scroll
+    track.innerHTML += track.innerHTML;
+    carousel.appendChild(track);
     wrapper.appendChild(carousel);
 
-    const title = document.createElement('h3');
-    title.className = 'post-title';
-    title.textContent = post.title;
-    wrapper.appendChild(title);
-
-    const desc = document.createElement('p');
-    desc.className = 'post-description';
-    wrapper.appendChild(desc);
+    const bottomTitle = document.createElement('p');
+    bottomTitle.className = 'post-description';
+    bottomTitle.textContent = post.name;
+    wrapper.appendChild(bottomTitle);
 
     portfolio.appendChild(wrapper);
-
-    const imgs = carousel.querySelectorAll('img');
-    let current = 0;
-    imgs[current].classList.add('active');
-    if (imgs.length > 1) {
-      setInterval(() => {
-        imgs[current].classList.remove('active');
-        current = (current + 1) % imgs.length;
-        imgs[current].classList.add('active');
-      }, 3000);
-    }
   });
 });
 
