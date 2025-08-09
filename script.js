@@ -19,28 +19,36 @@ document.addEventListener('DOMContentLoaded', () => {
   let nameIndex = 0;
   let roleIndex = 0;
 
-  // switch name every 8 seconds
+  // switch name every 8 seconds with fade animation
   setInterval(() => {
-    nameIndex = (nameIndex + 1) % names.length;
-    nameEl.textContent = names[nameIndex];
+    nameEl.classList.add('fade');
+    setTimeout(() => {
+      nameIndex = (nameIndex + 1) % names.length;
+      nameEl.textContent = names[nameIndex];
+      nameEl.classList.remove('fade');
+    }, 500);
   }, 8000);
 
-  // helper to trigger slide animation
-  const animateRole = () => {
-    roleEl.classList.remove('slide');
-    // Trigger reflow to restart the animation
-    void roleEl.offsetWidth;
-    roleEl.classList.add('slide');
+  // switch role every 4 seconds with slide up/out effect
+  const switchRole = () => {
+    roleEl.classList.add('slide-up-out');
+    setTimeout(() => {
+      roleIndex = (roleIndex + 1) % roles.length;
+      roleEl.textContent = roles[roleIndex];
+      roleEl.classList.remove('slide-up-out');
+      roleEl.classList.add('slide-up-in');
+    }, 250);
+    setTimeout(() => {
+      roleEl.classList.remove('slide-up-in');
+    }, 500);
   };
 
-  // switch role every 4 seconds
-  setInterval(() => {
-    roleIndex = (roleIndex + 1) % roles.length;
-    roleEl.textContent = roles[roleIndex];
-    animateRole();
-  }, 4000);
+  setInterval(switchRole, 4000);
 
-  // run animation on initial load
-  animateRole();
+  // initial animation
+  roleEl.classList.add('slide-up-in');
+  setTimeout(() => {
+    roleEl.classList.remove('slide-up-in');
+  }, 500);
 });
 

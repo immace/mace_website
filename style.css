@@ -49,6 +49,76 @@ h1 {
   font-weight: 700;
 }
 
+.hero-title {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+}
+
+.name-wrapper {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.dash {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.role-wrapper {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  display: block;
+  overflow: hidden;
+  line-height: 1.2em;
+  height: 1.2em;
+}
+
+#name {
+  display: block;
+  transition: opacity 0.5s;
+}
+
+.fade {
+  opacity: 0;
+}
+
+#role {
+  display: block;
+  transform: translateY(0);
+}
+
+.slide-up-in {
+  animation: role-in 0.25s forwards;
+}
+
+.slide-up-out {
+  animation: role-out 0.25s forwards;
+}
+
+@keyframes role-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes role-out {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
 .accent {
   width: 60px;
   height: 8px;
@@ -101,29 +171,4 @@ footer {
   font-size: 14px;
 }
 
-/* Animation for rotating role text */
-.role-wrapper {
-  display: inline-block;
-  overflow: hidden;
-  line-height: 1.2em;
-}
-
-#role {
-  display: block;
-}
-
-.slide {
-  animation: slide-up 0.5s ease;
-}
-
-@keyframes slide-up {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
