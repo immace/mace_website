@@ -138,9 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (mobile) {
         carousel.style.height = '';
       } else {
-        const portrait = images.some(img => img.naturalHeight > img.naturalWidth);
-        const h = portrait ? '60vh' : '44vh';
-        carousel.style.height = h;
+        const width = carousel.clientWidth;
+        const ratio = images[0].naturalHeight / images[0].naturalWidth;
+        carousel.style.height = `${width * ratio}px`;
       }
     };
 
