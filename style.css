@@ -73,10 +73,19 @@ h1 {
   overflow: hidden;
   line-height: 1.2em;
   height: 1.2em;
+  position: relative;
 }
 
 #name {
   display: block;
+}
+
+.role-wrapper span {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
 }
 
 #role {
@@ -137,6 +146,32 @@ footer {
 
 .dud {
   color: #aaa;
+}
+
+.slide-in {
+  animation: slide-in 0.5s forwards;
+}
+
+.slide-out {
+  animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
 }
 
 
