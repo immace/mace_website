@@ -133,12 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const images = Array.from(track.children);
     if (images.length === 0) return;
 
-    const mobile = window.innerWidth <= 768;
-
     const adjustHeight = () => {
-      const portrait = images.some(img => img.naturalHeight > img.naturalWidth);
-      const h = mobile && portrait ? '60vh' : '44vh';
-      carousel.style.height = h;
+      const mobile = window.innerWidth <= 768;
+      if (mobile) {
+        carousel.style.height = '';
+      } else {
+        const portrait = images.some(img => img.naturalHeight > img.naturalWidth);
+        const h = portrait ? '60vh' : '44vh';
+        carousel.style.height = h;
+      }
     };
 
     let loaded = 0;
@@ -152,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     window.addEventListener('resize', adjustHeight);
 
+    const mobile = window.innerWidth <= 768;
     if (mobile) {
       if (images.length > 1) {
         const indicators = document.createElement('div');
