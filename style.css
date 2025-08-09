@@ -195,22 +195,22 @@ footer {
 
 .carousel {
   position: relative;
-  width: 100%;
-  height: 60vw;
   overflow: hidden;
-  border: 1px solid #eee;
-  border-radius: 8px;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .carousel-track {
   display: flex;
+  align-items: center;
   gap: 0;
-  animation: scroll-left 20s linear infinite;
+  animation: scroll-left 8s linear infinite;
 }
 
 .carousel-track img {
-  height: 100%;
-  width: auto;
+  width: 100vw;
+  height: auto;
   flex-shrink: 0;
 }
 
@@ -231,9 +231,6 @@ footer {
 }
 
 @media (min-width: 1024px) {
-  .carousel {
-    height: calc(60vw / 2.5);
-  }
   .post-title {
     font-size: 32px;
   }
