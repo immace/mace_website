@@ -132,30 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const track = carousel.querySelector('.carousel-track');
     const images = Array.from(track.children);
     if (images.length === 0) return;
-
-    const adjustHeight = () => {
-      const mobile = window.innerWidth <= 768;
-      if (mobile) {
-        carousel.style.height = '';
-      } else {
-        const width = carousel.clientWidth;
-        const ratio = images[0].naturalHeight / images[0].naturalWidth;
-        carousel.style.height = `${width * ratio}px`;
-      }
-    };
-
-    let loaded = 0;
-    images.forEach(img => {
-      img.addEventListener('load', () => {
-        loaded++;
-        if (loaded === images.length) {
-          adjustHeight();
-        }
-      });
-    });
-    window.addEventListener('resize', adjustHeight);
-
     const mobile = window.innerWidth <= 768;
+    if (!mobile) {
+      carousel.style.height = '600px';
+    }
     if (mobile) {
       if (images.length > 1) {
         const indicators = document.createElement('div');
