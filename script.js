@@ -133,9 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const images = Array.from(track.children);
     if (images.length === 0) return;
     const mobile = window.innerWidth <= 768;
-    if (!mobile) {
-      carousel.style.height = '40vh';
-    }
     if (mobile) {
       if (images.length > 1) {
         const indicators = document.createElement('div');
@@ -158,11 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // duplicate images for seamless looping on desktop and ensure clones fit the carousel height
+    // desktop specific styles
+    carousel.style.height = '40vh';
+    images.forEach(img => {
+      img.style.height = '100%';
+      img.style.objectFit = 'contain';
+    });
+
+    // duplicate images for seamless looping on desktop
     images.forEach(img => {
       const clone = img.cloneNode(true);
-      clone.style.height = '100%';
-      clone.style.width = '100%';
       track.appendChild(clone);
     });
 
