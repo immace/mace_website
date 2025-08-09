@@ -1,9 +1,9 @@
-// Rotate name and roles on the hero section
-// Name switches every 8 seconds between "Мацэ" and "Дима"
-// Role switches every 4 seconds with slide-up animation
+// Name and role rotation with letter-by-letter transformation
 
 document.addEventListener('DOMContentLoaded', () => {
-  const names = ['Мацэ', 'Дима'];
+  const nameEl = document.getElementById('name');
+  const roleEl = document.getElementById('role');
+
   const roles = [
     'Графический дизайнер',
     'Веб-дизайнер',
@@ -13,42 +13,67 @@ document.addEventListener('DOMContentLoaded', () => {
     'Дизайнер постеров'
   ];
 
-  const nameEl = document.getElementById('name');
-  const roleEl = document.getElementById('role');
+  const holdTime = 24000; // ms to keep each final word
+  const stepDelay = 1000; // ms between letter changes
 
-  let nameIndex = 0;
+  const stepsToMace = [
+    'Дима Мальцев',
+    'Диа Мальцев',
+    'Да Мальцев',
+    ' Мальцев',
+    'Маьцев',
+    'Маьце',
+    'Маце',
+    'Мацэ'
+  ];
+
+  const stepsToDima = [
+    'Мацэ',
+    'Маце',
+    'Маьце',
+    'Маьцев',
+    ' Мальцев',
+    'Да Мальцев',
+    'Диа Мальцев',
+    'Дима Мальцев'
+  ];
+
+  const transformDuration = stepDelay * (stepsToMace.length - 1);
+
+  function runSequence(steps, index, done) {
+    nameEl.textContent = steps[index];
+    if (index < steps.length - 1) {
+      setTimeout(() => runSequence(steps, index + 1, done), stepDelay);
+    } else if (done) {
+      done();
+    }
+  }
+
+  let direction = 'toMace';
+
+  function cycleNames() {
+    if (direction === 'toMace') {
+      runSequence(stepsToMace, 0, () => {
+        direction = 'toDima';
+        setTimeout(cycleNames, holdTime);
+      });
+    } else {
+      runSequence(stepsToDima, 0, () => {
+        direction = 'toMace';
+        setTimeout(cycleNames, holdTime);
+      });
+    }
+  }
+
+  // start the cycle immediately on load
+  cycleNames();
+
+  // switch roles less frequently
   let roleIndex = 0;
-
-  // switch name every 8 seconds with fade animation
+  roleEl.textContent = roles[roleIndex];
+  const roleInterval = holdTime * 2 + transformDuration;
   setInterval(() => {
-    nameEl.classList.add('fade');
-    setTimeout(() => {
-      nameIndex = (nameIndex + 1) % names.length;
-      nameEl.textContent = names[nameIndex];
-      nameEl.classList.remove('fade');
-    }, 500);
-  }, 8000);
-
-  // switch role every 4 seconds with slide up/out effect
-  const switchRole = () => {
-    roleEl.classList.add('slide-up-out');
-    setTimeout(() => {
-      roleIndex = (roleIndex + 1) % roles.length;
-      roleEl.textContent = roles[roleIndex];
-      roleEl.classList.remove('slide-up-out');
-      roleEl.classList.add('slide-up-in');
-    }, 250);
-    setTimeout(() => {
-      roleEl.classList.remove('slide-up-in');
-    }, 500);
-  };
-
-  setInterval(switchRole, 4000);
-
-  // initial animation
-  roleEl.classList.add('slide-up-in');
-  setTimeout(() => {
-    roleEl.classList.remove('slide-up-in');
-  }, 500);
+    roleIndex = (roleIndex + 1) % roles.length;
+    roleEl.textContent = roles[roleIndex];
+  }, roleInterval);
 });
-

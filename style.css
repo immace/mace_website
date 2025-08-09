@@ -77,46 +77,10 @@ h1 {
 
 #name {
   display: block;
-  transition: opacity 0.5s;
-}
-
-.fade {
-  opacity: 0;
 }
 
 #role {
   display: block;
-  transform: translateY(0);
-}
-
-.slide-up-in {
-  animation: role-in 0.25s forwards;
-}
-
-.slide-up-out {
-  animation: role-out 0.25s forwards;
-}
-
-@keyframes role-in {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes role-out {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
 }
 
 .accent {
