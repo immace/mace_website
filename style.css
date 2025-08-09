@@ -101,3 +101,29 @@ footer {
   font-size: 14px;
 }
 
+/* Animation for rotating role text */
+.role-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.2em;
+}
+
+#role {
+  display: block;
+}
+
+.slide {
+  animation: slide-up 0.5s ease;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
