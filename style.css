@@ -1,6 +1,5 @@
 :root {
-  --accent: #E20000;
-  --sky: #87CEFA;
+  --accent: #A3C1D9;
   --gap: 24px;
   --maxw: 1000px;
 }
@@ -224,6 +223,9 @@ footer {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     height: auto;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .carousel::-webkit-scrollbar {
@@ -244,38 +246,39 @@ footer {
 
   .carousel-indicators {
     position: sticky;
-    bottom: 8px;
+    bottom: 16px;
     left: 0;
     right: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 6px;
     pointer-events: none;
   }
 
   .carousel-indicators span {
-    width: 6px;
-    height: 6px;
-    background: rgba(0, 0, 0, 0.5);
+    width: 4px;
+    height: 4px;
+    background: rgba(163, 193, 217, 0.5);
     border-radius: 50%;
   }
 
   .carousel-indicators span.active {
-    width: 8px;
-    height: 8px;
-    background: var(--sky);
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
   }
 }
 
 .post-title {
-  margin: 8px auto;
+  margin: 8px 0;
   font-size: 24px;
   max-width: var(--maxw);
   padding: 0 14px;
 }
 
 .post-description {
-  margin: 8px auto 0;
+  margin: 8px 0 0;
   font-size: 16px;
   color: #555;
   max-width: var(--maxw);
