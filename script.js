@@ -2,7 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const nameEl = document.getElementById('name');
-  const roleEl = document.getElementById('role');
+  let roleEl = document.getElementById('role');
+  const roleWrapper = document.querySelector('.role-wrapper');
 
   // TextScramble class for letter shuffling effect
   class TextScramble {
@@ -61,16 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const phrases = [
     'Дима Мальцев',
-    ' Маце',
-    'Мацэ',
-    'Дима Мальцев'
+    'Дима',
+    'Маце',
+    'Мацэ'
   ];
 
   const fx = new TextScramble(nameEl);
   let counter = 0;
   function next() {
     fx.setText(phrases[counter]).then(() => {
-      setTimeout(next, 800);
+      setTimeout(next, 8000);
     });
     counter = (counter + 1) % phrases.length;
   }
@@ -87,9 +88,25 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   let roleIndex = 0;
   roleEl.textContent = roles[roleIndex];
-  setInterval(() => {
-    roleIndex = (roleIndex + 1) % roles.length;
-    roleEl.textContent = roles[roleIndex];
-  }, 5000);
+
+  function changeRole() {
+    const nextIndex = (roleIndex + 1) % roles.length;
+    const next = document.createElement('span');
+    next.textContent = roles[nextIndex];
+    next.classList.add('slide-in');
+    roleWrapper.appendChild(next);
+
+    roleEl.classList.add('slide-out');
+
+    setTimeout(() => {
+      roleWrapper.removeChild(roleEl);
+      next.id = 'role';
+      roleEl = next;
+    }, 500);
+
+    roleIndex = nextIndex;
+  }
+
+  setInterval(changeRole, 5000);
 });
 
