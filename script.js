@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (images.length === 0) return;
     const mobile = window.innerWidth <= 768;
     if (!mobile) {
-      carousel.style.height = '600px';
+      carousel.style.height = '40vh';
     }
     if (mobile) {
       if (images.length > 1) {
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     images.forEach(img => {
       const clone = img.cloneNode(true);
       clone.style.height = '100%';
-      clone.style.width = 'auto';
+      clone.style.width = '100%';
       track.appendChild(clone);
     });
 
