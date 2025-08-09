@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         this.resolve();
       } else {
         this.frameRequest = requestAnimationFrame(this.update);
-        this.frame++;
+        this.frame += 2;
       }
     }
     randomChar() {
@@ -90,6 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(() => {
     roleIndex = (roleIndex + 1) % roles.length;
     roleEl.textContent = roles[roleIndex];
-  }, 55000);
+  }, 5000);
 });
 
