@@ -1,5 +1,6 @@
 :root {
   --accent: #E20000;
+  --sky: #87CEFA;
   --gap: 24px;
   --maxw: 1000px;
 }
@@ -216,6 +217,49 @@ footer {
   height: 100%;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-track {
+    will-change: auto;
+  }
+
+  .carousel-track img {
+    width: 100%;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    scroll-snap-align: center;
+  }
+
+  .carousel-indicators {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+  }
+
+  .carousel-indicators span {
+    width: 8px;
+    height: 8px;
+    background: #ccc;
+    border-radius: 50%;
+  }
+
+  .carousel-indicators span.active {
+    background: var(--sky);
+  }
 }
 
 .post-title {
