@@ -205,7 +205,7 @@ footer {
 
 .carousel-track {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 0;
   will-change: transform;
 }
@@ -213,6 +213,7 @@ footer {
 .carousel-track img {
   width: auto;
   height: 100%;
+  max-height: 100%;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -275,6 +276,9 @@ footer {
   font-size: 24px;
   max-width: var(--maxw);
   padding: 0 14px;
+  font-weight: 100;
+  font-style: italic;
+  color: var(--accent);
 }
 
 .post-description {
@@ -283,6 +287,7 @@ footer {
   color: #555;
   max-width: var(--maxw);
   padding: 0 14px;
+  font-weight: 700;
 }
 
 @media (min-width: 1024px) {

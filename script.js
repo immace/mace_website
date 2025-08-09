@@ -178,8 +178,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // duplicate images for seamless looping on desktop
-    images.forEach(img => track.appendChild(img.cloneNode(true)));
+    // duplicate images for seamless looping on desktop and ensure clones fit the carousel height
+    images.forEach(img => {
+      const clone = img.cloneNode(true);
+      clone.style.height = '100%';
+      clone.style.width = 'auto';
+      track.appendChild(clone);
+    });
 
     // continuous animation using requestAnimationFrame
     let pos = 0;
