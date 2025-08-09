@@ -219,11 +219,19 @@ footer {
     height: 40vh;
   }
 
-  .carousel-track img {
+  .carousel-track {
     height: 100%;
-    object-fit: contain;
+    align-items: center;     
+  }
+
+  .carousel-track img {
+    height: 100%;          
+    width: auto;            
+    object-fit: contain;    
+    flex-shrink: 0;
   }
 }
+
 
 @media (max-width: 768px) {
   .carousel {
