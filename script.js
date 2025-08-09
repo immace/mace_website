@@ -1,9 +1,82 @@
-// Name and role rotation with letter-by-letter transformation
+// Name scramble animation and role rotation
 
 document.addEventListener('DOMContentLoaded', () => {
   const nameEl = document.getElementById('name');
   const roleEl = document.getElementById('role');
 
+  // TextScramble class for letter shuffling effect
+  class TextScramble {
+    constructor(el) {
+      this.el = el;
+      this.chars = 'абвгдeёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      this.update = this.update.bind(this);
+    }
+    setText(newText) {
+      const oldText = this.el.innerText;
+      const length = Math.max(oldText.length, newText.length);
+      const promise = new Promise(resolve => this.resolve = resolve);
+      this.queue = [];
+      for (let i = 0; i < length; i++) {
+        const from = oldText[i] || '';
+        const to = newText[i] || '';
+        const start = Math.floor(Math.random() * 20);
+        const end = start + Math.floor(Math.random() * 20);
+        this.queue.push({from, to, start, end});
+      }
+      cancelAnimationFrame(this.frameRequest);
+      this.frame = 0;
+      this.update();
+      return promise;
+    }
+    update() {
+      let output = '';
+      let complete = 0;
+      for (let i = 0, n = this.queue.length; i < n; i++) {
+        let {from, to, start, end, char} = this.queue[i];
+        if (this.frame >= end) {
+          complete++;
+          output += to;
+        } else if (this.frame >= start) {
+          if (!char || Math.random() < 0.28) {
+            char = this.randomChar();
+            this.queue[i].char = char;
+          }
+          output += `<span class="dud">${char}</span>`;
+        } else {
+          output += from;
+        }
+      }
+      this.el.innerHTML = output;
+      if (complete === this.queue.length) {
+        this.resolve();
+      } else {
+        this.frameRequest = requestAnimationFrame(this.update);
+        this.frame++;
+      }
+    }
+    randomChar() {
+      return this.chars[Math.floor(Math.random() * this.chars.length)];
+    }
+  }
+
+  const phrases = [
+    'Дима Мальцев',
+    ' Маце',
+    'Мацэ',
+    'Дима Мальцев'
+  ];
+
+  const fx = new TextScramble(nameEl);
+  let counter = 0;
+  function next() {
+    fx.setText(phrases[counter]).then(() => {
+      setTimeout(next, 800);
+    });
+    counter = (counter + 1) % phrases.length;
+  }
+  next();
+
+  // Role rotation
   const roles = [
     'Графический дизайнер',
     'Веб-дизайнер',
@@ -12,68 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
     'Дизайнер айдентики',
     'Дизайнер постеров'
   ];
-
-  const holdTime = 24000; // ms to keep each final word
-  const stepDelay = 1000; // ms between letter changes
-
-  const stepsToMace = [
-    'Дима Мальцев',
-    'Диа Мальцев',
-    'Да Мальцев',
-    ' Мальцев',
-    'Маьцев',
-    'Маьце',
-    'Маце',
-    'Мацэ'
-  ];
-
-  const stepsToDima = [
-    'Мацэ',
-    'Маце',
-    'Маьце',
-    'Маьцев',
-    ' Мальцев',
-    'Да Мальцев',
-    'Диа Мальцев',
-    'Дима Мальцев'
-  ];
-
-  const transformDuration = stepDelay * (stepsToMace.length - 1);
-
-  function runSequence(steps, index, done) {
-    nameEl.textContent = steps[index];
-    if (index < steps.length - 1) {
-      setTimeout(() => runSequence(steps, index + 1, done), stepDelay);
-    } else if (done) {
-      done();
-    }
-  }
-
-  let direction = 'toMace';
-
-  function cycleNames() {
-    if (direction === 'toMace') {
-      runSequence(stepsToMace, 0, () => {
-        direction = 'toDima';
-        setTimeout(cycleNames, holdTime);
-      });
-    } else {
-      runSequence(stepsToDima, 0, () => {
-        direction = 'toMace';
-        setTimeout(cycleNames, holdTime);
-      });
-    }
-  }
-
-  // start the cycle immediately on load
-  cycleNames();
-
-  // switch roles less frequently
   let roleIndex = 0;
   roleEl.textContent = roles[roleIndex];
-  const roleInterval = holdTime * 2 + transformDuration;
   setInterval(() => {
     roleIndex = (roleIndex + 1) % roles.length;
     roleEl.textContent = roles[roleIndex];
-  }, roleInterval);
+  }, 55000);
 });
+
