@@ -3,6 +3,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const nameEl = document.getElementById('name');
   const headerNameEl = document.getElementById('header-name');
+  let roleEl = document.getElementById('role');
+  const roleWrapper = document.querySelector('.role-wrapper');
 
   // TextScramble class for letter shuffling effect
   class TextScramble {
@@ -78,6 +80,38 @@ document.addEventListener('DOMContentLoaded', () => {
     counter = (counter + 1) % phrases.length;
   }
   next();
+
+  // Role rotation
+  const roles = [
+    'Графический дизайнер',
+    'Веб-дизайнер',
+    'Иллюстратор',
+    'Дизайнер шрифтов',
+    'Дизайнер айдентики',
+    'Дизайнер постеров'
+  ];
+  let roleIndex = 0;
+  roleEl.textContent = roles[roleIndex];
+
+  function changeRole() {
+    const nextIndex = (roleIndex + 1) % roles.length;
+    const next = document.createElement('span');
+    next.textContent = roles[nextIndex];
+    next.classList.add('slide-in');
+    roleWrapper.appendChild(next);
+
+    roleEl.classList.add('slide-out');
+
+    setTimeout(() => {
+      roleWrapper.removeChild(roleEl);
+      next.id = 'role';
+      roleEl = next;
+    }, 500);
+
+    roleIndex = nextIndex;
+  }
+
+  setInterval(changeRole, 5000);
 
   const header = document.querySelector('header');
   const hero = document.querySelector('.hero');
