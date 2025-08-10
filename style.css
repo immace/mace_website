@@ -73,41 +73,70 @@ h1 {
 
 section { padding: 7vh 0; }
 
-/* ===== Animations for role ===== */
+/* ===== Animations for role / scramble ===== */
 .dud { color: #aaa; }
 .slide-in { animation: slide-in .5s forwards; }
 .slide-out { animation: slide-out .5s forwards; }
 @keyframes slide-in { from { transform: translateY(100%);} to { transform: translateY(0);} }
 @keyframes slide-out { from { transform: translateY(0);} to { transform: translateY(-100%);} }
 
-/* ===== Posts (карточки) ===== */
+/* ===== Posts (общий каркас) ===== */
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post { display: flex; flex-direction: column; }
 
-.post-title {
-  margin: 8px 0;
-  font-size: 24px;
-  max-width: var(--maxw);
-  padding: 0 14px;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--accent);
+/* Шапка поста «в линию»: слева тип, справа название */
+.post-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:16px;
+  max-width:var(--maxw);
+  padding:0 14px;
+  margin:8px auto 12px;
 }
-.post-description {
-  margin: 8px 0 0;
-  font-size: 16px; color: #555;
-  max-width: var(--maxw); padding: 0 14px;
-  font-weight: 700;
+.post-head .post-title{  /* левый — тип */
+  margin:0;
+  font-size:24px;
+  font-weight:300;
+  font-style:italic;
+  color:var(--accent);
 }
-@media (min-width: 1024px){
-  .post-title { font-size: 32px; }
-  .post-description { font-size: 20px; }
+.post-head .post-name-right{ /* правый — название */
+  margin:0;
+  font-size:18px;
+  font-weight:700;
+  color:#222;
+}
+
+/* Подпись снизу */
+.post-caption{
+  margin-top:12px;
+  max-width:var(--maxw);
+  padding:0 14px;
+}
+.post-caption .cap-top{
+  font-size:18px;
+  font-weight:300;
+  font-style:italic;
+  color:var(--accent);
+}
+.post-caption .cap-bottom{
+  margin-top:4px;
+  font-size:16px;
+  color:#444;
+}
+.post-caption .cap-bottom .name{
+  font-weight:700;
+  color:#111;
+}
+.post-caption .cap-bottom .desc{
+  color:#777;
 }
 
 /* ===== Images reset ===== */
 img { width: 100%; height: auto; display: block; }
 
-/* ===== Carousel ===== */
+/* ===== Carousel (только для первого поста) ===== */
 .carousel {
   position: relative;
   overflow: hidden;
@@ -128,7 +157,7 @@ img { width: 100%; height: auto; display: block; }
 
 @media (min-width: 769px){
   .carousel { height: 40vh; }
-  .carousel-track { height: 100%; align-items: center; }          /* ВАЖНО */
+  .carousel-track { height: 100%; align-items: center; }
   .carousel-track img { height: 100%; width: auto; object-fit: contain; }
 }
 
@@ -160,6 +189,58 @@ img { width: 100%; height: auto; display: block; }
   .carousel-indicators span.active { width: 6px; height: 6px; background: var(--accent); }
 }
 
+/* ===== Макет «большая слева + миниатюры справа» для остальных постов ===== */
+.post-body{
+  display:grid;
+  grid-template-columns:minmax(340px, 48vw) 1fr; /* слева большой блок, справа сетка */
+  gap:var(--gap);
+  max-width:100vw;
+  margin:0 auto;
+  padding:0;
+}
+
+.post-hero{
+  width:100%;
+  height:100%;
+  min-height:360px;
+  overflow:hidden;
+}
+.post-hero img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.post-thumbs{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr); /* три в ряд */
+  gap:var(--gap);
+  align-content:start;
+}
+.post-thumbs img{
+  width:100%;
+  aspect-ratio:1/1;       /* квадратные миниатюры; убери строку — будут естественные пропорции */
+  object-fit:cover;
+  display:block;
+  border:1px solid #eee;
+  border-radius:8px;
+}
+
+/* ---------- Адаптив ---------- */
+@media (max-width: 1024px){
+  .post-body{
+    grid-template-columns:1fr;  /* всё в колонку */
+  }
+  .post-hero{ min-height:300px; }
+  .post-thumbs{ grid-template-columns:repeat(3, 1fr); }
+}
+
+@media (max-width: 640px){
+  .post-hero{ min-height:220px; }
+  .post-thumbs{ grid-template-columns:repeat(2, 1fr); } /* две в ряд на телефоне */
+}
+
 /* ===== Пузырьки соцсетей (хаотический дрейф) ===== */
 .contacts { padding: 0 14px 56px; }
 
@@ -171,7 +252,6 @@ img { width: 100%; height: auto; display: block; }
   max-width: var(--maxw);
 }
 
-/* каждый пузырь привязываем к контейнеру и гоняем по X разными траекториями */
 .bubble-wrap{
   position: absolute;
   top: 50%;
@@ -217,7 +297,15 @@ img { width: 100%; height: auto; display: block; }
 
 @keyframes driftY { from{ transform: translateY(12px);} to{ transform: translateY(-16px);} }
 
-/* уменьшить движения для пользователей с ограничениями */
 @media (prefers-reduced-motion: reduce){
   .bubble, .bubble-wrap { animation: none !important; }
 }
+
+/* ===== Footer ===== */
+footer {
+  border-top: 1px solid #eee;
+  padding: 14px 0;
+  color: #777;
+  font-size: 14px;
+}
+#footer-name { font-weight: 100; }
