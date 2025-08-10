@@ -304,3 +304,7 @@ footer {
   font-size: 14px;
 }
 #footer-name { font-weight: 100; }
+
+@media (min-width: 769px){
+  .post.is-first .post-body { display: none !important; }
+}
