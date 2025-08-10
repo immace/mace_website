@@ -138,6 +138,63 @@ document.addEventListener('DOMContentLoaded', () => {
       return; // мобильная — без автопрокрутки
     }
 
+    function showHeart(container) {
+  // оболочка для анимации
+  const wrap = document.createElement('div');
+  wrap.className = 'heart-like';
+
+  // SVG сердечко (Material-style path)
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  const path = document.createElementNS(svgNS, 'path');
+  path.setAttribute(
+    'd',
+    'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 3.99 4 6.5 4c1.74 0 3.41 1.01 4.22 2.53C11.57 5.01 13.24 4 14.98 4 17.49 4 19.48 6 19.48 8.5c0 3.78-3.4 6.86-8.05 11.54L12 21.35z'
+  );
+  svg.appendChild(path);
+  wrap.appendChild(svg);
+
+  container.appendChild(wrap);
+
+  // запуск анимации
+  // 1) «появление»
+  // 2) через 120мс заливаем акцентом
+  // 3) удаляем по окончании
+  requestAnimationFrame(() => {
+    wrap.classList.add('animate');
+    setTimeout(() => wrap.classList.add('fill'), 120);
+  });
+
+  wrap.addEventListener('animationend', () => wrap.remove(), { once: true });
+}
+
+// Включаем двойной тап/клик для всех картинок карусели в пределах root
+function enableDoubleTapHearts(root) {
+  const imgs = root.querySelectorAll('.carousel-track img');
+  let lastTouch = 0;
+
+  imgs.forEach(img => {
+    // мобильный: двойной тап
+    img.addEventListener('touchend', e => {
+      const now = Date.now();
+      if (now - lastTouch < 350) {
+        const container = img.closest('.carousel');
+        if (container) showHeart(container);
+        e.preventDefault();
+      }
+      lastTouch = now;
+    }, { passive: true });
+
+    // десктоп: double click
+    img.addEventListener('dblclick', () => {
+      const container = img.closest('.carousel');
+      if (container) showHeart(container);
+    });
+  });
+}
+
+    
     // desktop
     carousel.style.height = '40vh';
     track.style.height = '100%';
@@ -246,6 +303,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     portfolio.appendChild(wrapper);
 
+    enableDoubleTapHearts(wrapper);
+    
     setupCarousel(carousel);
   });
 });
