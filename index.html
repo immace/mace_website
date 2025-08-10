@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff" />
   <title>Мацэ · Графический дизайнер</title>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <!-- Favicon (корень сайта) -->
+  <link rel="icon" href="/favicon.ico?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
 
-  <!-- Fonts -->
+  <!-- Шрифты -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet" />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- Стили -->
+  <link rel="stylesheet" href="/style.css?v=7" />
 </head>
 <body>
   <!-- Header -->
@@ -33,36 +34,28 @@
       <div class="accent"></div>
     </section>
 
-    <!-- Портфолио (заполняется script.js) -->
+    <!-- Портфолио (заполняется из script.js) -->
     <section id="portfolio" class="posts"></section>
 
-    <!-- Контакты: плавающие пузырьки -->
+    <!-- Контакты: плавающие «пузыри» -->
     <section id="contacts" class="contacts">
       <div class="social-bubbles">
         <!-- Instagram -->
-        <a class="bubble-wrap"
-           href="https://instagram.com/immalcev" target="_blank" rel="noopener"
-           aria-label="Instagram @immalcev">
+        <a class="bubble-wrap" href="https://instagram.com/immalcev" target="_blank" rel="noopener" aria-label="Instagram @immalcev">
           <span class="bubble">
-            <img src="assets/icons/instagram.svg" width="30" height="30" alt="">
+            <img src="/assets/icons/instagram.svg" width="30" height="30" alt="">
           </span>
         </a>
-
         <!-- Telegram -->
-        <a class="bubble-wrap"
-           href="https://t.me/immalcev" target="_blank" rel="noopener"
-           aria-label="Telegram @immalcev">
+        <a class="bubble-wrap" href="https://t.me/immalcev" target="_blank" rel="noopener" aria-label="Telegram @immalcev">
           <span class="bubble">
-            <img src="assets/icons/telegram.svg" width="30" height="30" alt="">
+            <img src="/assets/icons/telegram.svg" width="30" height="30" alt="">
           </span>
         </a>
-
         <!-- Email -->
-        <a class="bubble-wrap"
-           href="mailto:mace4681@gmail.com"
-           aria-label="Email mace4681@gmail.com">
+        <a class="bubble-wrap" href="mailto:mace4681@gmail.com" aria-label="Email mace4681@gmail.com">
           <span class="bubble">
-            <img src="assets/icons/mail.svg" width="30" height="30" alt="">
+            <img src="/assets/icons/mail.svg" width="30" height="30" alt="">
           </span>
         </a>
       </div>
@@ -73,7 +66,7 @@
     <div class="wrap">© <span id="footer-name">Мацэ</span></div>
   </footer>
 
-  <!-- Важно: подключение генерации портфолио и каруселей -->
-  <script src="script.js"></script>
+  <!-- Скрипты -->
+  <script src="/script.js?v=7" defer></script>
 </body>
 </html>
