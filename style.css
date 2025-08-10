@@ -345,3 +345,15 @@ footer {
   font-size: 14px;
 }
 #footer-name { font-weight: 100; }
+
+/* Скрыть верхний H3 у всех постов, кроме первого (на десктопе) */
+@media (min-width: 769px){
+  /* если h3 — прямой ребёнок .post */
+  .posts .post:not(.is-first) > h3.post-title { 
+    display: none !important; 
+  }
+  /* на случай, если вёрстка немного изменилась и h3 не прямой ребёнок */
+  .posts .post:not(.is-first) h3.post-title { 
+    display: none !important; 
+  }
+}
