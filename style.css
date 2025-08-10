@@ -160,66 +160,64 @@ img { width: 100%; height: auto; display: block; }
   .carousel-indicators span.active { width: 6px; height: 6px; background: var(--accent); }
 }
 
-/* ===== Contacts: floating bubbles ===== */
-.contacts { padding: 0 14px 48px; }
+/* ===== Пузырьки соцсетей (хаотический дрейф) ===== */
+.contacts { padding: 0 14px 56px; }
 
 .social-bubbles{
   position: relative;
-  height: 120px;                 /* зона «полёта» */
+  height: 140px;                 /* зона «полёта» */
   display: block;
   margin: 40px auto;
   max-width: var(--maxw);
 }
 
+/* каждый пузырь привязываем к контейнеру и гоняем по X разными траекториями */
 .bubble-wrap{
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  display: block;
+  transform: translate(-50%, -50%);
   text-decoration: none;
+  color: inherit;
 }
 
-/* разные старты по X + разные анимации для хаотичности */
-.bubble-wrap:nth-child(1){ left: 30%; animation: driftX1 7s ease-in-out infinite alternate; }
-.bubble-wrap:nth-child(2){ left: 50%; animation: driftX2 8.5s ease-in-out infinite alternate .4s; }
-.bubble-wrap:nth-child(3){ left: 70%; animation: driftX3 6.2s ease-in-out infinite alternate .8s; }
+/* стартовые позиции и разная анимация по X */
+.bubble-wrap:nth-child(1){ left: 32%; animation: driftX1 7.2s ease-in-out infinite alternate; }
+.bubble-wrap:nth-child(2){ left: 50%; animation: driftX2 8.8s ease-in-out infinite alternate .35s; }
+.bubble-wrap:nth-child(3){ left: 68%; animation: driftX3 6.6s ease-in-out infinite alternate .7s; }
 
+/* сам круг */
 .bubble{
-  --size: 62px;
-  width: var(--size); height: var(--size);
+  --size: 64px;
+  width: var(--size);
+  height: var(--size);
   border-radius: 50%;
   background: #fff;
   border: 1.5px solid var(--accent);
-  color: #111;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+  display: grid;
+  place-items: center;
+  color: #111;                   /* currentColor для SVG */
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
   transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
   animation: driftY 5.4s ease-in-out infinite alternate;
 }
+
 .bubble svg{ width: 28px; height: 28px; display: block; }
 
 .bubble:hover{
   transform: translateY(-2px) scale(1.07);
   background: var(--accent);
-  color: #fff;                 /* SVG станет белым благодаря currentColor */
-  box-shadow: 0 10px 26px rgba(0,0,0,.12);
+  color: #fff;                   /* иконка станет белой */
+  box-shadow: 0 12px 28px rgba(0,0,0,.16);
 }
 
-/* хаотичный дрейф */
-@keyframes driftX1{ from{ transform: translate(-35px,-50%);} to{ transform: translate(25px,-50%);} }
-@keyframes driftX2{ from{ transform: translate(-25px,-50%);} to{ transform: translate(32px,-50%);} }
-@keyframes driftX3{ from{ transform: translate(-30px,-50%);} to{ transform: translate(18px,-50%);} }
+/* хаотичный дрейф: разные амплитуды по X и общий покач по Y */
+@keyframes driftX1{ from{ transform: translate(-40px,-50%);} to{ transform: translate(18px,-50%);} }
+@keyframes driftX2{ from{ transform: translate(-26px,-50%);} to{ transform: translate(34px,-50%);} }
+@keyframes driftX3{ from{ transform: translate(-30px,-50%);} to{ transform: translate(22px,-50%);} }
+
 @keyframes driftY { from{ transform: translateY(12px);} to{ transform: translateY(-16px);} }
 
+/* уменьшить движения для пользователей с ограничениями */
 @media (prefers-reduced-motion: reduce){
   .bubble, .bubble-wrap { animation: none !important; }
 }
-
-/* ===== Footer ===== */
-footer {
-  border-top: 1px solid #eee;
-  padding: 14px 0;
-  color: #777;
-  font-size: 14px;
-}
-#footer-name { font-weight: 100; }
