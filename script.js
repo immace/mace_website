@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('script loaded');
-
+  // ===== header + name/role animations (как было) =====
   const nameEl = document.getElementById('name');
   const headerNameEl = document.getElementById('header-name');
   let roleEl = document.getElementById('role');
@@ -54,12 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         this.frame += 2;
       }
     }
-    randomChar() {
-      return this.chars[Math.floor(Math.random() * this.chars.length)];
-    }
+    randomChar() { return this.chars[Math.floor(Math.random() * this.chars.length)]; }
   }
 
- const phrases = ['Дима Мальцев', 'Мацэ'];
+  const phrases = ['Дима Мальцев', 'Мацэ'];
   const fxMain = new TextScramble(nameEl);
   const fxHeader = new TextScramble(headerNameEl);
   let counter = 0;
@@ -70,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     counter = (counter + 1) % phrases.length;
   }
-
   next();
 
   const roles = [
@@ -83,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   let roleIndex = 0;
   roleEl.textContent = roles[roleIndex];
-
   function changeRole() {
     const nextIndex = (roleIndex + 1) % roles.length;
     const next = document.createElement('span');
@@ -98,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
     roleIndex = nextIndex;
   }
-
   setInterval(changeRole, 5000);
 
   const header = document.querySelector('header');
@@ -111,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   observer.observe(hero);
 
-  // ===== CAROUSEL =====
+  // ===== Carousel setup =====
   function setupCarousel(carousel) {
     const track = carousel.querySelector('.carousel-track');
     const images = Array.from(track.children);
@@ -136,35 +130,34 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         carousel.addEventListener('scroll', updateIndicators);
       }
-      return; // мобильная — без автопрокрутки
+      return; // mobile — без автопрокрутки
     }
 
-    // desktop
-    carousel.style.height = '40vh';
+    // desktop: плавная бесконечная лента (только если карусель показывается)
+    const isVisible = getComputedStyle(carousel).display !== 'none';
+    if (!isVisible) return;
+
     track.style.height = '100%';
     track.style.alignItems = 'center';
-    images.forEach(img => {
-      img.loading = 'lazy';
-      img.style.height = '';
-      img.style.width = '';
-      img.style.objectFit = '';
-    });
+    images.forEach(img => { img.loading = 'lazy'; });
 
-    // дубликаты для бесшовной ленты
+    // дубликаты для зацикливания
     images.forEach(img => track.appendChild(img.cloneNode(true)));
 
     let pos = 0;
     const step = () => {
-      pos -= 0.5;                   // скорость
+      // скорость
+      pos -= 0.5;
       const resetAt = track.scrollWidth / 2;
-      if (-pos >= resetAt) pos = 0; // зацикливание
+      if (-pos >= resetAt) pos = 0;
       track.style.transform = `translateX(${pos}px)`;
       requestAnimationFrame(step);
     };
     step();
   }
 
- const assetFiles = [
+  // ===== DATA (с фильтрами/порядком как просил) =====
+  const assetFiles = [
     'Айдентика-Ростов-1.jpg',
     'Айдентика-Ростов-2.jpg',
     'Айдентика-Ростов-3.jpg',
@@ -172,31 +165,40 @@ document.addEventListener('DOMContentLoaded', () => {
     'Айдентика-Ростов-5.jpg',
     'Айдентика-Ростов-6.jpg',
     'Логотип-Ростов-1.jpg',
-    //'Обложка-Нотное_издание-1.png',
-    //'Обложка-Нотное_издание-2.png',
+
+    // Нотное издание — только 3-я
+    // 'Обложка-Нотное_издание-1.png',
+    // 'Обложка-Нотное_издание-2.png',
     'Обложка-Нотное_издание-3.png',
-    //'Обложка-Нотное_издание-4.png',
-    //'Обложка-Нотное_издание-5.png',
+    // 'Обложка-Нотное_издание-4.png',
+    // 'Обложка-Нотное_издание-5.png',
+
+    // Гувернантка — сначала 4-я, затем остальные
     'Постер-Гувернантка-4.jpg',
     'Постер-Гувернантка-1.jpg',
     'Постер-Гувернантка-2.jpg',
     'Постер-Гувернантка-3.jpg',
     'Постер-Гувернантка-5.jpg',
+
     'Постер-Движение-1.jpg',
     'Постер-Движение-2.jpg',
     'Постер-Движение-3.jpg',
     'Постер-Движение-4.jpg',
     'Постер-Движение-5.jpg',
+
+    // Майкл Джексон — только 1-я
     'Постер-Майкл_Джексон-1.jpg',
-    //'Постер-Майкл_Джексон-2.jpg',
+    // 'Постер-Майкл_Джексон-2.jpg',
+
     'Постер-Форма-1.jpg'
   ];
 
+  // сгруппировать по "Категория-Название"
   const postsMap = {};
   assetFiles.forEach(file => {
     const [section, postName, indexExt] = file.split('-');
     const key = `${section}-${postName}`;
-    const index = parseInt(indexExt.split('.')[0], 10);
+    // index не используем как сортировку — порядок контролируем самим массивом
     if (!postsMap[key]) {
       postsMap[key] = {
         category: section,
@@ -204,30 +206,30 @@ document.addEventListener('DOMContentLoaded', () => {
         images: []
       };
     }
-    postsMap[key].images.push({ src: `/assets/${file}`, index });
+    postsMap[key].images.push(`/assets/${file}`);
   });
 
-  const posts = Object.values(postsMap).map(p => {
-    p.images.sort((a, b) => a.index - b.index);
-    p.images = p.images.map(i => i.src);
-    return p;
-  });
+  const posts = Object.values(postsMap);
 
+  // ===== RENDER =====
   const portfolio = document.getElementById('portfolio');
-  posts.forEach(post => {
+
+  posts.forEach((post, idx) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'post';
+    if (idx === 0) wrapper.classList.add('is-first');
 
+    // Заголовок (тип поста)
     const topTitle = document.createElement('h3');
     topTitle.className = 'post-title';
     topTitle.textContent = post.category;
     wrapper.appendChild(topTitle);
 
+    // --- Вариант 1: Карусель (показывается на mobile у всех, на desktop только у первого)
     const carousel = document.createElement('div');
     carousel.className = 'carousel';
     const track = document.createElement('div');
     track.className = 'carousel-track';
-
     post.images.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
@@ -235,17 +237,54 @@ document.addEventListener('DOMContentLoaded', () => {
       img.loading = 'lazy';
       track.appendChild(img);
     });
-
     carousel.appendChild(track);
     wrapper.appendChild(carousel);
 
-    const bottomTitle = document.createElement('p');
-    bottomTitle.className = 'post-description';
-    bottomTitle.textContent = post.name + ' · описание: скоро';
-    wrapper.appendChild(bottomTitle);
+    // --- Вариант 2: Двухколоночный корпус (desktop для не-первого)
+    const body = document.createElement('div');
+    body.className = 'post-body';
+
+    const left = document.createElement('div');
+    left.className = 'post-left';
+    const cover = document.createElement('img');
+    cover.className = 'post-cover';
+    cover.src = post.images[0]; // первая картинка
+    cover.alt = `${post.category} ${post.name}`;
+    cover.loading = 'lazy';
+    left.appendChild(cover);
+
+    const right = document.createElement('div');
+    right.className = 'post-right';
+
+    // thumbs — остальные изображения (могут отсутствовать)
+    const thumbs = document.createElement('div');
+    thumbs.className = 'post-thumbs';
+    post.images.slice(1).forEach(src => {
+      const t = document.createElement('img');
+      t.src = src;
+      t.alt = `${post.category} ${post.name}`;
+      t.loading = 'lazy';
+      thumbs.appendChild(t);
+    });
+
+    // текст (тип/название/описание)
+    const meta = document.createElement('div');
+    meta.className = 'post-meta';
+    const desc = document.createElement('p');
+    desc.className = 'post-description';
+    desc.textContent = `${post.name} · описание: скоро`;
+    meta.appendChild(desc);
+
+    right.appendChild(thumbs);
+    right.appendChild(meta);
+
+    body.appendChild(left);
+    body.appendChild(right);
+    wrapper.appendChild(body);
 
     portfolio.appendChild(wrapper);
 
+    // активировать карусель (функция сама поймёт mobile/desktop и видимость)
     setupCarousel(carousel);
   });
 });
