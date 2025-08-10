@@ -1,10 +1,12 @@
-// ================== Анимация имени ==================
+// ====== Name scramble + header visibility + posts layout ======
+
 document.addEventListener('DOMContentLoaded', () => {
   const nameEl = document.getElementById('name');
   const headerNameEl = document.getElementById('header-name');
   let roleEl = document.getElementById('role');
   const roleWrapper = document.querySelector('.role-wrapper');
 
+  // ---------- TextScramble ----------
   class TextScramble {
     constructor(el) {
       this.el = el;
@@ -72,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   next();
 
-  // ================== Смена профессий ==================
+  // ---------- Role rotation ----------
   const roles = [
     'Графический дизайнер',
     'Веб-дизайнер',
@@ -103,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setInterval(changeRole, 5000);
 
-  // ================== Показ/скрытие хедера ==================
+  // ---------- Header show/hide ----------
   const header = document.querySelector('header');
   const hero = document.querySelector('.hero');
   const observer = new IntersectionObserver(entries => {
@@ -117,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   observer.observe(hero);
 
-  // ================== Функция карусели ==================
+  // ---------- Carousel (desktop continuous) ----------
   function setupCarousel(carousel) {
     const track = carousel.querySelector('.carousel-track');
     const images = Array.from(track.children);
@@ -143,10 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         carousel.addEventListener('scroll', updateIndicators);
       }
-      return;
+      return; // на мобиле — свайпы, без авто-прокрутки
     }
 
-    // ===== DESKTOP =====
+    // desktop
     carousel.style.height = '40vh';
     track.style.height = '100%';
     track.style.alignItems = 'center';
@@ -158,19 +160,16 @@ document.addEventListener('DOMContentLoaded', () => {
       img.loading = 'lazy';
     });
 
-    // Создаём 3 комплекта картинок
+    // делаем 3 комплекта картинок для бесшовной ленты
     const setCount = 3;
     for (let i = 0; i < setCount - 1; i++) {
-      images.forEach(img => {
-        track.appendChild(img.cloneNode(true));
-      });
+      images.forEach(img => track.appendChild(img.cloneNode(true)));
     }
-
     const singleSetWidth = track.scrollWidth / setCount;
 
     let pos = 0;
     const step = () => {
-      pos -= 0.5;
+      pos -= 0.5; // скорость
       if (-pos >= singleSetWidth) pos = 0;
       track.style.transform = `translateX(${pos}px)`;
       requestAnimationFrame(step);
@@ -178,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
     step();
   }
 
-  // ================== Генерация постов ==================
+  // ---------- Assets ----------
   const assetFiles = [
     'Айдентика-Ростов-1.jpg',
     'Айдентика-Ростов-2.jpg',
@@ -207,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'Постер-Форма-1.jpg'
   ];
 
+  // группируем по постам
   const postsMap = {};
   assetFiles.forEach(file => {
     const [section, postName, indexExt] = file.split('-');
@@ -228,34 +228,87 @@ document.addEventListener('DOMContentLoaded', () => {
     post.images = post.images.map(i => i.src);
   });
 
+  // ---------- Render ----------
   const portfolio = document.getElementById('portfolio');
+
   posts.forEach(post => {
     const wrapper = document.createElement('div');
     wrapper.className = 'post';
 
-    const topTitle = document.createElement('h3');
-    topTitle.className = 'post-title';
-    topTitle.textContent = post.category;
-    wrapper.appendChild(topTitle);
+    // 1) Особый случай: Айдентика/Ростов — карусель
+    const isIdentityCarousel =
+      (post.category === 'Айдентика'); // при желании уточнить по имени
 
-    const carousel = document.createElement('div');
-    carousel.className = 'carousel';
-    const track = document.createElement('div');
-    track.className = 'carousel-track';
-    post.images.forEach(src => {
+    if (isIdentityCarousel) {
+      const head = document.createElement('div');
+      head.className = 'post-head';
+      head.innerHTML = `
+        <h3 class="post-title">${post.category}</h3>
+        <p class="post-name-right">${post.name}</p>
+      `;
+      wrapper.appendChild(head);
+
+      const carousel = document.createElement('div');
+      carousel.className = 'carousel';
+      const track = document.createElement('div');
+      track.className = 'carousel-track';
+      post.images.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `${post.category} ${post.name}`;
+        track.appendChild(img);
+      });
+      carousel.appendChild(track);
+      wrapper.appendChild(carousel);
+
+      portfolio.appendChild(wrapper);
+      setupCarousel(carousel);
+      return;
+    }
+
+    // 2) Все остальные — большая слева + миниатюры справа
+    const head = document.createElement('div');
+    head.className = 'post-head';
+    head.innerHTML = `<h3 class="post-title">${post.category}</h3><span></span>`;
+    wrapper.appendChild(head);
+
+    const body = document.createElement('div');
+    body.className = 'post-body';
+
+    // крупная обложка — первая картинка
+    const hero = document.createElement('div');
+    hero.className = 'post-hero';
+    const heroImg = document.createElement('img');
+    heroImg.src = post.images[0];
+    heroImg.alt = `${post.category} ${post.name}`;
+    hero.appendChild(heroImg);
+    body.appendChild(hero);
+
+    // миниатюры (остальные)
+    const thumbs = document.createElement('div');
+    thumbs.className = 'post-thumbs';
+    post.images.slice(1).forEach(src => {
       const img = document.createElement('img');
       img.src = src;
       img.alt = `${post.category} ${post.name}`;
-      track.appendChild(img);
+      thumbs.appendChild(img);
     });
-    carousel.appendChild(track);
-    wrapper.appendChild(carousel);
+    body.appendChild(thumbs);
 
-    const bottomTitle = document.createElement('p');
-    bottomTitle.className = 'post-description';
-    bottomTitle.textContent = post.name;
-    wrapper.appendChild(bottomTitle);
+    wrapper.appendChild(body);
+
+    // подпись снизу слева
+    const caption = document.createElement('div');
+    caption.className = 'post-caption';
+    caption.innerHTML = `
+      <div class="cap-top">${post.category}</div>
+      <div class="cap-bottom"><span class="name">${post.name}</span> <span class="desc">— описание скоро…</span></div>
+    `;
+    wrapper.appendChild(caption);
+
     portfolio.appendChild(wrapper);
-    setupCarousel(carousel);
   });
+
+  // ВАЖНО: больше не добавляем пузырьки соцсетей через JS.
+  // Они есть в HTML (<section class="contacts"><div class="social-bubbles">...</div></section>)
 });
