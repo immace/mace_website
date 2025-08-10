@@ -108,7 +108,7 @@ section { padding: 7vh 0; }
   color: var(--accent);
 }
 
-/* описание — тонкое, с заглавной буквы в тексте подставляй сам */
+/* описание справа — тонкое; имя поста внутри делаем жирным */
 .post-description {
   margin: 8px 0 0;
   font-size: 16px;
@@ -117,6 +117,7 @@ section { padding: 7vh 0; }
   padding: 0 14px;
   font-weight: 300;
 }
+.post-description .post-name { font-weight: 700; color: #333; }
 
 @media (min-width: 1024px){
   .post-title { font-size: 32px; }
@@ -170,10 +171,10 @@ img { width: 100%; height: auto; display: block; }
   }
   .post:not(.is-first) .post-cover{
     display: block;
-    width: 100%;        /* ширина определяет размер */
+    width: 100%;
     height: auto;
     max-width: 100%;
-    object-fit: contain;/* без обрезки */
+    object-fit: contain; /* без обрезки */
     border-radius: 10px;
     box-shadow:
       0 14px 34px rgba(var(--accent-rgb), .22),
@@ -192,11 +193,11 @@ img { width: 100%; height: auto; display: block; }
   /* правая колонка: сверху превью сеткой, снизу текст */
   .post:not(.is-first) .post-right{
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto; /* высота секции подстраивается автоматически */
     row-gap: var(--gap);
   }
 
-  /* превью — 3 в ряд; фиксированные пропорции через aspect-ratio */
+  /* превью — 3 в ряд; НИЧЕГО не обрезаем: без фикс. высоты и без aspect-ratio */
   .post:not(.is-first) .post-thumbs{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -204,9 +205,9 @@ img { width: 100%; height: auto; display: block; }
   }
   .post:not(.is-first) .post-thumbs img{
     width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;  /* <— ВАЖНО: стабильные пропорции */
-    object-fit: cover;    /* плотные миниатюры */
+    height: auto;        /* авто-высота */
+    object-fit: contain; /* показываем целиком */
+    background: #fff;    /* на случай «письма» по краям */
     border-radius: 8px;
     box-shadow:
       0 14px 34px rgba(var(--accent-rgb), .22),
@@ -348,12 +349,8 @@ footer {
 
 /* Скрыть верхний H3 у всех постов, кроме первого (на десктопе) */
 @media (min-width: 769px){
-  /* если h3 — прямой ребёнок .post */
-  .posts .post:not(.is-first) > h3.post-title { 
-    display: none !important; 
-  }
-  /* на случай, если вёрстка немного изменилась и h3 не прямой ребёнок */
-  .posts .post:not(.is-first) h3.post-title { 
-    display: none !important; 
+  .posts .post:not(.is-first) > h3.post-title,
+  .posts .post:not(.is-first) h3.post-title {
+    display: none !important;
   }
 }
