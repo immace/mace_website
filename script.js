@@ -258,20 +258,4 @@ document.addEventListener('DOMContentLoaded', () => {
     portfolio.appendChild(wrapper);
     setupCarousel(carousel);
   });
-
-  // ================== Плавающие соцсети ==================
-  const socialContainer = document.createElement('div');
-  socialContainer.className = 'floating-socials';
-  socialContainer.innerHTML = `
-    <a href="https://instagram.com/immalcev" target="_blank" class="bubble">
-      <img src="assets/instagram.png" alt="Instagram">
-    </a>
-    <a href="https://t.me/immalcev" target="_blank" class="bubble">
-      <img src="assets/telegram.png" alt="Telegram">
-    </a>
-    <a href="mailto:mace4681@gmail.com" class="bubble">
-      <img src="assets/email.png" alt="Email">
-    </a>
-  `;
-  document.body.appendChild(socialContainer);
 });
