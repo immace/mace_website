@@ -130,34 +130,70 @@ document.addEventListener('DOMContentLoaded', () => {
   //    - на мобиле: горизонтальный скролл + индикаторы
   // ----------------------------
   function setupCarousel(carousel) {
-    const track = carousel.querySelector('.carousel-track');
-    const images = Array.from(track.children);
-    if (images.length === 0) return;
+  const track = carousel.querySelector('.carousel-track');
+  const images = Array.from(track.children);
+  if (images.length === 0) return;
 
-    const mobile = window.innerWidth <= 768;
+  const mobile = window.innerWidth <= 768;
 
-    if (mobile) {
-      // мобильная версия — обычный скролл и точки
-      if (images.length > 1) {
-        const indicators = document.createElement('div');
-        indicators.className = 'carousel-indicators';
-        images.forEach((_, i) => {
-          const dot = document.createElement('span');
-          if (i === 0) dot.classList.add('active');
-          indicators.appendChild(dot);
+  if (mobile) {
+    // мобильная версия — только свайп
+    if (images.length > 1) {
+      const indicators = document.createElement('div');
+      indicators.className = 'carousel-indicators';
+      images.forEach((_, i) => {
+        const dot = document.createElement('span');
+        if (i === 0) dot.classList.add('active');
+        indicators.appendChild(dot);
+      });
+      carousel.appendChild(indicators);
+
+      const updateIndicators = () => {
+        const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+        indicators.querySelectorAll('span').forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
         });
-        carousel.appendChild(indicators);
-
-        const updateIndicators = () => {
-          const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
-          indicators.querySelectorAll('span').forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-          });
-        };
-        carousel.addEventListener('scroll', updateIndicators);
-      }
-      return; // без автопрокрутки на мобиле
+      };
+      carousel.addEventListener('scroll', updateIndicators);
     }
+    return;
+  }
+
+  // ===== DESKTOP =====
+  carousel.style.height = '40vh';
+  track.style.height = '100%';
+  track.style.alignItems = 'center';
+
+  // Убираем inline размеры у картинок
+  images.forEach(img => {
+    img.style.height = '';
+    img.style.width = '';
+    img.style.objectFit = '';
+    img.loading = 'lazy';
+  });
+
+  // Создаём клонов так, чтобы в сумме было 3 комплекта картинок
+  const setCount = 3;
+  for (let i = 0; i < setCount - 1; i++) {
+    images.forEach(img => {
+      track.appendChild(img.cloneNode(true));
+    });
+  }
+
+  // Ширина одного сета картинок
+  const singleSetWidth = track.scrollWidth / setCount;
+
+  // Бесконечная плавная прокрутка
+  let pos = 0;
+  const step = () => {
+    pos -= 0.5; // скорость
+    if (-pos >= singleSetWidth) pos = 0; // сброс после одного полного сета
+    track.style.transform = `translateX(${pos}px)`;
+    requestAnimationFrame(step);
+  };
+  step();
+}
+
 
     // ===== DESKTOP =====
     // высоту карусели задаём (дублируем CSS на всякий случай)
