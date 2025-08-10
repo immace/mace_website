@@ -260,12 +260,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const track = document.createElement('div');
     track.className = 'carousel-track';
 
-    post.images.forEach(src => {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = `${post.category} ${post.name}`;
-      track.appendChild(img);
-    });
+   post.images.forEach(src => {
+  const img = document.createElement('img');
+  // важный момент — кодируем URL с кириллицей/пробелами
+  img.src = encodeURI(src);
+  img.alt = `${post.category} ${post.name}`;
+  img.loading = 'lazy';
+  img.decoding = 'async';
+  track.appendChild(img);
+});
+
 
     carousel.appendChild(track);
     wrapper.appendChild(carousel);
