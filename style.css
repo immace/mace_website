@@ -19,77 +19,23 @@ body {
   padding: 0 14px;
 }
 
-/* ===== Header ===== */
 header {
   position: fixed;
   top: 0; left: 0; right: 0;
   background: #fff;
-  border-bottom: 1px solid #eee;
-  opacity: 0; pointer-events: none;
-  transition: opacity .3s;
-  z-index: 1000;
-}
-header.visible { opacity: 1; pointer-events: auto; }
-
-.header-content {
-  display: flex; justify-content: center; align-items: center;
-  padding: 12px 0;
-}
-
-#header-name {
-  font-size: clamp(28px, 6vw, 72px);
-  line-height: .96;
-  font-weight: 100;
-}
-
-/* ===== Hero ===== */
-.hero { padding: 10vh 0 6vh; }
-
-h1 {
-  font-size: clamp(28px, 6vw, 72px);
-  margin: 0;
-  line-height: .96;
-  font-weight: 700;
-}
-.hero-title { display: flex; flex-direction: column; }
-
-#name { display: block; font-weight: 100; }
-
-.role-wrapper {
-  display: block; overflow: hidden;
-  line-height: 1.2em; height: 1.2em; position: relative; font-weight: 700;
-}
-.role-wrapper span {
-  display: block; position: absolute; left: 0; top: 0; width: 100%;
-  white-space: nowrap;
-}
-
-#role { display: block; }
-
-.accent {
-  width: 60px; height: 8px; background: var(--accent);
-  margin-top: 16px;
-}
 
 section { padding: 7vh 0; }
 
-/* ===== role animations ===== */
 .dud { color: #aaa; }
 .slide-in { animation: slide-in .5s forwards; }
 .slide-out { animation: slide-out .5s forwards; }
 @keyframes slide-in { from { transform: translateY(100%);} to { transform: translateY(0);} }
 @keyframes slide-out { from { transform: translateY(0);} to { transform: translateY(-100%);} }
 
-/* ===== posts ===== */
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post { display: flex; flex-direction: column; }
 
-.post-title {
-  margin: 8px 0;
-  font-size: 24px;
-  max-width: var(--maxw);
-  padding: 0 14px;
-  font-weight: 300;
+@@ -93,34 +93,38 @@
   font-style: italic;
   color: var(--accent);
 }
@@ -106,10 +52,8 @@ section { padding: 7vh 0; }
   .post-description { font-size: 20px; }
 }
 
-/* ===== images reset ===== */
 img { width: 100%; height: auto; display: block; }
 
-/* ===== carousel ===== */
 .carousel {
   position: relative;
   overflow: hidden;
@@ -149,22 +93,9 @@ img { width: 100%; height: auto; display: block; }
   .carousel-track { will-change: auto; }
   .carousel-track img {
     width: 100%; height: auto;
-    border: 1px solid #eee; border-radius: 16px;
-    scroll-snap-align: center;
-  }
-
-  .carousel-indicators {
-    position: sticky; bottom: 16px; left: 0; right: 0;
-    display: flex; justify-content: center; align-items: center; gap: 6px;
-    pointer-events: none;
-  }
-  .carousel-indicators span {
-    width: 4px; height: 4px; background: rgba(163,193,217,.5); border-radius: 50%;
-  }
   .carousel-indicators span.active { width: 6px; height: 6px; background: var(--accent); }
 }
 
-/* ===== contacts: floating bubbles ===== */
 .contacts { padding: 0 14px 56px; }
 
 .social-bubbles{
@@ -188,14 +119,14 @@ img { width: 100%; height: auto; display: block; }
 .bubble-wrap:nth-child(3){ left: 68%; animation: driftX3 6.6s ease-in-out infinite alternate .7s; }
 
 .bubble{
-  --size: 76px;
+   --size: 76px;
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
   background: #fff;
   box-shadow:
     0 10px 24px rgba(0,0,0,.08),
-    0 0 0 0 var(--accent) inset; /* скрытая «обводка» */
+     0 0 0 0 var(--accent) inset; /* скрытая «обводка» */
   display: grid;
   place-items: center;
   color: #111;
@@ -208,7 +139,7 @@ img { width: 100%; height: auto; display: block; }
 }
 
 .bubble img{
-  width: 30px; height: 30px; display: block;
+   width: 30px; height: 30px; display: block;
 }
 
 .bubble:hover,
@@ -235,7 +166,6 @@ img { width: 100%; height: auto; display: block; }
   .bubble, .bubble-wrap { animation: none !important; }
 }
 
-/* ===== footer ===== */
 footer {
   border-top: 1px solid #eee;
   padding: 14px 0;
@@ -243,42 +173,3 @@ footer {
   font-size: 14px;
 }
 #footer-name { font-weight: 100; }
-
-/* === Double-tap heart animation === */
-.heart-like {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%) scale(0.3);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.heart-like svg { width: 96px; height: 96px; display: block; }
-.heart-like svg path {
-  stroke: #111;               /* тонкая чёрная обводка */
-  stroke-width: 12;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: transparent;          /* сначала пустое сердечко */
-}
-
-/* появление */
-.heart-like.animate {
-  animation: heart-pop 200ms ease-out forwards,
-             heart-fly 800ms 250ms ease-in forwards;
-}
-
-/* заливка акцентом (чуть позже старта) */
-.heart-like.fill svg path { fill: var(--accent); }
-
-@keyframes heart-pop {
-  from { transform: translate(-50%,-50%) scale(0.3); opacity:.2; }
-  to   { transform: translate(-50%,-50%) scale(1.0); opacity:1;  }
-}
-@keyframes heart-fly {
-  from { transform: translate(-50%,-50%) scale(1.0); opacity:1; }
-  to   { transform: translate(-50%,-130%) scale(0.8); opacity:0; }
-}
-
