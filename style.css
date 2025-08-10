@@ -243,3 +243,42 @@ footer {
   font-size: 14px;
 }
 #footer-name { font-weight: 100; }
+
+/* === Double-tap heart animation === */
+.heart-like {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%) scale(0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.heart-like svg { width: 96px; height: 96px; display: block; }
+.heart-like svg path {
+  stroke: #111;               /* тонкая чёрная обводка */
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: transparent;          /* сначала пустое сердечко */
+}
+
+/* появление */
+.heart-like.animate {
+  animation: heart-pop 200ms ease-out forwards,
+             heart-fly 800ms 250ms ease-in forwards;
+}
+
+/* заливка акцентом (чуть позже старта) */
+.heart-like.fill svg path { fill: var(--accent); }
+
+@keyframes heart-pop {
+  from { transform: translate(-50%,-50%) scale(0.3); opacity:.2; }
+  to   { transform: translate(-50%,-50%) scale(1.0); opacity:1;  }
+}
+@keyframes heart-fly {
+  from { transform: translate(-50%,-50%) scale(1.0); opacity:1; }
+  to   { transform: translate(-50%,-130%) scale(0.8); opacity:0; }
+}
+
