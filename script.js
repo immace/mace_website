@@ -1,249 +1,251 @@
-:root {
-  --accent: #A3C1D9;   /* акцент сайта */
-  --gap: 24px;
-  --maxw: 1000px;
-}
+// ===== helper animations: name scramble + roles + sticky header =====
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('script loaded');
 
-* { box-sizing: border-box; }
+  const nameEl = document.getElementById('name');
+  const headerNameEl = document.getElementById('header-name');
+  let roleEl = document.getElementById('role');
+  const roleWrapper = document.querySelector('.role-wrapper');
 
-body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  background: #fff;
-  color: #000;
-}
-
-.wrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 14px;
-}
-
-/* ===== Header ===== */
-header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  opacity: 0; pointer-events: none;
-  transition: opacity .3s;
-  z-index: 1000;
-}
-header.visible { opacity: 1; pointer-events: auto; }
-
-.header-content {
-  display: flex; justify-content: center; align-items: center;
-  padding: 12px 0;
-}
-
-#header-name {
-  font-size: clamp(28px, 6vw, 72px);
-  line-height: .96;
-  font-weight: 100;
-}
-
-/* ===== Hero ===== */
-.hero { padding: 10vh 0 6vh; }
-
-h1 {
-  font-size: clamp(28px, 6vw, 72px);
-  margin: 0;
-  line-height: .96;
-  font-weight: 700;
-}
-.hero-title { display: flex; flex-direction: column; }
-
-#name { display: block; font-weight: 100; }
-
-.role-wrapper {
-  display: block; overflow: hidden;
-  line-height: 1.2em; height: 1.2em; position: relative; font-weight: 700;
-}
-.role-wrapper span {
-  display: block; position: absolute; left: 0; top: 0; width: 100%;
-  white-space: nowrap;
-}
-
-#role { display: block; }
-
-.accent {
-  width: 60px; height: 8px; background: var(--accent);
-  margin-top: 16px;
-}
-
-section { padding: 7vh 0; }
-
-/* ===== Animations for role ===== */
-.dud { color: #aaa; }
-.slide-in { animation: slide-in .5s forwards; }
-.slide-out { animation: slide-out .5s forwards; }
-@keyframes slide-in { from { transform: translateY(100%);} to { transform: translateY(0);} }
-@keyframes slide-out { from { transform: translateY(0);} to { transform: translateY(-100%);} }
-
-/* ===== Posts (карточки) ===== */
-.posts { display: flex; flex-direction: column; gap: var(--gap); }
-.post { display: flex; flex-direction: column; }
-
-.post-title {
-  margin: 8px 0;
-  font-size: 24px;
-  max-width: var(--maxw);
-  padding: 0 14px;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--accent);
-}
-.post-description {
-  margin: 8px 0 0;
-  font-size: 16px; color: #555;
-  max-width: var(--maxw); padding: 0 14px;
-  font-weight: 700;
-}
-@media (min-width: 1024px){
-  .post-title { font-size: 32px; }
-  .post-description { font-size: 20px; }
-}
-
-/* ===== Images reset ===== */
-img { width: 100%; height: auto; display: block; }
-
-/* ===== Carousel ===== */
-.carousel {
-  position: relative;
-  overflow: hidden;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-}
-.carousel-track {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  will-change: transform;
-}
-.carousel-track img {
-  width: 100%;
-  flex-shrink: 0;
-}
-
-@media (min-width: 769px){
-  .carousel { height: 40vh; }
-  .carousel-track { height: 100%; align-items: center; }
-  .carousel-track img { height: 100%; width: auto; object-fit: contain; }
-}
-
-@media (max-width: 768px){
-  .carousel {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    height: auto; width: 100%;
-    margin-left: 0; margin-right: 0;
-  }
-  .carousel::-webkit-scrollbar { display: none; }
-
-  .carousel-track { will-change: auto; }
-  .carousel-track img {
-    width: 100%; height: auto;
-    border: 1px solid #eee; border-radius: 16px;
-    scroll-snap-align: center;
+  class TextScramble {
+    constructor(el) {
+      this.el = el;
+      this.chars = 'абвгдeёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      this.update = this.update.bind(this);
+    }
+    setText(newText) {
+      const oldText = this.el.innerText;
+      const length = Math.max(oldText.length, newText.length);
+      const promise = new Promise(resolve => this.resolve = resolve);
+      this.queue = [];
+      for (let i = 0; i < length; i++) {
+        const from = oldText[i] || '';
+        const to = newText[i] || '';
+        const start = Math.floor(Math.random() * 20);
+        const end = start + Math.floor(Math.random() * 20);
+        this.queue.push({from, to, start, end});
+      }
+      cancelAnimationFrame(this.frameRequest);
+      this.frame = 0;
+      this.update();
+      return promise;
+    }
+    update() {
+      let output = '';
+      let complete = 0;
+      for (let i = 0, n = this.queue.length; i < n; i++) {
+        let {from, to, start, end, char} = this.queue[i];
+        if (this.frame >= end) {
+          complete++; output += to;
+        } else if (this.frame >= start) {
+          if (!char || Math.random() < 0.28) {
+            char = this.randomChar();
+            this.queue[i].char = char;
+          }
+          output += `<span class="dud">${char}</span>`;
+        } else {
+          output += from;
+        }
+      }
+      this.el.innerHTML = output;
+      if (complete === this.queue.length) {
+        this.resolve();
+      } else {
+        this.frameRequest = requestAnimationFrame(this.update);
+        this.frame += 2;
+      }
+    }
+    randomChar() {
+      return this.chars[Math.floor(Math.random() * this.chars.length)];
+    }
   }
 
-  .carousel-indicators {
-    position: sticky; bottom: 16px; left: 0; right: 0;
-    display: flex; justify-content: center; align-items: center; gap: 6px;
-    pointer-events: none;
+  const phrases = ['Дима Мальцев', 'Мацэ'];
+  const fxMain = new TextScramble(nameEl);
+  const fxHeader = new TextScramble(headerNameEl);
+  let counter = 0;
+  function next() {
+    const phrase = phrases[counter];
+    Promise.all([fxMain.setText(phrase), fxHeader.setText(phrase)]).then(() => {
+      setTimeout(next, 15000);
+    });
+    counter = (counter + 1) % phrases.length;
   }
-  .carousel-indicators span {
-    width: 4px; height: 4px; background: rgba(163,193,217,.5); border-radius: 50%;
+  next();
+
+  const roles = [
+    'Графический дизайнер',
+    'Веб-дизайнер',
+    'Иллюстратор',
+    'Дизайнер шрифтов',
+    'Дизайнер айдентики',
+    'Дизайнер постеров'
+  ];
+  let roleIndex = 0;
+  roleEl.textContent = roles[roleIndex];
+
+  function changeRole() {
+    const nextIndex = (roleIndex + 1) % roles.length;
+    const next = document.createElement('span');
+    next.textContent = roles[nextIndex];
+    next.classList.add('slide-in');
+    roleWrapper.appendChild(next);
+    roleEl.classList.add('slide-out');
+    setTimeout(() => {
+      roleWrapper.removeChild(roleEl);
+      next.id = 'role';
+      roleEl = next;
+    }, 500);
+    roleIndex = nextIndex;
   }
-  .carousel-indicators span.active { width: 6px; height: 6px; background: var(--accent); }
-}
+  setInterval(changeRole, 5000);
 
-/* ===== Contacts: floating bubbles ===== */
-.contacts { padding: 0 14px 56px; }
+  const header = document.querySelector('header');
+  const hero = document.querySelector('.hero');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) header.classList.remove('visible');
+      else header.classList.add('visible');
+    });
+  });
+  observer.observe(hero);
 
-.social-bubbles{
-  position: relative;
-  height: 160px;               /* зона «полёта» повыше под большие пузыри */
-  display: block;
-  margin: 40px auto;
-  max-width: var(--maxw);
-}
+  // ===== CAROUSEL =====
+  function setupCarousel(carousel) {
+    const track = carousel.querySelector('.carousel-track');
+    const images = Array.from(track.children);
+    if (images.length === 0) return;
 
-.bubble-wrap{
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  text-decoration: none;
-  color: inherit;
-}
+    const mobile = window.innerWidth <= 768;
+    if (mobile) {
+      if (images.length > 1) {
+        const indicators = document.createElement('div');
+        indicators.className = 'carousel-indicators';
+        images.forEach((_, i) => {
+          const dot = document.createElement('span');
+          if (i === 0) dot.classList.add('active');
+          indicators.appendChild(dot);
+        });
+        carousel.appendChild(indicators);
+        const updateIndicators = () => {
+          const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+          indicators.querySelectorAll('span').forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+          });
+        };
+        carousel.addEventListener('scroll', updateIndicators);
+      }
+      return; // мобильная — без автопрокрутки
+    }
 
-/* стартовые позиции и разная анимация по X */
-.bubble-wrap:nth-child(1){ left: 32%; animation: driftX1 7.2s ease-in-out infinite alternate; }
-.bubble-wrap:nth-child(2){ left: 50%; animation: driftX2 8.8s ease-in-out infinite alternate .35s; }
-.bubble-wrap:nth-child(3){ left: 68%; animation: driftX3 6.6s ease-in-out infinite alternate .7s; }
+    // desktop
+    carousel.style.height = '40vh';
+    track.style.height = '100%';
+    track.style.alignItems = 'center';
+    images.forEach(img => {
+      img.loading = 'lazy';
+      img.style.height = '';
+      img.style.width = '';
+      img.style.objectFit = '';
+    });
 
-/* сам круг — больше */
-.bubble{
-  --size: 76px;                 /* было 64px */
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  background: #fff;
-  box-shadow:
-    0 10px 24px rgba(0,0,0,.08),
-    0 0 0 0 var(--accent) inset;   /* «обводка» скрыта по умолчанию */
-  display: grid;
-  place-items: center;
-  color: #111;
-  transition:
-    transform .2s ease,
-    background .2s ease,
-    color .2s ease,
-    box-shadow .2s ease;
-  animation: driftY 5.4s ease-in-out infinite alternate;
-}
+    // дубликаты для бесшовной ленты
+    images.forEach(img => track.appendChild(img.cloneNode(true)));
 
-/* иконки — чуть больше */
-.bubble img{
-  width: 30px;                  /* было 24px */
-  height: 30px;
-  display: block;
-}
+    let pos = 0;
+    const step = () => {
+      pos -= 0.5;                   // скорость
+      const resetAt = track.scrollWidth / 2;
+      if (-pos >= resetAt) pos = 0; // зацикливание
+      track.style.transform = `translateX(${pos}px)`;
+      requestAnimationFrame(step);
+    };
+    step();
+  }
 
-/* hover / focus — показываем обводку */
-.bubble:hover,
-.bubble:focus-visible{
-  transform: translateY(-2px) scale(1.07);
-  box-shadow:
-    0 12px 28px rgba(0,0,0,.16),
-    0 0 0 1.5px var(--accent) inset;
-}
+  // ===== PORTFOLIO (группируем по "категория-имя") =====
+  const assetFiles = [
+    'Айдентика-Ростов-1.jpg',
+    'Айдентика-Ростов-2.jpg',
+    'Айдентика-Ростов-3.jpg',
+    'Айдентика-Ростов-4.jpg',
+    'Айдентика-Ростов-5.jpg',
+    'Айдентика-Ростов-6.jpg',
+    'Логотип-Ростов-1.jpg',
+    'Обложка-Нотное_издание-1.png',
+    'Обложка-Нотное_издание-2.png',
+    'Обложка-Нотное_издание-3.png',
+    'Обложка-Нотное_издание-4.png',
+    'Обложка-Нотное_издание-5.png',
+    'Постер-Гувернантка-1.jpg',
+    'Постер-Гувернантка-2.jpg',
+    'Постер-Гувернантка-3.jpg',
+    'Постер-Гувернантка-4.jpg',
+    'Постер-Гувернантка-5.jpg',
+    'Постер-Движение-1.jpg',
+    'Постер-Движение-2.jpg',
+    'Постер-Движение-3.jpg',
+    'Постер-Движение-4.jpg',
+    'Постер-Движение-5.jpg',
+    'Постер-Майкл_Джексон-1.jpg',
+    'Постер-Майкл_Джексон-2.jpg',
+    'Постер-Форма-1.jpg'
+  ];
 
-/* active — чуть сильнее обводка и «нажатие» */
-.bubble:active{
-  transform: translateY(0) scale(0.98);
-  box-shadow:
-    0 8px 18px rgba(0,0,0,.12),
-    0 0 0 2px var(--accent) inset;
-}
+  const postsMap = {};
+  assetFiles.forEach(file => {
+    const [section, postName, indexExt] = file.split('-');
+    const key = `${section}-${postName}`;
+    const index = parseInt(indexExt.split('.')[0], 10);
+    if (!postsMap[key]) {
+      postsMap[key] = {
+        category: section,
+        name: postName.replace(/_/g, ' '),
+        images: []
+      };
+    }
+    postsMap[key].images.push({ src: `/assets/${file}`, index });
+  });
 
-/* хаотичный дрейф */
-@keyframes driftX1{ from{ transform: translate(-40px,-50%);} to{ transform: translate(18px,-50%);} }
-@keyframes driftX2{ from{ transform: translate(-26px,-50%);} to{ transform: translate(34px,-50%);} }
-@keyframes driftX3{ from{ transform: translate(-30px,-50%);} to{ transform: translate(22px,-50%);} }
-@keyframes driftY  { from{ transform: translateY(12px);} to{ transform: translateY(-16px);} }
+  const posts = Object.values(postsMap).map(p => {
+    p.images.sort((a, b) => a.index - b.index);
+    p.images = p.images.map(i => i.src);
+    return p;
+  });
 
-@media (prefers-reduced-motion: reduce){
-  .bubble, .bubble-wrap { animation: none !important; }
-}
+  const portfolio = document.getElementById('portfolio');
+  posts.forEach(post => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'post';
 
-/* ===== Footer ===== */
-footer {
-  border-top: 1px solid #eee;
-  padding: 14px 0;
-  color: #777;
-  font-size: 14px;
-}
-#footer-name { font-weight: 100; }
+    const topTitle = document.createElement('h3');
+    topTitle.className = 'post-title';
+    topTitle.textContent = post.category;
+    wrapper.appendChild(topTitle);
+
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel';
+    const track = document.createElement('div');
+    track.className = 'carousel-track';
+
+    post.images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = `${post.category} ${post.name}`;
+      img.loading = 'lazy';
+      track.appendChild(img);
+    });
+
+    carousel.appendChild(track);
+    wrapper.appendChild(carousel);
+
+    const bottomTitle = document.createElement('p');
+    bottomTitle.className = 'post-description';
+    bottomTitle.textContent = post.name + ' · описание: скоро';
+    wrapper.appendChild(bottomTitle);
+
+    portfolio.appendChild(wrapper);
+
+    setupCarousel(carousel);
+  });
+});
