@@ -1,28 +1,22 @@
 :root {
-  --accent: #A3C1D9;   /* акцент сайта */
+  --accent: #A3C1D9;
   --gap: 24px;
   --maxw: 1000px;
 }
 
+/* Base */
 * { box-sizing: border-box; }
-
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
   background: #fff;
   color: #000;
 }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 14px; }
 
-.wrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 14px;
-}
-
-/* ===== Header ===== */
+/* Header */
 header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
+  position: fixed; inset: 0 0 auto 0;
   background: #fff;
   border-bottom: 1px solid #eee;
   opacity: 0; pointer-events: none;
@@ -30,29 +24,13 @@ header {
   z-index: 1000;
 }
 header.visible { opacity: 1; pointer-events: auto; }
+.header-content { display: flex; justify-content: center; align-items: center; padding: 12px 0; }
+#header-name { font-size: clamp(28px, 6vw, 72px); line-height: .96; font-weight: 100; }
 
-.header-content {
-  display: flex; justify-content: center; align-items: center;
-  padding: 12px 0;
-}
-
-#header-name {
-  font-size: clamp(28px, 6vw, 72px);
-  line-height: .96;
-  font-weight: 100;
-}
-
-/* ===== Hero ===== */
+/* Hero */
 .hero { padding: 10vh 0 6vh; }
-
-h1 {
-  font-size: clamp(28px, 6vw, 72px);
-  margin: 0;
-  line-height: .96;
-  font-weight: 700;
-}
+h1 { font-size: clamp(28px, 6vw, 72px); margin: 0; line-height: .96; font-weight: 700; }
 .hero-title { display: flex; flex-direction: column; }
-
 #name { display: block; font-weight: 100; }
 
 .role-wrapper {
@@ -63,80 +41,47 @@ h1 {
   display: block; position: absolute; left: 0; top: 0; width: 100%;
   white-space: nowrap;
 }
-
 #role { display: block; }
 
-.accent {
-  width: 60px; height: 8px; background: var(--accent);
-  margin-top: 16px;
-}
+.accent { width: 60px; height: 8px; background: var(--accent); margin-top: 16px; }
 
 section { padding: 7vh 0; }
 
-/* ===== Animations for role / scramble ===== */
+/* Animations for role */
 .dud { color: #aaa; }
 .slide-in { animation: slide-in .5s forwards; }
 .slide-out { animation: slide-out .5s forwards; }
 @keyframes slide-in { from { transform: translateY(100%);} to { transform: translateY(0);} }
 @keyframes slide-out { from { transform: translateY(0);} to { transform: translateY(-100%);} }
 
-/* ===== Posts (общий каркас) ===== */
+/* Posts (если используешь js-генерацию) */
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post { display: flex; flex-direction: column; }
 
-/* Шапка поста «в линию»: слева тип, справа название */
-.post-head{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:16px;
-  max-width:var(--maxw);
-  padding:0 14px;
-  margin:8px auto 12px;
+.post-title {
+  margin: 8px 0;
+  font-size: 24px;
+  max-width: var(--maxw);
+  padding: 0 14px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--accent);
 }
-.post-head .post-title{  /* левый — тип */
-  margin:0;
-  font-size:24px;
-  font-weight:300;
-  font-style:italic;
-  color:var(--accent);
+.post-description {
+  margin: 8px 0 0;
+  font-size: 16px; color: #555;
+  max-width: var(--maxw); padding: 0 14px;
+  font-weight: 700;
 }
-.post-head .post-name-right{ /* правый — название */
-  margin:0;
-  font-size:18px;
-  font-weight:700;
-  color:#222;
+@media (min-width: 1024px){
+  .post-title { font-size: 32px; }
+  .post-description { font-size: 20px; }
 }
 
-/* Подпись снизу */
-.post-caption{
-  margin-top:12px;
-  max-width:var(--maxw);
-  padding:0 14px;
-}
-.post-caption .cap-top{
-  font-size:18px;
-  font-weight:300;
-  font-style:italic;
-  color:var(--accent);
-}
-.post-caption .cap-bottom{
-  margin-top:4px;
-  font-size:16px;
-  color:#444;
-}
-.post-caption .cap-bottom .name{
-  font-weight:700;
-  color:#111;
-}
-.post-caption .cap-bottom .desc{
-  color:#777;
-}
+/* Images reset (на всякий случай) */
+img { max-width: 100%; height: auto; display: block; }
 
-/* ===== Images reset ===== */
-img { width: 100%; height: auto; display: block; }
-
-/* ===== Carousel (только для первого поста) ===== */
+/* ===== Carousel базовые стили (если используешь) ===== */
 .carousel {
   position: relative;
   overflow: hidden;
@@ -146,21 +91,17 @@ img { width: 100%; height: auto; display: block; }
 }
 .carousel-track {
   display: flex;
-  align-items: stretch; /* на мобиле растягиваем, на десктопе ниже переопределим */
+  align-items: stretch;
   gap: 0;
   will-change: transform;
 }
-.carousel-track img {
-  width: 100%;
-  flex-shrink: 0;
-}
+.carousel-track img { width: 100%; flex-shrink: 0; }
 
 @media (min-width: 769px){
   .carousel { height: 40vh; }
   .carousel-track { height: 100%; align-items: center; }
   .carousel-track img { height: 100%; width: auto; object-fit: contain; }
 }
-
 @media (max-width: 768px){
   .carousel {
     overflow-x: auto;
@@ -170,14 +111,12 @@ img { width: 100%; height: auto; display: block; }
     margin-left: 0; margin-right: 0;
   }
   .carousel::-webkit-scrollbar { display: none; }
-
   .carousel-track { will-change: auto; }
   .carousel-track img {
     width: 100%; height: auto;
     border: 1px solid #eee; border-radius: 16px;
     scroll-snap-align: center;
   }
-
   .carousel-indicators {
     position: sticky; bottom: 16px; left: 0; right: 0;
     display: flex; justify-content: center; align-items: center; gap: 6px;
@@ -189,59 +128,7 @@ img { width: 100%; height: auto; display: block; }
   .carousel-indicators span.active { width: 6px; height: 6px; background: var(--accent); }
 }
 
-/* ===== Макет «большая слева + миниатюры справа» для остальных постов ===== */
-.post-body{
-  display:grid;
-  grid-template-columns:minmax(340px, 48vw) 1fr; /* слева большой блок, справа сетка */
-  gap:var(--gap);
-  max-width:100vw;
-  margin:0 auto;
-  padding:0;
-}
-
-.post-hero{
-  width:100%;
-  height:100%;
-  min-height:360px;
-  overflow:hidden;
-}
-.post-hero img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-.post-thumbs{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr); /* три в ряд */
-  gap:var(--gap);
-  align-content:start;
-}
-.post-thumbs img{
-  width:100%;
-  aspect-ratio:1/1;       /* квадратные миниатюры; убери строку — будут естественные пропорции */
-  object-fit:cover;
-  display:block;
-  border:1px solid #eee;
-  border-radius:8px;
-}
-
-/* ---------- Адаптив ---------- */
-@media (max-width: 1024px){
-  .post-body{
-    grid-template-columns:1fr;  /* всё в колонку */
-  }
-  .post-hero{ min-height:300px; }
-  .post-thumbs{ grid-template-columns:repeat(3, 1fr); }
-}
-
-@media (max-width: 640px){
-  .post-hero{ min-height:220px; }
-  .post-thumbs{ grid-template-columns:repeat(2, 1fr); } /* две в ряд на телефоне */
-}
-
-/* ===== Пузырьки соцсетей (хаотический дрейф) ===== */
+/* ===== Contacts: floating bubbles ===== */
 .contacts { padding: 0 14px 56px; }
 
 .social-bubbles{
@@ -252,6 +139,7 @@ img { width: 100%; height: auto; display: block; }
   max-width: var(--maxw);
 }
 
+/* каждый пузырь — позиция + горизонтальный дрейф */
 .bubble-wrap{
   position: absolute;
   top: 50%;
@@ -268,40 +156,39 @@ img { width: 100%; height: auto; display: block; }
 /* сам круг */
 .bubble{
   --size: 64px;
-  width: var(--size);
-  height: var(--size);
+  width: var(--size); height: var(--size);
   border-radius: 50%;
   background: #fff;
   border: 1.5px solid var(--accent);
-  display: grid;
-  place-items: center;
-  color: #111;                   /* currentColor для SVG */
+  display: grid; place-items: center;
+  color: #111;
   box-shadow: 0 10px 24px rgba(0,0,0,.08);
   transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
   animation: driftY 5.4s ease-in-out infinite alternate;
 }
-
-.bubble svg{ width: 28px; height: 28px; display: block; }
-
 .bubble:hover{
   transform: translateY(-2px) scale(1.07);
   background: var(--accent);
-  color: #fff;                   /* иконка станет белой */
+  color: #fff;
   box-shadow: 0 12px 28px rgba(0,0,0,.16);
 }
 
-/* хаотичный дрейф: разные амплитуды по X и общий покач по Y */
+/* размеры картинок-иконок */
+.bubble img{
+  width: 28px; height: 28px; display: block;
+}
+
+/* хаотичный дрейф */
 @keyframes driftX1{ from{ transform: translate(-40px,-50%);} to{ transform: translate(18px,-50%);} }
 @keyframes driftX2{ from{ transform: translate(-26px,-50%);} to{ transform: translate(34px,-50%);} }
 @keyframes driftX3{ from{ transform: translate(-30px,-50%);} to{ transform: translate(22px,-50%);} }
-
-@keyframes driftY { from{ transform: translateY(12px);} to{ transform: translateY(-16px);} }
+@keyframes driftY  { from{ transform: translateY(12px);} to{ transform: translateY(-16px);} }
 
 @media (prefers-reduced-motion: reduce){
   .bubble, .bubble-wrap { animation: none !important; }
 }
 
-/* ===== Footer ===== */
+/* Footer */
 footer {
   border-top: 1px solid #eee;
   padding: 14px 0;
