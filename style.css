@@ -261,6 +261,20 @@ img { width: 100%; height: auto; display: block; }
   }
   .carousel::-webkit-scrollbar { display: none; }
 
+  .post {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post .carousel {
+    order: 1; /* сначала карусель */
+  }
+
+  .post > .post-title {
+    order: 2; /* потом заголовок */
+    margin-top: 8px;
+  }
+
   .carousel-track { will-change: auto; }
   .carousel-track img {
     width: 100%;
