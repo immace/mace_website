@@ -98,34 +98,34 @@ section { padding: 7vh 0; }
 .post  { display: flex; flex-direction: column; }
 
 /* Заголовок типа поста — ширина по тексту + мазок позади */
-.post-title{
+.post > .post-title{
   position: relative;
-  display: inline-block !important; /* критично: ширина по тексту */
-  width: auto !important;
-  max-width: 100%;
-  white-space: nowrap;               /* чтобы не переносился */
+  display: inline-block;     /* ширина по содержимому */
+  align-self: flex-start;     /* не растягиваться на всю ширину flex-контейнера */
+  width: auto;
+  white-space: nowrap;
+
   margin: 8px 14px;
-  padding: .22em .8em .28em;         /* чуть воздуха вокруг текста */
+  padding: .22em .8em .28em;
   color: #fff;
   font-style: italic;
-  font-weight: 600;                  /* «чуть жирнее тонкого» */
+  font-weight: 600;
   line-height: 1;
-  background: none !important;       /* убираем старую заливку маркером */
-  border-radius: 0;                  /* на всякий случай */
+  background: none;
+  border-radius: 0;
   z-index: 0;
 }
 
-/* Сам мазок — ровно по ширине текста */
-.post-title::before{
+.post > .post-title::before{
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;                       /* совпадает с шириной заголовка */
-  height: 1.35em;                    /* высота мазка */
+  width: 100%;                 /* ширина = ширине текста */
+  height: 1.35em;
   background: url("/assets/markers/marker-bg-small.png") center / 100% 100% no-repeat;
-  z-index: -1;                       /* под текстом */
+  z-index: -1;                 /* под текстом */
 }
 /* описание справа — тонкое; имя поста внутри делаем жирным */
 
@@ -396,29 +396,4 @@ footer {
 .post-desc {
   font-weight: 300;
   color: #555;
-}
-
-.post.is-first > .post-title {
-  display: inline-block;
-  width: auto;
-  white-space: nowrap;
-  position: relative;
-  padding: .22em .8em .28em;
-  color: #fff;
-  font-style: italic;
-  font-weight: 600;
-  line-height: 1;
-  background: none !important;
-}
-
-.post.is-first > .post-title::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 1.35em;
-  background: url("/assets/markers/marker-bg-small.png") center / 100% 100% no-repeat;
-  z-index: -1;
 }
