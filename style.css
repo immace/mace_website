@@ -372,3 +372,14 @@ footer {
   font-weight: 500; /* было 300 */
   color: #444; /* чуть темнее для читаемости */
 }
+
+.post-name {
+  font-weight: 600;
+  color: #000;
+}
+
+/* Описание — тоньше */
+.post-desc {
+  font-weight: 300;
+  color: #555;
+}
