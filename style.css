@@ -47,17 +47,17 @@ header.visible { opacity: 1; pointer-events: auto; }
 }
 
 /* ===== Hero ===== */
-.hero { padding: 10vh 0 6vh; }
+.hero { padding: 10vh 0 3vh; }
 
 .portfolio-name {
   text-align: center;
-  margin: 20px 0;
+  margin: 0;                 /* без лишних отступов сверху/снизу */
 }
-
 .portfolio-name img {
-  max-width: 280px; /* можно подогнать */
-  width: 100%;
+  display: block;
+  width: 85%;
   height: auto;
+  margin: 0 auto;            /* центрируем */
 }
 
 h1 {
@@ -96,6 +96,10 @@ h1 {
 }
 
 section { padding: 7vh 0; }
+
+section#portfolio.posts {
+  padding: 3.5vh 0 7vh;      /* top | left/right | bottom */
+}
 
 /* ===== Animations for role ===== */
 .dud { color: #aaa; }
