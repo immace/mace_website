@@ -98,7 +98,7 @@ section { padding: 7vh 0; }
 .post  { display: flex; flex-direction: column; }
 
 /* Заголовок типа поста — ширина по тексту + мазок позади */
-.post > .post-title{
+.post-title{
   position: relative;
   display: inline-block;     /* ширина по содержимому */
   align-self: flex-start;     /* не растягиваться на всю ширину flex-контейнера */
@@ -116,7 +116,7 @@ section { padding: 7vh 0; }
   z-index: 0;
 }
 
-.post > .post-title::before{
+.post-title::before{
   content: "";
   position: absolute;
   left: 50%;
