@@ -396,3 +396,17 @@ footer {
   font-weight: 300;
   color: #555;
 }
+
+.post.is-first {
+  display: flex;
+  flex-direction: column;
+}
+
+.post.is-first .carousel {
+  order: 1; /* сначала идёт карусель */
+}
+
+.post.is-first > .post-title {
+  order: 2; /* потом идёт заголовок */
+  margin-top: 8px; /* небольшой отступ */
+}
