@@ -309,7 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
       desc.className = 'post-description';
       const nameCap =
         post.name.length ? post.name[0].toUpperCase() + post.name.slice(1) : post.name;
-      desc.textContent = `${nameCap} · описание: скоро`;
+      const desc = document.createElement('p');
+      desc.className = 'post-description';
+      desc.innerHTML = `<span class="post-name">${post.name}</span> · <span class="post-desc">описание: скоро</span>`;
+
 
       meta.appendChild(type);
       meta.appendChild(desc);
