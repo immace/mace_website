@@ -380,6 +380,8 @@ footer {
 .post-description {
   font-weight: 500; /* было 300 */
   color: #444; /* чуть темнее для читаемости */
+  margin: 8px 0 0;
+  padding: 0 14px;
 }
 
 .post-name {
