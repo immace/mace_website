@@ -49,6 +49,17 @@ header.visible { opacity: 1; pointer-events: auto; }
 /* ===== Hero ===== */
 .hero { padding: 10vh 0 6vh; }
 
+.portfolio-name {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.portfolio-name img {
+  max-width: 280px; /* можно подогнать */
+  width: 100%;
+  height: auto;
+}
+
 h1 {
   font-size: clamp(28px, 6vw, 72px);
   margin: 0;
