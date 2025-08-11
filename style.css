@@ -133,7 +133,7 @@ section { padding: 7vh 0; }
   font-size: 16px;
   color: #555;
   max-width: var(--maxw);
-  padding: 0 14px;
+  padding: 0 26px 0 0;;
   font-weight: 300;
 }
 
