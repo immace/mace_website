@@ -97,40 +97,47 @@ section { padding: 7vh 0; }
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post  { display: flex; flex-direction: column; }
 
-/* Тип поста: белый курсив, мазок за текстом */
+/* Заголовок типа поста — ширина по тексту + мазок позади */
 .post-title{
   position: relative;
-  display: inline-block;
-  padding: .28em .8em .36em;     /* зазор внутри мазка */
+  display: inline-block !important; /* критично: ширина по тексту */
+  width: auto !important;
+  max-width: 100%;
+  white-space: nowrap;               /* чтобы не переносился */
+  margin: 8px 14px;
+  padding: .22em .8em .28em;         /* чуть воздуха вокруг текста */
   color: #fff;
   font-style: italic;
-  font-weight: 600;              /* “чуть жирнее тонкого” */
+  font-weight: 600;                  /* «чуть жирнее тонкого» */
   line-height: 1;
-  letter-spacing: .3px;
+  background: none !important;       /* убираем старую заливку маркером */
+  border-radius: 0;                  /* на всякий случай */
+  z-index: 0;
 }
 
-/* сам мазок — растягивается по размеру текста */
+/* Сам мазок — ровно по ширине текста */
 .post-title::before{
   content: "";
   position: absolute;
-  inset: 0;                      /* покрыть всю плашку */
-  pointer-events: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;                       /* совпадает с шириной заголовка */
+  height: 1.35em;                    /* высота мазка */
   background: url("/assets/markers/marker-bg-small.png") center / 100% 100% no-repeat;
-  /* чуть опускаем мазок, если нужно:
-  transform: translateY(1px);
-  */
-  z-index: -1;                   /* за текстом */
+  z-index: -1;                       /* под текстом */
 }
-
 /* описание справа — тонкое; имя поста внутри делаем жирным */
-.post-description {
+
+/*.post-description {
   margin: 8px 0 0;
   font-size: 16px;
   color: #555;
   max-width: var(--maxw);
   padding: 0 14px;
   font-weight: 300;
-}
+}*/
+
 .post-description .post-name { font-weight: 700; color: #333; }
 
 @media (min-width: 1024px){
