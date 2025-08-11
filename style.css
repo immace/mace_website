@@ -97,15 +97,29 @@ section { padding: 7vh 0; }
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post  { display: flex; flex-direction: column; }
 
-/* тип поста (Айдентика, Постер и т.п.) — немного толще, курсив, акцент */
-.post-title {
-  margin: 8px 0;
-  font-size: 24px;
-  max-width: var(--maxw);
-  padding: 0 14px;
-  font-weight: 500;
+/* Тип поста: белый курсив, мазок за текстом */
+.post-title{
+  position: relative;
+  display: inline-block;
+  padding: .28em .8em .36em;     /* зазор внутри мазка */
+  color: #fff;
   font-style: italic;
-  color: var(--accent);
+  font-weight: 600;              /* “чуть жирнее тонкого” */
+  line-height: 1;
+  letter-spacing: .3px;
+}
+
+/* сам мазок — растягивается по размеру текста */
+.post-title::before{
+  content: "";
+  position: absolute;
+  inset: 0;                      /* покрыть всю плашку */
+  pointer-events: none;
+  background: url("/assets/markers/marker-bg-small.png") center / 100% 100% no-repeat;
+  /* чуть опускаем мазок, если нужно:
+  transform: translateY(1px);
+  */
+  z-index: -1;                   /* за текстом */
 }
 
 /* описание справа — тонкое; имя поста внутри делаем жирным */
