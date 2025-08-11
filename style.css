@@ -47,7 +47,7 @@ header.visible { opacity: 1; pointer-events: auto; }
 }
 
 /* ===== Hero ===== */
-.hero { padding: 10vh 0 10vh; }
+.hero { padding: 10vh 0 7vh; }
 
 .portfolio-name {
   text-align: center;
