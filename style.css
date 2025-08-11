@@ -47,7 +47,7 @@ header.visible { opacity: 1; pointer-events: auto; }
 }
 
 /* ===== Hero ===== */
-.hero { padding: 10vh 0 3vh; }
+.hero { padding: 3vh 0 10vh; }
 
 .portfolio-name {
   text-align: center;
@@ -119,8 +119,8 @@ section#portfolio.posts {
   align-self: flex-start;     /* не растягиваться на всю ширину flex-контейнера */
   width: auto;
   white-space: nowrap;
-  margin: 8px 14px;
-  padding: .32em 1.5em .38em;
+  margin: 0px;
+  /*padding: .32em 1.5em .38em;*/
   color: #fff;
   font-style: italic;
   font-weight: 600;
@@ -438,4 +438,29 @@ footer {
 .post.is-first > .post-title {
   order: 2; /* потом идёт заголовок */
   margin-top: 8px; /* небольшой отступ */
+}
+
+.post-title,
+.post.is-first > .post-title {
+  position: relative;
+  display: inline-block;           /* убираем лишние отступы под "маркер" */
+  color: #111;                /* тёмный текст */
+  font-style: italic;         /* оставляем наклон, если нужен */
+  font-weight: 500;           /* «чуть тоньше», но не 100–300 */
+  line-height: 1.1;
+  background: none !important;
+  border: 0;
+
+  /* подчёркивание акцентным цветом */
+  text-decoration-line: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: .16em;  /* толщина линии */
+  text-underline-offset: .28em;      /* отступ от текста */
+}
+
+/* Полное отключение старого «мазка» на всякий случай */
+.post-title::before,
+.post.is-first > .post-title::before {
+  content: none !important;
+  display: none !important;
 }
