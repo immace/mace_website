@@ -55,9 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         this.frame += 2;
       }
     }
-    randomChar() {
-      return this.chars[Math.floor(Math.random() * this.chars.length)];
-    }
+    randomChar() { return this.chars[Math.floor(Math.random() * this.chars.length)]; }
   }
 
   const phrases = ['Дима Мальцев', 'Мацэ'];
@@ -80,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'Иллюстратор',
     'Дизайнер шрифтов',
     'Дизайнер айдентики',
-    'Дизайнер постеров',
+    'Дизайнер постеров'
   ];
   let roleIndex = 0;
   roleEl.textContent = roles[roleIndex];
@@ -119,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const mobile = window.innerWidth <= 768;
     if (mobile) {
-      // мобилка: без автопрокрутки, индикаторы точками
       if (images.length > 1) {
         const indicators = document.createElement('div');
         indicators.className = 'carousel-indicators';
@@ -140,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // десктоп: автопрокрутка только если карусель реально видима (по CSS она видима у первого поста)
+    // desktop: автопрокрутка только у реально видимых каруселей (по CSS это первый пост)
     if (getComputedStyle(carousel).display === 'none') return;
 
     track.style.height = '100%';
@@ -152,9 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let pos = 0;
     const step = () => {
-      pos -= 0.5; // скорость
+      pos -= 0.5;
       const resetAt = track.scrollWidth / 2;
-      if (-pos >= resetAt) pos = 0; // зацикливание
+      if (-pos >= resetAt) pos = 0;
       track.style.transform = `translateX(${pos}px)`;
       requestAnimationFrame(step);
     };
@@ -162,10 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===== data: files and ordering/filters =====
-  // Скрыто: Нотное издание (1,2,4,5), Майкл Джексон (2)
-  // Порядок "Гувернантка": 4, затем 1,2,3,5
   const assetFiles = [
-    // Айдентика / Ростов
     'Айдентика-Ростов-1.jpg',
     'Айдентика-Ростов-2.jpg',
     'Айдентика-Ростов-3.jpg',
@@ -173,65 +167,52 @@ document.addEventListener('DOMContentLoaded', () => {
     'Айдентика-Ростов-5.jpg',
     'Айдентика-Ростов-6.jpg',
 
-    // Отдельный пост "Логотип / Ростов" (одна картинка)
     'Логотип-Ростов-1.jpg',
 
-    // Обложка / Нотное издание — ПОКАЗЫВАЕМ ТОЛЬКО №3
-    // 'Обложка-Нотное_издание-1.png',
-    // 'Обложка-Нотное_издание-2.png',
+    // Обложка — только №3
     'Обложка-Нотное_издание-3.png',
-    // 'Обложка-Нотное_издание-4.png',
-    // 'Обложка-Нотное_издание-5.png',
 
-    // Постер / Гувернантка — порядок: 4, затем 1,2,3,5
+    // Гувернантка — порядок 4,1,2,3,5
     'Постер-Гувернантка-4.jpg',
     'Постер-Гувернантка-1.jpg',
     'Постер-Гувернантка-2.jpg',
     'Постер-Гувернантка-3.jpg',
     'Постер-Гувернантка-5.jpg',
 
-    // Постер / Движение — все
     'Постер-Движение-1.jpg',
     'Постер-Движение-2.jpg',
     'Постер-Движение-3.jpg',
     'Постер-Движение-4.jpg',
     'Постер-Движение-5.jpg',
 
-    // Постер / Майкл Джексон — ТОЛЬКО №1
-    //'Постер-Майкл_Джексон-1.jpg',
-    // 'Постер-Майкл_Джексон-2.jpg',
-
-    // Постер / Форма — одна работа
-    'Постер-Форма-1.jpg',
+    // 'Постер-Майкл_Джексон-1.jpg', // был скрыт по твоим правилам
+    'Постер-Форма-1.jpg'
   ];
 
   // Группируем по "Категория-Название"
   const postsMap = {};
   assetFiles.forEach(file => {
-    // Безопасный разбор: берём всё до последнего "-" как "section + postName",
-    // а последнюю часть до точки считаем индексом
     const parts = file.split('-');
     if (parts.length < 2) return;
 
-    const indexExt = parts.pop(); // например: "1.jpg"
-    const base = parts.join('-'); // например: "Постер-Гувернантка"
+    const indexExt = parts.pop();            // "1.jpg"
+    const base = parts.join('-');            // "Постер-Гувернантка"
     const [section, ...rest] = base.split('-');
-    const postName = rest.join('-'); // "Гувернантка"
-
-    const key = `${section}-${postName}`;
+    const postName = rest.join('-');         // "Гувернантка"
     const index = parseInt(indexExt.split('.')[0], 10);
 
+    const key = `${section}-${postName}`;
     if (!postsMap[key]) {
       postsMap[key] = {
         category: section,
         name: postName.replace(/_/g, ' '),
-        images: [],
+        images: []
       };
     }
     postsMap[key].images.push({ src: `/assets/${file}`, idx: isNaN(index) ? 0 : index });
   });
 
-  // Сортируем картинки каждого поста по индексу и разворачиваем в массив src
+  // Сортируем изображения внутри поста
   const posts = Object.values(postsMap).map(post => {
     post.images.sort((a, b) => a.idx - b.idx);
     post.images = post.images.map(i => i.src);
@@ -246,13 +227,13 @@ document.addEventListener('DOMContentLoaded', () => {
     wrapper.className = 'post';
     if (idx === 0) wrapper.classList.add('is-first'); // первый пост — карусель на десктопе
 
-    // заголовок (тип поста)
+    // Заголовок (тип поста)
     const topTitle = document.createElement('h3');
     topTitle.className = 'post-title';
     topTitle.textContent = post.category;
     wrapper.appendChild(topTitle);
 
-    // Карусель (у всех; на десктопе видна только у первого благодаря CSS)
+    // Карусель (у всех; на десктопе видна только у первого)
     const carousel = document.createElement('div');
     carousel.className = 'carousel';
     const track = document.createElement('div');
@@ -267,12 +248,12 @@ document.addEventListener('DOMContentLoaded', () => {
     carousel.appendChild(track);
     wrapper.appendChild(carousel);
 
-    // Для остальных постов (не первого) — двухколоночный корпус
+    // Для остальных постов — двухколоночный корпус
     if (idx !== 0) {
       const body = document.createElement('div');
       body.className = 'post-body';
 
-      // слева — обложка (теперь управляется по ширине в CSS)
+      // слева — обложка
       const left = document.createElement('div');
       left.className = 'post-left';
       const cover = document.createElement('img');
@@ -286,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const right = document.createElement('div');
       right.className = 'post-right';
 
-      // превью остальных (3 в ряд; без жёсткой высоты — пусть подстраиваются)
+      // превью остальных (3 в ряд, без обрезки)
       const thumbs = document.createElement('div');
       thumbs.className = 'post-thumbs';
       post.images.slice(1).forEach(src => {
@@ -297,22 +278,20 @@ document.addEventListener('DOMContentLoaded', () => {
         thumbs.appendChild(t);
       });
 
-      // текст: тип (чуть толще) + строка с названием/описанием (тоньше, с заглавной)
+      // текст
       const meta = document.createElement('div');
       meta.className = 'post-meta';
 
       const type = document.createElement('p');
-      type.className = 'post-title'; // тот же стиль типа поста (жирнее/акцент)
+      type.className = 'post-title';
       type.textContent = post.category;
 
       const desc = document.createElement('p');
       desc.className = 'post-description';
-      const nameCap =
-        post.name.length ? post.name[0].toUpperCase() + post.name.slice(1) : post.name;
-      const desc = document.createElement('p');
-      desc.className = 'post-description';
-      desc.innerHTML = `<span class="post-name">${post.name}</span> · <span class="post-desc">описание: скоро</span>`;
-
+      const prettyName = post.name
+        ? post.name[0].toUpperCase() + post.name.slice(1)
+        : post.name;
+      desc.innerHTML = `<span class="post-name">${prettyName}</span> · <span class="post-desc">описание: скоро</span>`;
 
       meta.appendChild(type);
       meta.appendChild(desc);
