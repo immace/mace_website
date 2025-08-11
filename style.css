@@ -276,6 +276,8 @@ img { width: 100%; height: auto; display: block; }
   }
   .carousel::-webkit-scrollbar { display: none; }
 
+  .hero { padding: 5vh 0 7vh; }
+  
   .post {
     display: flex;
     flex-direction: column;
