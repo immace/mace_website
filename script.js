@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     randomChar() { return this.chars[Math.floor(Math.random() * this.chars.length)]; }
   }
 
-  const phrases = ['Дима Мальцев', 'Мацэ'];
+  const phrases = ['Дима Мальцев', 'Мацэ́'];
   const fxMain = new TextScramble(nameEl);
   const fxHeader = new TextScramble(headerNameEl);
   let counter = 0;
