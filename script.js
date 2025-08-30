@@ -402,3 +402,69 @@ document.addEventListener('DOMContentLoaded', () => {
     close();
   });
 })();
+
+// ===== CTA — открытие модалки по ссылке =====
+(function(){
+  const openLink = document.getElementById('spm-open');
+  const overlay  = document.getElementById('spm-overlay');
+  if (openLink && overlay) openLink.addEventListener('click', () => {
+    overlay.setAttribute('aria-hidden','false');
+    const inp = document.getElementById('spm-tg');
+    inp && inp.focus();
+  });
+})();
+
+// ===== Вытаскиваем средний цвет из аватарки (с запасным) =====
+function averageColorFromURL(url){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';          // попытка не таинтить canvas
+    img.referrerPolicy = 'no-referrer';     // на всякий
+    img.onload = () => {
+      try{
+        const w = 24, h = 24;
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const { data } = ctx.getImageData(0,0,w,h);
+        let r=0,g=0,b=0,count=0;
+        for(let i=0;i<data.length;i+=4){ r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++; }
+        r = Math.round(r/count); g = Math.round(g/count); b = Math.round(b/count);
+        const toHex = (n)=>n.toString(16).padStart(2,'0');
+        resolve(`#${toHex(r)}${toHex(g)}${toHex(b)}`);
+      }catch(e){
+        resolve('#a3c1d9'); // fallback если CORS/tainted canvas
+      }
+    };
+    img.onerror = () => resolve('#a3c1d9');  // fallback если аватар не загрузился
+    img.src = url;
+  });
+}
+
+// ===== Хук в твою функцию updateTg (или аналог) =====
+// Найди место, где при валидном нике ты делаешь:
+  // tgAva.src = `https://t.me/i/userpic/320/${tg}.jpg`;
+  // tgCard.classList.add('glow');
+// И ДОБАВЬ ниже вот это:
+async function applyTgAccentFromAvatar(tg){
+  const tgCard = document.getElementById('spm-tg-card');
+  if (!tgCard) return;
+  const avatarUrl = `https://t.me/i/userpic/320/${tg}.jpg`;
+  const color = await averageColorFromURL(avatarUrl);
+  tgCard.style.setProperty('--tg', color); // подсветка возьмет этот цвет
+}
+
+// пример интеграции внутри твоего обработчика валидного ника:
+(function integrateTgColor(){
+  const tgInput = document.getElementById('spm-tg');
+  if (!tgInput) return;
+  tgInput.addEventListener('input', async () => {
+    const raw = tgInput.value.trim();
+    const tg = raw.replace(/^@+/, '');
+    if (!/^[a-zA-Z0-9_]{5,32}$/.test(tg)) return;
+
+    // когда ник валиден — ставим карточке цвет из аватарки
+    await applyTgAccentFromAvatar(tg);
+  });
+})();
