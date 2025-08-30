@@ -555,3 +555,22 @@ footer {
 .spm-btn-fill:disabled{opacity:.4;cursor:not-allowed}
 .spm-hint{color:#666;font-size:12px}
 .hidden{display:none}
+
+/* CTA как типографская ссылка */
+.cta-link{
+  font:600 18px/1.35 Montserrat,system-ui,sans-serif;
+  color:#000;
+  text-decoration:none;
+  border-bottom:2px solid #a3c1d9;
+  padding-bottom:2px;
+  transition:color .2s, border-color .2s;
+}
+.cta-link:hover{ color:#a3c1d9; border-color:#000; }
+
+/* Телеграм-карточка: используем кастомный акцент --tg (по умолчанию #a3c1d9) */
+#spm-tg-card{ --tg:#a3c1d9; }
+#spm-tg-card.glow{
+  border-color:var(--tg);
+  box-shadow:0 0 0 2px var(--tg), 0 0 24px color-mix(in srgb, var(--tg) 35%, transparent);
+  background:color-mix(in srgb, var(--tg) 10%, white);
+}
