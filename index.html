@@ -33,6 +33,58 @@
     </div>
   </header>
 
+<!-- === Start Project: Modal === -->
+<div id="spm-overlay" class="spm-overlay" aria-hidden="true">
+  <div class="spm-modal" role="dialog" aria-modal="true" aria-labelledby="spm-title">
+    <div class="spm-modal__head">
+      <div>
+        <h2 id="spm-title" class="spm-title">Начать проект</h2>
+        <p class="spm-sub">Выберите услугу, укажите ник Telegram и получите бриф</p>
+      </div>
+      <button id="spm-close" class="spm-icon" aria-label="Закрыть">✕</button>
+    </div>
+
+    <div class="spm-block">
+      <div class="spm-label">Что хотите создать?</div>
+      <ul class="spm-list">
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="logo" checked> <span>Логотип / айдентика</span></label></li>
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="font"> <span>Шрифт (display / text)</span></label></li>
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="pattern"> <span>Дизайн на лекало / принты</span></label></li>
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="web"> <span>Дизайн сайта / UI</span></label></li>
+        <li class="spm-option">
+          <label><input type="radio" name="spm-service" value="other"> <span>Другое (опишите)</span></label>
+          <div id="spm-other-wrap" class="hidden">
+            <input id="spm-other" type="text" placeholder="Опишите задачу (нейминг, презентация, мерч)">
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="spm-block">
+      <div class="spm-label">Telegram аккаунт</div>
+      <div id="spm-tg-card" class="spm-tg">
+        <div class="spm-tg__avatar">
+          <div class="spm-ava"><img id="spm-ava-img" alt="avatar"></div>
+        </div>
+        <div class="spm-tg__right">
+          <div id="spm-tg-name" class="spm-tg__name hidden">Имя пользователя</div>
+          <div id="spm-tg-inputwrap" class="spm-inputwrap">
+            <input id="spm-tg" type="text" placeholder="@immalcev" autocomplete="off">
+          </div>
+          <div id="spm-tg-error" class="spm-error hidden">Недействительный ник Telegram</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spm-footer">
+      <div class="spm-hint">После отправки начнётся загрузка персонального брифа</div>
+      <button id="spm-submit" class="spm-btn-fill" disabled>Получить бриф</button>
+    </div>
+  </div>
+</div>
+<!-- === /Start Project: Modal === -->
+
+  
   <main class="wrap">
     <!-- Hero -->
 <section class="hero">
