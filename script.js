@@ -308,3 +308,93 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCarousel(carousel);
   });
 });
+
+// ==== Start Project Modal (Vanilla JS) ====
+(function(){
+  const BRIEFS = {
+    logo: "/briefs/brief-logo.pdf",
+    font: "/briefs/brief-font.pdf",
+    pattern: "/briefs/brief-pattern.pdf",
+    web: "/briefs/brief-web.pdf",
+    general: "/briefs/brief-general.pdf",
+  };
+  const $ = (id)=>document.getElementById(id);
+  const isValidTg = (u)=>/^[a-zA-Z0-9_]{5,32}$/.test(u);
+
+  const openBtn = $('spm-open');
+  const overlay = $('spm-overlay');
+  const closeBtn = $('spm-close');
+  const submitBtn = $('spm-submit');
+  const otherWrap = $('spm-other-wrap');
+
+  const tgCard = $('spm-tg-card');
+  const tgInputWrap = $('spm-tg-inputwrap');
+  const tgInput = $('spm-tg');
+  const tgErr = $('spm-tg-error');
+  const tgName = $('spm-tg-name');
+  const tgAva = $('spm-ava-img');
+
+  const serviceRadios = Array.from(document.querySelectorAll('input[name="spm-service"]'));
+
+  function open(){ overlay.setAttribute('aria-hidden','false'); tgInput && tgInput.focus(); }
+  function close(){ overlay.setAttribute('aria-hidden','true'); resetTg(); }
+
+  openBtn && openBtn.addEventListener('click', open);
+  closeBtn && closeBtn.addEventListener('click', close);
+  overlay && overlay.addEventListener('click', (e)=>{ if(e.target===overlay) close(); });
+
+  serviceRadios.forEach(r => r.addEventListener('change', ()=>{
+    const checked = serviceRadios.find(x=>x.checked);
+    otherWrap.classList.toggle('hidden', !(checked && checked.value==='other'));
+  }));
+
+  function resetTg(){
+    tgInput.value = '';
+    tgErr.classList.add('hidden');
+    tgInputWrap.classList.remove('error');
+    tgCard.classList.remove('glow');
+    tgName.classList.add('hidden');
+    tgName.textContent = '';
+    tgAva.removeAttribute('src');
+    submitBtn.disabled = true;
+  }
+
+  function updateTg(){
+    const raw = tgInput.value.trim();
+    const tg = raw.replace(/^@+/, '');
+    if(!tg){ resetTg(); return; }
+    if(!isValidTg(tg)){
+      tgErr.classList.remove('hidden');
+      tgInputWrap.classList.add('error');
+      tgCard.classList.remove('glow');
+      tgName.classList.add('hidden');
+      tgAva.removeAttribute('src');
+      submitBtn.disabled = true;
+      return;
+    }
+    tgErr.classList.add('hidden');
+    tgInputWrap.classList.remove('error');
+    tgCard.classList.add('glow');
+    tgAva.src = `https://t.me/i/userpic/320/${tg}.jpg`;
+    tgName.textContent = `@${tg}`;
+    tgName.classList.remove('hidden');
+    submitBtn.disabled = false;
+  }
+  tgInput && tgInput.addEventListener('input', updateTg);
+
+  submitBtn && submitBtn.addEventListener('click', ()=>{
+    const raw = tgInput.value.trim();
+    const tg = raw.replace(/^@+/, '');
+    if(!isValidTg(tg)) return;
+
+    const checked = serviceRadios.find(r=>r.checked);
+    const service = checked ? checked.value : 'general';
+    const url = BRIEFS[service] || BRIEFS.general;
+    const base = service==='general' ? 'brief-general' : `brief-${service}`;
+    const filename = `${base}__@${tg}.pdf`;
+
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    close();
+  });
+})();
