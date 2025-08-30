@@ -359,27 +359,31 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.disabled = true;
   }
 
-  function updateTg(){
-    const raw = tgInput.value.trim();
-    const tg = raw.replace(/^@+/, '');
-    if(!tg){ resetTg(); return; }
-    if(!isValidTg(tg)){
-      tgErr.classList.remove('hidden');
-      tgInputWrap.classList.add('error');
-      tgCard.classList.remove('glow');
-      tgName.classList.add('hidden');
-      tgAva.removeAttribute('src');
-      submitBtn.disabled = true;
-      return;
-    }
-    tgErr.classList.add('hidden');
-    tgInputWrap.classList.remove('error');
-    tgCard.classList.add('glow');
-    tgAva.src = `https://t.me/i/userpic/320/${tg}.jpg`;
-    tgName.textContent = `@${tg}`;
-    tgName.classList.remove('hidden');
-    submitBtn.disabled = false;
+ function updateTg(){
+  const raw = tgInput.value.trim();
+  const tg = raw.replace(/^@+/, '');
+  if(!tg){ resetTg(); return; }
+
+  if(!/^[a-zA-Z0-9_]{5,32}$/.test(tg)){
+    tgErr.classList.remove('hidden');
+    tgInputWrap.classList.add('error');
+    tgCard.classList.remove('glow');
+    tgName.classList.add('hidden');
+    tgAva.removeAttribute('src');
+    submitBtn.disabled = true;
+    return;
   }
+
+  // ✅ валидный ник: включаем «синюю» телеграм-подсветку
+  tgErr.classList.add('hidden');
+  tgInputWrap.classList.remove('error');
+  tgCard.classList.add('glow');
+  tgAva.src = `https://t.me/i/userpic/320/${tg}.jpg`;
+  tgName.textContent = `@${tg}`;
+  tgName.classList.remove('hidden');
+  submitBtn.disabled = false;
+}
+
   tgInput && tgInput.addEventListener('input', updateTg);
 
   submitBtn && submitBtn.addEventListener('click', ()=>{
