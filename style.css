@@ -1,6 +1,6 @@
 :root {
   --accent: #A3C1D9;
-  --accent-rgb: 163,193,217; /* для теней */
+  --accent-rgb: 163,193,217;
   --gap: 24px;
   --maxw: 1000px;
 }
@@ -14,11 +14,7 @@ body {
   color: #000;
 }
 
-.wrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 14px;
-}
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 14px; }
 
 /* ===== Header ===== */
 header {
@@ -49,16 +45,8 @@ header.visible { opacity: 1; pointer-events: auto; }
 /* ===== Hero ===== */
 .hero { padding: 10vh 0 7vh; }
 
-.portfolio-name {
-  text-align: center;
-  margin: 0;                 /* без лишних отступов сверху/снизу */
-}
-.portfolio-name img {
-  display: block;
-  width: 85%;
-  height: auto;
-  margin: 0 auto;            /* центрируем */
-}
+.portfolio-name { text-align: center; margin: 0; }
+.portfolio-name img { display: block; width: 85%; height: auto; margin: 0 auto; }
 
 h1 {
   font-size: clamp(28px, 6vw, 72px);
@@ -67,7 +55,6 @@ h1 {
   font-weight: 700;
 }
 .hero-title { display: flex; flex-direction: column; }
-
 #name { display: block; font-weight: 100; }
 
 .role-wrapper {
@@ -96,500 +83,89 @@ h1 {
 }
 
 section { padding: 7vh 0; }
+section#portfolio.posts { padding: 3.5vh 0 7vh; }
 
-section#portfolio.posts {
-  padding: 3.5vh 0 7vh;      /* top | left/right | bottom */
-}
-
-/* ===== Animations for role ===== */
+/* Animations for role */
 .dud { color: #aaa; }
 .slide-in  { animation: slide-in .5s forwards; }
 .slide-out { animation: slide-out .5s forwards; }
-@keyframes slide-in  { from { transform: translateY(100%);} to { transform: translateY(0);} }
-@keyframes slide-out { from { transform: translateY(0);} to { transform: translateY(-100%);} }
+@keyframes slide-in  { from{ transform: translateY(100%);} to{ transform: translateY(0);} }
+@keyframes slide-out { from{ transform: translateY(0);} to{ transform: translateY(-100%);} }
 
-/* ===== Posts ===== */
+/* Posts */
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post  { display: flex; flex-direction: column; }
 
-/* Заголовок типа поста — ширина по тексту + мазок позади */
-.post-title{
-  position: relative;
-  display: inline-block;     /* ширина по содержимому */
-  align-self: flex-start;     /* не растягиваться на всю ширину flex-контейнера */
-  width: auto;
-  white-space: nowrap;
-  margin: 0px;
-  /*padding: .32em 1.5em .38em;*/
-  color: #fff;
+.post-title {
+  display: inline-block;
+  margin: 0;
   font-style: italic;
-  font-weight: 600;
-  line-height: 1;
-  background: none;
-  border-radius: 0;
-  z-index: 0;
+  font-weight: 500;
+  line-height: 1.1;
+  text-decoration: underline var(--accent) .16em;
+  text-underline-offset: .28em;
 }
 
-.post-title::before{
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;                 /* ширина = ширине текста */
-  height: 1.75em;
-  background: url("/assets/markers/marker-bg-small.png") center / 100% 100% no-repeat;
-  z-index: -1;                 /* под текстом */
-}
-/* описание справа — тонкое; имя поста внутри делаем жирным */
-
-.post-description {
-  margin: 8px 0 0;
-  font-size: 16px;
-  color: #555;
-  max-width: var(--maxw);
-  padding: 0 26px 0 0;;
-  font-weight: 300;
-}
-
-.post-description .post-name { font-weight: 700; color: #333; }
+.post-description { margin: 8px 0 0; font-size: 16px; color: #555; font-weight: 500; }
+.post-description .post-name { font-weight: 600; color: #000; }
+.post-desc { font-weight: 300; color: #555; }
 
 @media (min-width: 1024px){
   .post-title { font-size: 32px; }
   .post-description { font-size: 20px; }
 }
 
-/* Images reset */
 img { width: 100%; height: auto; display: block; }
 
-/* ===== Общая карусель (моб и десктоп) ===== */
-.carousel {
-  position: relative;
-  overflow: hidden;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-}
-.carousel-track {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  will-change: transform;
-}
-.carousel-track img {
-  width: 100%;
-  flex-shrink: 0;
-}
+/* Carousel */
+.carousel { position: relative; overflow: hidden; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+.carousel-track { display: flex; align-items: stretch; gap: 0; will-change: transform; }
+.carousel-track img { width: 100%; flex-shrink: 0; }
 
-/* ===== Desktop: первый пост — карусель; остальные — 2 колонки ===== */
+/* Desktop layout */
 @media (min-width: 769px){
-  /* скрываем карусель у всех, кроме первого */
   .post .carousel { display: none; }
-
   .post.is-first .carousel { display: block; height: 40vh; }
   .post.is-first .carousel-track { height: 100%; align-items: center; }
   .post.is-first .carousel-track img { height: 100%; width: auto; object-fit: contain; }
 
-  /* корпус поста (не первый): 50% / 50% */
   .post:not(.is-first) .post-body{
     display: grid;
-    grid-template-columns: 1fr 1fr; /* две половины */
+    grid-template-columns: 1fr 1fr;
     gap: var(--gap);
     align-items: start;
     padding: 0 14px;
   }
-
-  /* левая колонка — обложка по ширине колонки */
-  .post:not(.is-first) .post-left{
-    width: 100%;
-    display: block;
-  }
+  .post:not(.is-first) .post-left{ width: 100%; }
   .post:not(.is-first) .post-cover{
-    display: block;
-    width: 100%;
-    height: auto;
-    max-width: 100%;
-    object-fit: contain; /* без обрезки */
-    border-radius: 10px;
-    box-shadow:
-      0 14px 34px rgba(var(--accent-rgb), .22),
-      0 6px 18px rgba(var(--accent-rgb), .18),
-      0 1px 4px  rgba(var(--accent-rgb), .20);
-    transition: box-shadow .25s ease, transform .2s ease;
+    width: 100%; object-fit: contain; border-radius: 10px;
+    box-shadow: 0 14px 34px rgba(var(--accent-rgb), .22);
   }
-  .post:not(.is-first) .post-cover:hover{
-    transform: translateY(-2px);
-    box-shadow:
-      0 18px 42px rgba(var(--accent-rgb), .26),
-      0 8px 22px rgba(var(--accent-rgb), .20),
-      0 2px 6px  rgba(var(--accent-rgb), .22);
-  }
-
-  /* правая колонка: сверху превью сеткой, снизу текст */
-  .post:not(.is-first) .post-right{
-    display: grid;
-    grid-template-rows: auto auto; /* высота секции подстраивается автоматически */
-    row-gap: var(--gap);
-  }
-
-  /* превью — 3 в ряд; НИЧЕГО не обрезаем: без фикс. высоты и без aspect-ratio */
-  .post:not(.is-first) .post-thumbs{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  .post:not(.is-first) .post-thumbs img{
-    width: 100%;
-    height: auto;        /* авто-высота */
-    object-fit: contain; /* показываем целиком */
-    background: #fff;    /* на случай «письма» по краям */
-    border-radius: 8px;
-    box-shadow:
-      0 14px 34px rgba(var(--accent-rgb), .22),
-      0 6px 18px rgba(var(--accent-rgb), .18),
-      0 1px 4px  rgba(var(--accent-rgb), .20);
-    transition: box-shadow .25s ease, transform .2s ease;
-  }
-  .post:not(.is-first) .post-thumbs img:hover{
-    transform: translateY(-2px);
-    box-shadow:
-      0 18px 42px rgba(var(--accent-rgb), .26),
-      0 8px 22px rgba(var(--accent-rgb), .20),
-      0 2px 6px  rgba(var(--accent-rgb), .22);
-  }
-
-  /* текст справа внизу */
-  .post:not(.is-first) .post-meta{
-    text-align: right;
-    align-self: end;
-  }
+  .post:not(.is-first) .post-right{ display: grid; grid-template-rows: auto auto; row-gap: var(--gap); }
+  .post:not(.is-first) .post-thumbs{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .post:not(.is-first) .post-thumbs img{ border-radius: 8px; }
+  .post:not(.is-first) .post-meta{ text-align: right; align-self: end; }
 }
 
-/* ===== Mobile: у всех постов — карусели ===== */
+/* Mobile */
 @media (max-width: 768px){
-  .carousel {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    height: auto; width: 100%;
-    margin-left: 0; margin-right: 0;
-  }
-  .carousel::-webkit-scrollbar { display: none; }
-
-  .hero { padding: 5vh 0 7vh; }
-  
-  .post {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .post .carousel {
-    order: 1; /* сначала карусель */
-  }
-
-  .post > .post-title {
-    order: 2; /* потом заголовок */
-    margin-top: 8px;
-  }
-
-  .carousel-track { will-change: auto; }
-  .carousel-track img {
-    width: 100%;
-    height: auto;
-    border: 1px solid #eee;
-    border-radius: 16px;
-    scroll-snap-align: center;
-  }
-
-  .carousel-indicators {
-    position: sticky;
-    bottom: 16px; left: 0; right: 0;
-    display: flex; justify-content: center; align-items: center; gap: 6px;
-    pointer-events: none;
-  }
-  .carousel-indicators span {
-    width: 4px; height: 4px; background: rgba(163,193,217,.5); border-radius: 50%;
-  }
-  .carousel-indicators span.active {
-    width: 6px; height: 6px; background: var(--accent);
-  }
-
-  /* десктопные секции скрываем */
-  .post .post-body,
-  .post .post-left,
-  .post .post-right { display: none; }
-
-  /* и везде показываем карусели */
-  .post .carousel { display: block; }
+  .carousel { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; margin:0; }
+  .carousel::-webkit-scrollbar{ display:none; }
+  .carousel-track img{ border:1px solid #eee; border-radius:16px; scroll-snap-align:center; }
+  .carousel-indicators{ position:sticky; bottom:16px; display:flex; justify-content:center; gap:6px; }
+  .carousel-indicators span{ width:4px; height:4px; background:rgba(163,193,217,.5); border-radius:50%; }
+  .carousel-indicators span.active{ width:6px; height:6px; background:var(--accent); }
+  .post .post-body,.post .post-left,.post .post-right{ display:none; }
+  .post .carousel{ display:block; }
 }
 
-/* ===== Contacts: плавающие «пузырьки» ===== */
+/* Contacts */
 .contacts { padding: 0 14px 56px; }
+.social-bubbles{ position:relative; height:160px; margin:40px auto; max-width:var(--maxw); }
+.bubble-wrap{ position:absolute; top:50%; transform:translate(-50%,-50%); }
+.bubble{ --size:76px; width:var(--size); height:var(--size); border-radius:50%; background:#fff; display:grid; place-items:center; }
+.bubble img{ width:30px; height:30px; }
 
-.social-bubbles{
-  position: relative;
-  height: 160px;
-  display: block;
-  margin: 40px auto;
-  max-width: var(--maxw);
-}
-
-.bubble-wrap{
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  text-decoration: none;
-  color: inherit;
-}
-.bubble-wrap:nth-child(1){ left: 32%; animation: driftX1 7.2s ease-in-out infinite alternate; }
-.bubble-wrap:nth-child(2){ left: 50%; animation: driftX2 8.8s ease-in-out infinite alternate .35s; }
-.bubble-wrap:nth-child(3){ left: 68%; animation: driftX3 6.6s ease-in-out infinite alternate .7s; }
-
-.bubble{
-  --size: 76px;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  background: #fff;
-  box-shadow:
-    0 10px 24px rgba(0,0,0,.08),
-    0 0 0 0 var(--accent) inset; /* «скрытая» обводка; проявляем на hover */
-  display: grid;
-  place-items: center;
-  color: #111;
-  transition:
-    transform .2s ease,
-    background .2s ease,
-    color .2s ease,
-    box-shadow .2s ease;
-  animation: driftY 5.4s ease-in-out infinite alternate;
-}
-.bubble img{ width: 30px; height: 30px; display: block; }
-
-.bubble:hover,
-.bubble:focus-visible{
-  transform: translateY(-2px) scale(1.07);
-  box-shadow:
-    0 12px 28px rgba(0,0,0,.16),
-    0 0 0 1.5px var(--accent) inset;
-}
-.bubble:active{
-  transform: translateY(0) scale(0.98);
-  box-shadow:
-    0 8px 18px rgba(0,0,0,.12),
-    0 0 0 2px var(--accent) inset;
-}
-
-@keyframes driftX1{ from{ transform: translate(-40px,-50%);} to{ transform: translate(18px,-50%);} }
-@keyframes driftX2{ from{ transform: translate(-26px,-50%);} to{ transform: translate(34px,-50%);} }
-@keyframes driftX3{ from{ transform: translate(-30px,-50%);} to{ transform: translate(22px,-50%);} }
-@keyframes driftY  { from{ transform: translateY(12px);} to{ transform: translateY(-16px);} }
-
-@media (prefers-reduced-motion: reduce){
-  .bubble, .bubble-wrap { animation: none !important; }
-}
-
-/* ===== Footer ===== */
-footer {
-  border-top: 1px solid #eee;
-  padding: 14px 0;
-  color: #777;
-  font-size: 14px;
-}
-#footer-name { font-weight: 100; }
-
-/* Скрыть верхний H3 у всех постов, кроме первого (на десктопе) */
-@media (min-width: 769px){
-  .posts .post:not(.is-first) > h3.post-title,
-  .posts .post:not(.is-first) h3.post-title {
-    display: none !important;
-  }
-}
-
-/* Название поста (в описании) — жирнее */
-.post-description {
-  font-weight: 500; /* было 300 */
-  color: #444; /* чуть темнее для читаемости */
-  margin: 8px 0 0;
-  padding: 0 14px;
-  font-size: 16px;
-  color: #555;
-  max-width: var(--maxw);
-}
-
-.post-name {
-  font-weight: 600;
-  color: #000;
-}
-
-/* Описание — тоньше */
-.post-desc {
-  font-weight: 300;
-  color: #555;
-}
-
-.post.is-first {
-  display: flex;
-  flex-direction: column;
-}
-
-.post.is-first .carousel {
-  order: 1; /* сначала идёт карусель */
-}
-
-.post.is-first > .post-title {
-  order: 2; /* потом идёт заголовок */
-  margin-top: 8px; /* небольшой отступ */
-}
-
-.post-title,
-.post.is-first > .post-title {
-  position: relative;
-  display: inline-block;           /* убираем лишние отступы под "маркер" */
-  color: #111;                /* тёмный текст */
-  font-style: italic;         /* оставляем наклон, если нужен */
-  font-weight: 500;           /* «чуть тоньше», но не 100–300 */
-  line-height: 1.1;
-  background: none !important;
-  border: 0;
-
-  /* подчёркивание акцентным цветом */
-  text-decoration-line: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: .16em;  /* толщина линии */
-  text-underline-offset: .28em;      /* отступ от текста */
-}
-
-/* Полное отключение старого «мазка» на всякий случай */
-.post-title::before,
-
-.hidden{ display:none; }
-
-/* ==== Start Project Modal (Vanilla JS) ==== */
-.spm-btn-accent{ border:1px solid var(--accent); color:var(--accent); background:transparent; padding:12px 24px; border-radius:16px; font-weight:600; }
-.spm-btn-accent:hover{ box-shadow:0 2px 10px rgba(163,193,217,.35); transform:translateY(-1px); }
-
-.spm-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.4); padding:16px; z-index:2000; }
-.spm-overlay[aria-hidden="false"]{ display:flex; }
-.spm-modal{ width:min(720px, 100%); background:#fff; color:#000; border-radius:20px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.15); }
-.spm-modal__head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; }
-.spm-title{ font-size:24px; font-weight:800; margin:0; }
-.spm-sub{ margin:6px 0 0; color:#666; font-size:13px; }
-.spm-icon{ border:none; background:transparent; color:var(--accent); font-size:18px; padding:6px; border-radius:10px; }
-.spm-icon:hover{ background:rgba(163,193,217,.12); }
-
-.spm-block{ margin-bottom:20px; }
-.spm-label{ text-transform:uppercase; letter-spacing:.06em; font-weight:700; font-size:11px; color:#666; margin-bottom:8px; }
-.spm-list{ list-style:none; padding:0; margin:8px 0 0; display:grid; gap:8px; }
-.spm-option{ border:1px solid #e6e6e6; border-radius:12px; padding:10px 12px; }
-.spm-option:hover{ border-color:var(--accent); }
-.spm-option input{ accent-color:var(--accent); }
-
-.spm-tg{ display:grid; grid-template-columns:1fr 3fr; gap:16px; border:1px solid #e6e6e6; border-radius:16px; padding:16px; transition:box-shadow .25s, border-color .25s, background .25s; }
-.spm-tg.glow{ border-color:var(--accent); box-shadow:0 0 24px rgba(163,193,217,.35), 0 0 0 2px var(--accent) inset; background:rgba(163,193,217,.08); }
-.spm-tg__avatar{ display:flex; align-items:center; justify-content:center; }
-.spm-ava{ width:84px; height:84px; border-radius:999px; background:#eee; overflow:hidden; display:flex; justify-content:center; align-items:center; font-weight:700; color:#ccc; }
-.spm-ava img{ width:100%; height:100%; object-fit:cover; display:block; }
-.spm-tg__name{ font-weight:700; margin-bottom:8px; }
-
-.spm-inputwrap{ border:1px solid #e6e6e6; border-radius:12px; padding:8px 10px; }
-.spm-inputwrap.error{ border-color:#e5484d; }
-.spm-inputwrap input{ width:100%; border:none; outline:none; background:transparent; font-size:14px; color:#000; }
-.spm-inputwrap input::placeholder{ color:#9ca3af; }
-
-.spm-error{ color:#e5484d; font-size:13px; margin-top:8px; }
-.spm-footer{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:24px; }
-.spm-btn-fill{ background:var(--accent); color:#fff; border:none; padding:12px 20px; border-radius:16px; font-weight:600; }
-.spm-btn-fill:disabled{ opacity:.4; cursor:not-allowed; }
-.spm-hint{ color:#666; font-size:12px; }
-
-.post.is-first > .post-title::before {
-  content: none !important;
-  display: none !important;
-}
-
-:root { --accent:#a3c1d9; --tg:#229ED9; } /* телеграм-синий */
-
- /* Базовая типографика модалки (перебивает глобальные стили) */
-.spm-modal .spm-title{font:800 26px/1.2 Montserrat,system-ui,sans-serif;letter-spacing:0}
-.spm-modal .spm-sub{font:400 13px/1.4 Montserrat,system-ui,sans-serif;color:#666;margin-top:6px}
-.spm-modal .spm-label{font:700 11px/1.1 Montserrat,system-ui,sans-serif;letter-spacing:.06em;color:#666;text-transform:uppercase;margin-bottom:8px}
-
- /* Кнопка */
-.spm-btn-accent{border:1px solid var(--accent);color:var(--accent);background:transparent;padding:12px 24px;border-radius:16px;font-weight:600;display:inline-block}
-.spm-btn-accent:hover{box-shadow:0 2px 10px rgba(163,193,217,.35);transform:translateY(-1px)}
-
- /* Модалка */
-.spm-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);padding:16px;z-index:2000}
-.spm-overlay[aria-hidden="false"]{display:flex}
-.spm-modal{width:min(720px,100%);background:#fff;color:#000;border-radius:20px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
-.spm-modal__head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
-.spm-icon{border:none;background:transparent;color:var(--accent);font-size:18px;padding:6px;border-radius:10px}
-.spm-icon:hover{background:rgba(163,193,217,.12)}
-
- /* Список услуг */
-.spm-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
-.spm-option{border:1px solid #e6e6e6;border-radius:12px;padding:10px 12px}
-.spm-option:hover{border-color:var(--accent)}
-.spm-option input{accent-color:var(--accent)}
-
- /* Telegram-карточка (¼ + ¾) */
-#spm-tg-card{display:grid;grid-template-columns:1fr 3fr;gap:16px;border:1px solid #e6e6e6;border-radius:16px;padding:16px;transition:border-color .25s,box-shadow .25s,background .25s}
-#spm-tg-card .spm-ava{width:84px;height:84px;border-radius:999px;background:#eee;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#ccc;font-weight:700}
-#spm-tg-card .spm-ava img{width:100%;height:100%;object-fit:cover;display:block}
-.spm-tg__name{font-weight:700;margin-bottom:8px}
-
- /* Поле ника */
-#spm-tg-inputwrap{border:1px solid #e6e6e6;border-radius:12px;padding:8px 10px}
-#spm-tg-inputwrap.error{border-color:#e5484d}
-#spm-tg-inputwrap input{width:100%;border:none;outline:none;background:transparent;font-size:14px;color:#000}
-#spm-tg-inputwrap input::placeholder{color:#9ca3af}
-.spm-error{color:#e5484d;font-size:13px;margin-top:8px}
-
- /* «Свечение» при валидном нике (жёсткая специфичность) */
-#spm-tg-card.glow{border-color:var(--tg);box-shadow:0 0 0 2px var(--tg),0 0 24px rgba(34,158,217,.35);background:rgba(34,158,217,.08)}
-/* если хочешь строго в своём акценте — замени var(--tg) на var(--accent) в строке выше */
-
-.spm-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
-.spm-btn-fill{background:var(--accent);color:#fff;border:none;padding:12px 20px;border-radius:16px;font-weight:600}
-.spm-btn-fill:disabled{opacity:.4;cursor:not-allowed}
-.spm-hint{color:#666;font-size:12px}
-.hidden{display:none}
-
-/* CTA как типографская ссылка */
-.cta-link{
-  font:600 18px/1.35 Montserrat,system-ui,sans-serif;
-  color:#000;
-  text-decoration:none;
-  border-bottom:2px solid #a3c1d9;
-  padding-bottom:2px;
-  transition:color .2s, border-color .2s;
-}
-.cta-link:hover{ color:#a3c1d9; border-color:#000; }
-
-/* Телеграм-карточка: используем кастомный акцент --tg (по умолчанию #a3c1d9) */
-#spm-tg-card{ --tg:#a3c1d9; }
-#spm-tg-card.glow{
-  border-color:var(--tg);
-  box-shadow:0 0 0 2px var(--tg), 0 0 24px color-mix(in srgb, var(--tg) 35%, transparent);
-  background:color-mix(in srgb, var(--tg) 10%, white);
-}
-
-/* ▼ Переключатель языка */
-/* ▼ Language switch — минималист */
-.lang-switch{
-  position: fixed;
-  top: 16px;
-  right: 16px;           /* поменяй на left:16px; right:auto; если нужна левая сторона */
-  background: none;
-  border: none;
-  padding: 0;
-  font: 600 12px/1 Montserrat, system-ui, sans-serif;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--accent, #1b1b1b);
-  cursor: pointer;
-}
-.lang-switch:hover{ text-decoration: underline; }
-/* ▲ */
-
+/* Footer */
+footer { border-top:1px solid #eee; padding:14px 0; color:#777; font-size:14px; }
+#footer-name { font-weight:100; }
