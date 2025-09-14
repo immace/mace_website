@@ -201,3 +201,53 @@ img { width: 100%; height: auto; display: block; }
 /* ===== Footer ===== */
 footer { border-top:1px solid #eee; padding:14px 0; color:#777; font-size:14px; }
 #footer-name { font-weight:100; }
+
+/* === Social Bubbles === */
+#contacts { padding: 80px 0; }
+
+.social-bubbles{
+  position: relative;
+  height: 260px;           /* можно 200–320px по вкусу */
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.bubble-wrap{
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  will-change: transform;
+  /* каждая «траектория» управляется CSS-переменными из JS: */
+  --dx: 0px;  /* смещение по X */
+  --dy: 0px;  /* смещение по Y */
+  --dur: 8s;  /* длительность */
+  --delay: 0s;
+  animation: bubble-float var(--dur) ease-in-out var(--delay) infinite alternate;
+}
+
+.bubble{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+
+.bubble img{ width: 30px; height: 30px; }
+
+.bubble-wrap:hover{ animation-play-state: paused; }
+
+@keyframes bubble-float{
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(calc(var(--dx)*.6), calc(var(--dy)*.6)); }
+  100% { transform: translate(var(--dx), var(--dy)); }
+}
+
+/* мобильная адаптация */
+@media (max-width: 640px){
+  .social-bubbles{ height: 200px; }
+  .bubble-wrap{ width: 52px; height: 52px; }
+}
