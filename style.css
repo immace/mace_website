@@ -22,25 +22,17 @@ header {
   top: 0; left: 0; right: 0;
   background: #fff;
   border-bottom: 1px solid #eee;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s;
-  z-index: 1000;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s; z-index: 1000;
 }
 header.visible { opacity: 1; pointer-events: auto; }
 
 .header-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; justify-content: center; align-items: center;
   padding: 12px 0;
 }
 
-#header-name {
-  font-size: clamp(28px, 6vw, 72px);
-  line-height: .96;
-  font-weight: 100;
-}
+#header-name { font-size: clamp(28px, 6vw, 72px); line-height: .96; font-weight: 100; }
 
 /* ===== Hero ===== */
 .hero { padding: 10vh 0 7vh; }
@@ -48,38 +40,18 @@ header.visible { opacity: 1; pointer-events: auto; }
 .portfolio-name { text-align: center; margin: 0; }
 .portfolio-name img { display: block; width: 85%; height: auto; margin: 0 auto; }
 
-h1 {
-  font-size: clamp(28px, 6vw, 72px);
-  margin: 0;
-  line-height: .96;
-  font-weight: 700;
-}
+h1 { font-size: clamp(28px, 6vw, 72px); margin: 0; line-height: .96; font-weight: 700; }
 .hero-title { display: flex; flex-direction: column; }
 #name { display: block; font-weight: 100; }
 
 .role-wrapper {
-  display: block;
-  overflow: hidden;
-  line-height: 1.2em;
-  height: 1.2em;
-  position: relative;
-  font-weight: 700;
+  display: block; overflow: hidden; line-height: 1.2em; height: 1.2em;
+  position: relative; font-weight: 700;
 }
-.role-wrapper span {
-  display: block;
-  position: absolute;
-  left: 0; top: 0;
-  width: 100%;
-  white-space: nowrap;
-}
+.role-wrapper span { position: absolute; left: 0; top: 0; width: 100%; white-space: nowrap; }
 #role { display: block; }
 
-.accent {
-  width: 60px;
-  height: 8px;
-  background: var(--accent);
-  margin-top: 16px;
-}
+.accent { width: 60px; height: 8px; background: var(--accent); margin-top: 16px; }
 
 section { padding: 7vh 0; }
 section#portfolio.posts { padding: 3.5vh 0 7vh; }
@@ -95,180 +67,143 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post  { display: flex; flex-direction: column; }
 
-/* Заголовок типа (desktop / first post) */
-.post-title {
-  display: inline-block;
-  margin: 8px 0 0;
-  font-style: italic;
-  font-weight: 500;
-  line-height: 1.1;
-  text-decoration: underline var(--accent) .16em;
-  text-underline-offset: .28em;
+.post-title{
+  display:inline-block; margin:8px 0 0; font-style:italic; font-weight:500; line-height:1.1;
+  text-decoration: underline var(--accent) .16em; text-underline-offset:.28em;
 }
 
-/* Текст описания */
-.post-description { margin: 8px 0 0; font-size: 16px; color: #555; font-weight: 500; }
-.post-description .post-name { font-weight: 600; color: #000; }
-.post-desc { font-weight: 300; color: #555; }
+.post-description{ margin:8px 0 0; font-size:16px; color:#555; font-weight:500; }
+.post-description .post-name{ font-weight:600; color:#000; }
+.post-desc{ font-weight:300; color:#555; }
 
-@media (min-width: 1024px){
-  .post-title { font-size: 32px; }
-  .post-description { font-size: 20px; }
+@media (min-width:1024px){
+  .post-title{ font-size:32px; }
+  .post-description{ font-size:20px; }
 }
 
-img { width: 100%; height: auto; display: block; }
+img{ width:100%; height:auto; display:block; }
 
-/* ===== Карусель (общая) ===== */
-.carousel { position: relative; overflow: hidden; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-.carousel-track { display: flex; align-items: stretch; gap: 0; will-change: transform; }
-.carousel-track img { width: 100%; flex-shrink: 0; }
+/* ===== Carousel (base) ===== */
+.carousel{
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+.carousel-track{ display:flex; align-items:stretch; gap:0; will-change:transform; }
+.carousel-track img{ width:100%; flex-shrink:0; }
 
 /* ===== Desktop ===== */
-@media (min-width: 769px){
-  .post .carousel { display: none; }
-  .post.is-first .carousel { display: block; height: 40vh; }
-  .post.is-first .carousel-track { height: 100%; align-items: center; }
-  .post.is-first .carousel-track img { height: 100%; width: auto; object-fit: contain; }
+@media (min-width:769px){
+  .post .carousel{ display:none; }
+  .post.is-first .carousel{ display:block; height:40vh; }
+  .post.is-first .carousel-track{ height:100%; align-items:center; }
+  .post.is-first .carousel-track img{ height:100%; width:auto; object-fit:contain; }
 
   .post:not(.is-first) .post-body{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--gap);
-    align-items: start;
-    padding: 0 14px;
+    display:grid; grid-template-columns:1fr 1fr; gap:var(--gap);
+    align-items:start; padding:0 14px;
   }
-  .post:not(.is-first) .post-left{ width: 100%; }
   .post:not(.is-first) .post-cover{
-    width: 100%; object-fit: contain; border-radius: 10px;
-    box-shadow: 0 14px 34px rgba(var(--accent-rgb), .22);
+    width:100%; object-fit:contain; border-radius:10px;
+    box-shadow:0 14px 34px rgba(var(--accent-rgb), .22);
   }
-  .post:not(.is-first) .post-right{ display: grid; grid-template-rows: auto auto; row-gap: var(--gap); }
-  .post:not(.is-first) .post-thumbs{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .post:not(.is-first) .post-thumbs img{ border-radius: 8px; }
-  .post:not(.is-first) .post-meta{ text-align: right; align-self: end; }
+  .post:not(.is-first) .post-right{ display:grid; grid-template-rows:auto auto; row-gap:var(--gap); }
+  .post:not(.is-first) .post-thumbs{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .post:not(.is-first) .post-thumbs img{ border-radius:8px; }
+  .post:not(.is-first) .post-meta{ text-align:right; align-self:end; }
 
-  /* мобильный мета-блок на десктопе скрыт */
-  .post-meta-under { display: none !important; }
+  .post-meta-under{ display:none !important; }
 }
 
 /* ===== Mobile ===== */
-@media (max-width: 768px){
-  /* ── Карусель "как в инсте": одно фото на экран + точки поверх фото ── */
-  .carousel {
+@media (max-width:768px){
+  /* центрируем по сетке контейнера, без «ухода» за края */
+  .carousel{
+    width: 100%;
+    margin: 0;             /* отменяем 100vw-хаки */
+    padding: 0;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    margin: 0;
-    padding: 0;                   /* никаких лишних полей — ровно по центру */
   }
   .carousel::-webkit-scrollbar{ display:none; }
-  .carousel-track { gap: 0; }
+  .carousel-track{ gap:0; }
   .carousel-track img{
-    width: 100%;
-    border: 1px solid #eee;
-    border-radius: 16px;
-    scroll-snap-align: center;    /* кадр строго центрируется */
+    width:100%;
+    height:auto;           /* чтобы кадры не резались */
+    border:1px solid #eee;
+    border-radius:16px;
+    scroll-snap-align:center;  /* один кадр — по центру */
   }
 
-  /* точки поверх фото, по центру */
+  /* точки — закреплённо поверх любого кадра */
   .carousel-indicators{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 10px;
-    display: flex;
-    gap: 6px;
-    z-index: 2;
-    pointer-events: none;
+    position:absolute; left:50%; transform:translateX(-50%);
+    bottom:10px; display:flex; gap:6px;
+    z-index: 8;                 /* выше изображений */
+    pointer-events:none;
   }
   .carousel-indicators span{
-    width: 4px; height: 4px;
-    background: rgba(163,193,217,.5);
-    border-radius: 50%;
+    width:4px; height:4px; background:rgba(163,193,217,.5); border-radius:50%;
   }
   .carousel-indicators span.active{
-    width: 6px; height: 6px;
-    background: var(--accent);
+    width:6px; height:6px; background:var(--accent);
   }
 
-  /* скрываем desktop-версию для постов */
-  .post .post-body,
-  .post .post-left,
-  .post .post-right { display: none; }
+  .post .post-body, .post .post-left, .post .post-right{ display:none; }
+  .post.is-first > .post-title{ display:none; }
 
-  /* заголовок у первого поста (под каруселью) скрыть на мобиле */
-  .post.is-first > .post-title { display: none; }
-
-  /* мета-блок под каруселью: тип слева, имя/описание справа */
   .post-meta-under{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 6px 14px;
-    align-items: baseline;
-    padding: 10px 14px 0;        /* те же поля, что у .wrap */
+    display:grid; grid-template-columns:auto 1fr;
+    gap:6px 14px; align-items:baseline;
+    padding:10px 14px 0;       /* совпадает с .wrap */
   }
   .post-meta-under .post-title{
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.2;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin:0; font-size:16px; line-height:1.2;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
   .post-meta-under .post-description{
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.2;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    text-align: right;
+    margin:0; font-size:13px; line-height:1.2;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:right;
   }
 }
 
 /* ===== Contacts ===== */
-.contacts { padding: 0 14px 56px; }
+.contacts{ padding:0 14px 56px; }
 
-/* Desktop — исходная раскладка, но с "дыханием" у пузырей */
+/* Desktop — «дыхание» */
 .social-bubbles{
-  position:relative;
-  height:160px;
-  margin:40px auto;
-  max-width:var(--maxw);
+  position:relative; height:160px; margin:40px auto; max-width:var(--maxw);
 }
 .bubble-wrap{ position:absolute; top:50%; transform:translate(-50%,-50%); }
 .bubble{
   --size:76px;
   width:var(--size); height:var(--size);
-  border-radius:50%;
-  background:#fff;
-  display:grid; place-items:center;
-  animation: bubble-float 6.5s ease-in-out infinite alternate;
+  border-radius:50%; background:#fff; display:grid; place-items:center;
+  animation: bubble-float 4.8s ease-in-out infinite alternate; /* быстрее */
 }
 .bubble img{ width:30px; height:30px; }
-.social-bubbles > .bubble-wrap:nth-child(1) .bubble{ animation-duration: 7s;   animation-delay: 0s; }
-.social-bubbles > .bubble-wrap:nth-child(2) .bubble{ animation-duration: 6s;   animation-delay: .3s; }
-.social-bubbles > .bubble-wrap:nth-child(3) .bubble{ animation-duration: 7.6s; animation-delay: .6s; }
+.social-bubbles > .bubble-wrap:nth-child(1) .bubble{ animation-duration:4.6s; animation-delay:0s; }
+.social-bubbles > .bubble-wrap:nth-child(2) .bubble{ animation-duration:4.2s; animation-delay:.15s; }
+.social-bubbles > .bubble-wrap:nth-child(3) .bubble{ animation-duration:5.2s; animation-delay:.3s; }
 
 @keyframes bubble-float{
   0%   { transform: translateY(0) rotate(0deg) scale(1); }
-  50%  { transform: translateY(-6px) rotate(1.2deg) scale(1.01); }
-  100% { transform: translateY(4px) rotate(-1deg) scale(0.995); }
+  50%  { transform: translateY(-10px) rotate(1.5deg) scale(1.015); }
+  100% { transform: translateY(6px) rotate(-1.2deg) scale(0.995); }
 }
 
-/* Mobile — пузыри в ряд, аккуратные отступы */
-@media (max-width: 768px){
+/* Mobile — пузыри в ряд, с тем же «дыханием» */
+@media (max-width:768px){
   .social-bubbles{
-    position: static;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    height: auto;
-    margin: 28px auto 56px;
+    position: static; display:flex; justify-content:center; align-items:center;
+    gap:16px; height:auto; margin:28px auto 56px;
   }
-  .bubble-wrap{
-    position: static;
-    transform: none;
-  }
+  .bubble-wrap{ position: static; transform:none; }
 }
 
 /* ===== Footer ===== */
-footer { border-top:1px solid #eee; padding:14px 0; color:#777; font-size:14px; }
-#footer-name { font-weight:100; }
+footer{ border-top:1px solid #eee; padding:14px 0; color:#777; font-size:14px; }
+#footer-name{ font-weight:100; }
