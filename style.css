@@ -72,7 +72,6 @@ h1 {
   width: 100%;
   white-space: nowrap;
 }
-
 #role { display: block; }
 
 .accent {
@@ -92,13 +91,14 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
 @keyframes slide-in  { from{ transform: translateY(100%);} to{ transform: translateY(0);} }
 @keyframes slide-out { from{ transform: translateY(0);} to{ transform: translateY(-100%);} }
 
-/* Posts */
+/* ===== Posts ===== */
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post  { display: flex; flex-direction: column; }
 
+/* Заголовок типа */
 .post-title {
   display: inline-block;
-  margin: 0;
+  margin: 8px 0 0;
   font-style: italic;
   font-weight: 500;
   line-height: 1.1;
@@ -106,6 +106,7 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
   text-underline-offset: .28em;
 }
 
+/* Текст описания */
 .post-description { margin: 8px 0 0; font-size: 16px; color: #555; font-weight: 500; }
 .post-description .post-name { font-weight: 600; color: #000; }
 .post-desc { font-weight: 300; color: #555; }
@@ -117,12 +118,12 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
 
 img { width: 100%; height: auto; display: block; }
 
-/* Carousel */
+/* ===== Карусель (общая) ===== */
 .carousel { position: relative; overflow: hidden; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
 .carousel-track { display: flex; align-items: stretch; gap: 0; will-change: transform; }
 .carousel-track img { width: 100%; flex-shrink: 0; }
 
-/* Desktop layout */
+/* ===== Desktop ===== */
 @media (min-width: 769px){
   .post .carousel { display: none; }
   .post.is-first .carousel { display: block; height: 40vh; }
@@ -145,27 +146,43 @@ img { width: 100%; height: auto; display: block; }
   .post:not(.is-first) .post-thumbs{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .post:not(.is-first) .post-thumbs img{ border-radius: 8px; }
   .post:not(.is-first) .post-meta{ text-align: right; align-self: end; }
+
+  /* мобильный мета-блок на десктопе скрыт */
+  .post-meta-under { display: none !important; }
 }
 
-/* Mobile */
+/* ===== Mobile ===== */
 @media (max-width: 768px){
   .carousel { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; margin:0; }
   .carousel::-webkit-scrollbar{ display:none; }
   .carousel-track img{ border:1px solid #eee; border-radius:16px; scroll-snap-align:center; }
-  .carousel-indicators{ position:sticky; bottom:16px; display:flex; justify-content:center; gap:6px; }
-  .carousel-indicators span{ width:4px; height:4px; background:rgba(163,193,217,.5); border-radius:50%; }
-  .carousel-indicators span.active{ width:6px; height:6px; background:var(--accent); }
-  .post .post-body,.post .post-left,.post .post-right{ display:none; }
+
+  /* на мобиле не показываем десктопные 2 колонки */
+  .post .post-body,
+  .post .post-left,
+  .post .post-right { display: none; }
+
   .post .carousel{ display:block; }
+
+  /* 🔹 мета-блок ПОД каруселью: слева тип, справа название+описание */
+  .post-meta-under{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px 16px;
+    align-items: start;
+    padding: 8px 6px 0;
+  }
+  .post-meta-under .post-title{ margin: 0; }
+  .post-meta-under .post-description{ margin: 0; }
 }
 
-/* Contacts */
+/* ===== Contacts ===== */
 .contacts { padding: 0 14px 56px; }
 .social-bubbles{ position:relative; height:160px; margin:40px auto; max-width:var(--maxw); }
 .bubble-wrap{ position:absolute; top:50%; transform:translate(-50%,-50%); }
 .bubble{ --size:76px; width:var(--size); height:var(--size); border-radius:50%; background:#fff; display:grid; place-items:center; }
 .bubble img{ width:30px; height:30px; }
 
-/* Footer */
+/* ===== Footer ===== */
 footer { border-top:1px solid #eee; padding:14px 0; color:#777; font-size:14px; }
 #footer-name { font-weight:100; }
