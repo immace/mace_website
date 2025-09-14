@@ -9,7 +9,10 @@ const I18N = {
       'Дизайнер шрифтов','Дизайнер айдентики','Дизайнер постеров'
     ],
     footerName:'Мацэ',
-    post:{ descSoon:'описание: скоро', catMap:{'Постер':'Постер','Айдентика':'Айдентика','Логотип':'Логотип','Обложка':'Обложка'} }
+    post:{
+      descSoon:'описание: скоро',
+      catMap:{'Постер':'Постер','Айдентика':'Айдентика','Логотип':'Логотип','Обложка':'Обложка'}
+    }
   },
   en: {
     htmlLang: 'en',
@@ -20,9 +23,24 @@ const I18N = {
       'Type Designer','Brand Identity Designer','Poster Designer'
     ],
     footerName:'Macé',
-    post:{ descSoon:'description: soon', catMap:{'Постер':'Poster','Айдентика':'Identity','Логотип':'Logo','Обложка':'Cover'} }
+    post:{
+      descSoon:'description: soon',
+      catMap:{'Постер':'Poster','Айдентика':'Identity','Логотип':'Logo','Обложка':'Cover'}
+    }
   }
 };
+
+// Имя поста (project name) — маппинг RU <-> EN
+const NAME_MAP = {
+  ru2en: {
+    'Ростов':'Rostov',
+    'Нотное издание':'Sheet music',
+    'Гувернантка':'Governess',
+    'Движение':'Motion',
+    'Форма':'Form'
+  }
+};
+NAME_MAP.en2ru = Object.fromEntries(Object.entries(NAME_MAP.ru2en).map(([k,v])=>[v,k]));
 
 function isLikelyRussia(){
   const langs = navigator.languages || [navigator.language||''];
@@ -33,20 +51,37 @@ function isLikelyRussia(){
 }
 function decideInitialLang(){ return isLikelyRussia() ? 'ru':'en'; }
 
+function translateName(originalRu, lang){
+  if (lang === 'en') return NAME_MAP.ru2en[originalRu] || originalRu;
+  // lang === 'ru'
+  return NAME_MAP.en2ru[originalRu] || originalRu;
+}
+
 function applyLang(lang){
   const t = I18N[lang]||I18N.en;
   document.documentElement.setAttribute('lang',t.htmlLang);
   document.title=t.title;
   window.__roles_i18n=t.roles;
   window.__phrases_i18n=t.phrases;
-  const foot=document.getElementById('footer-name'); if(foot) foot.textContent=t.footerName;
 
-  // Перевод категорий и описаний (работает и для desktop-meta, и для mobile-meta)
+  const foot=document.getElementById('footer-name');
+  if(foot) foot.textContent=t.footerName;
+
+  // типы (категории)
   document.querySelectorAll('.post .post-title').forEach(el=>{
     const ru=el.getAttribute('data-ru')||el.textContent.trim();
     const map=t.post.catMap; el.textContent=map[ru]||ru;
   });
-  document.querySelectorAll('.post-description .post-desc').forEach(el=>{ el.textContent=t.post.descSoon; });
+  // описания
+  document.querySelectorAll('.post-description .post-desc').forEach(el=>{
+    el.textContent=t.post.descSoon;
+  });
+  // имена проектов
+  document.querySelectorAll('.post-description .post-name').forEach(el=>{
+    const originalRu = el.getAttribute('data-name-ru') || el.textContent.trim();
+    el.setAttribute('data-name-ru', originalRu); // запомним
+    el.textContent = translateName(originalRu, lang);
+  });
 }
 
 // ===== main interactions =====
@@ -57,7 +92,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const roleWrapper=document.querySelector('.role-wrapper');
 
   class TextScramble{
-    constructor(el){ this.el=el; this.chars='абвгдеёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZ'; }
+    constructor(el){ this.el=el; this.chars='абвгдеёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZ'; this.update=this.update.bind(this); }
     setText(newText){
       const oldText=this.el.innerText;
       const length=Math.max(oldText.length,newText.length);
@@ -82,7 +117,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       }
       this.el.innerHTML=output;
       if(complete===this.queue.length) this.resolve();
-      else { this.frameRequest=requestAnimationFrame(this.update.bind(this)); this.frame+=2; }
+      else { this.frameRequest=requestAnimationFrame(this.update); this.frame+=2; }
     }
     randomChar(){ return this.chars[Math.floor(Math.random()*this.chars.length)]; }
   }
@@ -168,7 +203,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     const indexExt=parts.pop();
     const base=parts.join('-');
     const [section,...rest]=base.split('-');
-    const postName=rest.join('-');
+    const postName=rest.join('-'); // RU исходное имя из файлов
     const index=parseInt(indexExt.split('.')[0],10);
     const key=`${section}-${postName}`;
     if(!postsMap[key]){
@@ -186,7 +221,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Рендер
   const portfolio=document.getElementById('portfolio');
   const currentLang=decideInitialLang();
-  applyLang(currentLang);
   const tPost=I18N[currentLang].post;
 
   posts.forEach((post,idx)=>{
@@ -194,7 +228,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     wrapper.className='post';
     if(idx===0) wrapper.classList.add('is-first');
 
-    // Карусель (идёт первой у всех постов)
+    // Карусель
     const carousel=document.createElement('div'); carousel.className='carousel';
     const track=document.createElement('div'); track.className='carousel-track';
     const mappedForAlt=(I18N[currentLang].post.catMap[post.category]||post.category);
@@ -206,7 +240,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     carousel.appendChild(track);
     wrapper.appendChild(carousel);
 
-    // 🔹 ТОЛЬКО для первого поста — заголовок ПОД каруселью (десктопный)
+    // Только для первого поста — тип под каруселью (desktop)
     if(idx===0){
       const topTitle=document.createElement('h3');
       topTitle.className='post-title';
@@ -216,7 +250,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       wrapper.appendChild(topTitle);
     }
 
-    // Десктопный блок для остальных постов (две колонки)
+    // Desktop 2-колонки для остальных
     if(idx!==0){
       const body=document.createElement('div'); body.className='post-body';
 
@@ -242,7 +276,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 
       const desc=document.createElement('p'); desc.className='post-description';
       const prettyName=post.name?post.name[0].toUpperCase()+post.name.slice(1):post.name;
-      desc.innerHTML=`<span class="post-name">${prettyName}</span> · <span class="post-desc">${I18N[currentLang].post.descSoon}</span>`;
+      // запоминаем RU имя в data-атрибут, чтобы корректно переводить туда-обратно
+      desc.innerHTML=`<span class="post-name" data-name-ru="${prettyName}">${translateName(prettyName, currentLang)}</span> · <span class="post-desc">${I18N[currentLang].post.descSoon}</span>`;
 
       meta.appendChild(type); meta.appendChild(desc);
       right.appendChild(thumbs); right.appendChild(meta);
@@ -251,7 +286,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       wrapper.appendChild(body);
     }
 
-    // 🔹 Мобильный мета-блок ПОД каруселью — у всех постов
+    // Мобильный мета-блок под каруселью — у всех постов
     const mobileMeta=document.createElement('div');
     mobileMeta.className='post-meta-under';
 
@@ -263,7 +298,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     const mobileDesc=document.createElement('p');
     mobileDesc.className='post-description';
     const prettyNameMobile=post.name?post.name[0].toUpperCase()+post.name.slice(1):post.name;
-    mobileDesc.innerHTML=`<span class="post-name">${prettyNameMobile}</span> · <span class="post-desc">${I18N[currentLang].post.descSoon}</span>`;
+    mobileDesc.innerHTML=`<span class="post-name" data-name-ru="${prettyNameMobile}">${translateName(prettyNameMobile, currentLang)}</span> · <span class="post-desc">${I18N[currentLang].post.descSoon}</span>`;
 
     mobileMeta.appendChild(mobileType);
     mobileMeta.appendChild(mobileDesc);
@@ -272,4 +307,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     portfolio.appendChild(wrapper);
     setupCarousel(carousel);
   });
+
+  // Применим переводы после рендера
+  applyLang(currentLang);
 });
