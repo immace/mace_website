@@ -251,3 +251,64 @@ footer { border-top:1px solid #eee; padding:14px 0; color:#777; font-size:14px; 
   .social-bubbles{ height: 200px; }
   .bubble-wrap{ width: 52px; height: 52px; }
 }
+
+/* === Mobile fix: ровные поля слева/справа, меньше масштаб, подписи по краям === */
+@media (max-width: 768px){
+
+  /* равные отступы страницы */
+  .wrap{
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* каждый пост центрируется и не расползается */
+  .posts{ display:block !important; }
+  .post{
+    width: 100% !important;
+    max-width: 560px;               /* уменьшили общий размер на мобиле */
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* карусель/обложка — строго по ширине поста */
+  .carousel{
+    width: 100% !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+  .carousel-track{ width: 100% !important; transform: none !important; }
+  .carousel img{
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;      /* убираем «щели» от inline-элементов */
+  }
+
+  /* двухколоночный режим выключаем на мобиле, всё в одну колонку */
+  .post-body{ display:block !important; padding: 0 !important; margin: 0 !important; }
+  .post-left, .post-right{ width: 100% !important; padding: 0 !important; margin: 0 !important; }
+  .post-right{ margin-top: 12px !important; }
+  .post-cover{ width: 100% !important; display:block !important; border-radius: 16px !important; }
+  .post-thumbs{ display: none !important; } /* чтобы не распирало вправо */
+
+  /* заголовок и описание: без внутренних полей — ровно по краям, как картинка */
+  .post-title,
+  .post-description,
+  .post-meta{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+  }
+  .post-title{ margin-top: 10px !important; margin-bottom: 4px !important; }
+  .post-description{ margin-bottom: 12px !important; }
+
+  /* хедер/хиро компактнее */
+  .hero-title{ font-size: clamp(26px, 7vw, 36px) !important; }
+}
+
+/* на очень узких экранах ещё компактнее */
+@media (max-width: 390px){
+  .post{ max-width: 520px; }
+  .carousel, .post-cover{ border-radius: 12px !important; }
+}
