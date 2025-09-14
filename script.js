@@ -311,3 +311,73 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Применим переводы после рендера
   applyLang(currentLang);
 });
+
+/* === Social Bubbles: random layout + chaotic paths (no overlaps) === */
+(function initBubbles(){
+  const container = document.querySelector('.social-bubbles');
+  if (!container) return;
+
+  const nodes = Array.from(container.querySelectorAll('.bubble-wrap'));
+  if (!nodes.length) return;
+
+  // параметры
+  const PAD = 10;          // отступ от краёв
+  const MIN_DIST = 78;     // минимальная дистанция между центрами, чтобы не «липли»
+  const MAX_TRIES = 200;   // попытки разложить без пересечений
+
+  // размеры контейнера (берём после рендера)
+  const rect = container.getBoundingClientRect();
+  const W = rect.width;
+  const H = rect.height;
+
+  // вспомогалки
+  const rand = (min, max) => Math.random() * (max - min) + min;
+  const dist2 = (a,b) => {
+    const dx = a.x - b.x, dy = a.y - b.y;
+    return dx*dx + dy*dy;
+  };
+
+  // аккуратно раскладываем точки без наложений
+  const placed = [];
+  for (let i = 0; i < nodes.length; i++){
+    const el = nodes[i];
+    const w = el.offsetWidth || 56;
+    const h = el.offsetHeight || 56;
+    const r = Math.max(w,h)/2;
+
+    let ok = false, tries = 0, x=0, y=0;
+    while(!ok && tries++ < MAX_TRIES){
+      x = rand(PAD + r, W - PAD - r);
+      y = rand(PAD + r, H - PAD - r);
+      ok = placed.every(p => dist2({x,y}, p) >= (MIN_DIST*MIN_DIST));
+    }
+    placed.push({x,y});
+
+    // ставим позицию
+    el.style.left = (x - w/2) + 'px';
+    el.style.top  = (y - h/2) + 'px';
+
+    // задаём «хаотичную» траекторию и время
+    const dx = rand(-80, 80);
+    const dy = rand(-70, 70);
+    const dur = rand(7, 12);
+    const delay = rand(-3, 2); // отрицательная задержка для рассинхрона
+
+    el.style.setProperty('--dx', dx + 'px');
+    el.style.setProperty('--dy', dy + 'px');
+    el.style.setProperty('--dur', dur + 's');
+    el.style.setProperty('--delay', delay + 's');
+  }
+
+  // на ресайз — пересчитать (без дёрганья на каждом пикселе)
+  let raf, ticking = false;
+  window.addEventListener('resize', () => {
+    if (ticking) return;
+    ticking = true;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      ticking = false;
+      initBubbles(); // заново разложим
+    });
+  }, { passive:true });
+})();
