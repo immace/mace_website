@@ -32,6 +32,7 @@ function isLikelyRussia(){
   return hasRu||isRuTZ;
 }
 function decideInitialLang(){ return isLikelyRussia() ? 'ru':'en'; }
+
 function applyLang(lang){
   const t = I18N[lang]||I18N.en;
   document.documentElement.setAttribute('lang',t.htmlLang);
@@ -40,7 +41,7 @@ function applyLang(lang){
   window.__phrases_i18n=t.phrases;
   const foot=document.getElementById('footer-name'); if(foot) foot.textContent=t.footerName;
 
-  // Перевод категорий и описаний
+  // Перевод категорий и описаний (работает и для desktop-meta, и для mobile-meta)
   document.querySelectorAll('.post .post-title').forEach(el=>{
     const ru=el.getAttribute('data-ru')||el.textContent.trim();
     const map=t.post.catMap; el.textContent=map[ru]||ru;
@@ -193,7 +194,19 @@ document.addEventListener('DOMContentLoaded',()=>{
     wrapper.className='post';
     if(idx===0) wrapper.classList.add('is-first');
 
-    // 🔹 Заголовок создать только у ПЕРВОГО поста
+    // Карусель (идёт первой у всех постов)
+    const carousel=document.createElement('div'); carousel.className='carousel';
+    const track=document.createElement('div'); track.className='carousel-track';
+    const mappedForAlt=(I18N[currentLang].post.catMap[post.category]||post.category);
+    post.images.forEach(src=>{
+      const img=document.createElement('img');
+      img.src=src; img.alt=`${mappedForAlt} ${post.name}`; img.loading='lazy';
+      track.appendChild(img);
+    });
+    carousel.appendChild(track);
+    wrapper.appendChild(carousel);
+
+    // 🔹 ТОЛЬКО для первого поста — заголовок ПОД каруселью (десктопный)
     if(idx===0){
       const topTitle=document.createElement('h3');
       topTitle.className='post-title';
@@ -203,18 +216,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       wrapper.appendChild(topTitle);
     }
 
-    // Карусель
-    const carousel=document.createElement('div'); carousel.className='carousel';
-    const track=document.createElement('div'); track.className='carousel-track';
-    const mappedForAlt=(I18N[currentLang].post.catMap[post.category]||post.category);
-    post.images.forEach(src=>{
-      const img=document.createElement('img');
-      img.src=src; img.alt=`${mappedForAlt} ${post.name}`; img.loading='lazy';
-      track.appendChild(img);
-    });
-    carousel.appendChild(track); wrapper.appendChild(carousel);
-
-    // Для остальных постов — 2 колонки с заголовком в meta
+    // Десктопный блок для остальных постов (две колонки)
     if(idx!==0){
       const body=document.createElement('div'); body.className='post-body';
 
@@ -248,6 +250,24 @@ document.addEventListener('DOMContentLoaded',()=>{
       body.appendChild(left); body.appendChild(right);
       wrapper.appendChild(body);
     }
+
+    // 🔹 Мобильный мета-блок ПОД каруселью — у всех постов
+    const mobileMeta=document.createElement('div');
+    mobileMeta.className='post-meta-under';
+
+    const mobileType=document.createElement('p');
+    mobileType.className='post-title';
+    mobileType.setAttribute('data-ru',post.category);
+    mobileType.textContent=I18N[currentLang].post.catMap[post.category]||post.category;
+
+    const mobileDesc=document.createElement('p');
+    mobileDesc.className='post-description';
+    const prettyNameMobile=post.name?post.name[0].toUpperCase()+post.name.slice(1):post.name;
+    mobileDesc.innerHTML=`<span class="post-name">${prettyNameMobile}</span> · <span class="post-desc">${I18N[currentLang].post.descSoon}</span>`;
+
+    mobileMeta.appendChild(mobileType);
+    mobileMeta.appendChild(mobileDesc);
+    wrapper.appendChild(mobileMeta);
 
     portfolio.appendChild(wrapper);
     setupCarousel(carousel);
