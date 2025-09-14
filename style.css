@@ -196,14 +196,14 @@ img{ width:100%; height:auto; display:block; }
 }
 .bubble-wrap{ position:absolute; top:50%; transform:translate(-50%,-50%); }
 .bubble{
-  --size:76px;
+   --size:76px;
   width:var(--size); height:var(--size);
   border-radius:50%; background:#fff; display:grid; place-items:center;
-  animation: bubble-float 4.8s ease-in-out infinite alternate; /* быстрее */
+  animation: bubble-float 3.8s ease-in-out infinite alternate; /* быстрее */
 }
 .bubble img{ width:30px; height:30px; }
 .social-bubbles > .bubble-wrap:nth-child(1) .bubble{ animation-duration:4.6s; animation-delay:0s; }
-.social-bubbles > .bubble-wrap:nth-child(2) .bubble{ animation-duration:4.2s; animation-delay:.15s; }
+.social-bubbles > .bubble-wrap:nth-child(2) .bubble{ animation-duration:3.5s; animation-delay:.15s; }
 .social-bubbles > .bubble-wrap:nth-child(3) .bubble{ animation-duration:5.2s; animation-delay:.3s; }
 
 @keyframes bubble-float{
