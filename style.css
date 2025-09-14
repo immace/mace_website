@@ -108,7 +108,7 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
 
 /* Текст описания */
 .post-description { margin: 8px 0 0; font-size: 16px; color: #555; font-weight: 500; }
-.post-description .post-name { font-weight: 600; color: #000; }
+.post-description .post-name { font-weight: 600; color: #000; } /* ← убран акцентный цвет */
 .post-desc { font-weight: 300; color: #555; }
 
 @media (min-width: 1024px){
@@ -118,7 +118,7 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
 
 img { width: 100%; height: auto; display: block; }
 
-/* ===== Карусель ===== */
+/* ===== Карусель (общая) ===== */
 .carousel { position: relative; overflow: hidden; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
 .carousel-track { display: flex; align-items: stretch; gap: 0; will-change: transform; }
 .carousel-track img { width: 100%; flex-shrink: 0; }
@@ -153,9 +153,20 @@ img { width: 100%; height: auto; display: block; }
 
 /* ===== Mobile ===== */
 @media (max-width: 768px){
-  .carousel { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; margin:0; }
+  /* визуально центрируем контент: у карусели одинаковые поля слева/справа */
+  .carousel {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin: 0;
+    padding: 0 16px;        /* ← одинаковые боковые поля */
+  }
   .carousel::-webkit-scrollbar{ display:none; }
-  .carousel-track img{ border:1px solid #eee; border-radius:16px; scroll-snap-align:center; }
+  .carousel-track img{
+    border:1px solid #eee;
+    border-radius:16px;
+    scroll-snap-align:center;
+  }
 
   /* не показываем desktop-версию */
   .post .post-body,
@@ -165,43 +176,40 @@ img { width: 100%; height: auto; display: block; }
   /* заголовок у первого поста (под каруселью) скрыть на мобиле */
   .post.is-first > .post-title { display: none; }
 
-  /* 🔹 мета-блок ПОД каруселью у всех постов: слева тип, справа название+описание */
+  /* 🔹 мета-блок ПОД каруселью у всех постов — тип слева, имя/описание справа */
   .post-meta-under{
     display: grid;
-    grid-template-columns: auto 1fr; /* ширина слева = по контенту */
+    grid-template-columns: auto 1fr; /* тип по контенту, справа — растягивается */
     gap: 6px 14px;
     align-items: baseline;          /* выравнивание по первой строке */
-    padding: 10px 14px 0;           /* равные внутренние отступы */
+    padding: 10px 16px 0;           /* те же поля, что у карусели */
   }
 
   .post-meta-under .post-title{
     margin: 0;
-    font-size: 16px;                /* +2 px как просил */
+    font-size: 16px;                /* +2 px */
     line-height: 1.2;
-    white-space: nowrap;            /* одна строка */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   .post-meta-under .post-description{
     margin: 0;
     font-size: 13px;
     line-height: 1.2;
-    white-space: nowrap;            /* одна строка */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: right;
   }
-  /* акцент только на мобиле — имя проекта */
-  .post-meta-under .post-description .post-name{
-    color: var(--accent);
-  }
+  /* имя проекта — обычный цвет (акцент убрали) */
+  .post-meta-under .post-description .post-name{ color: inherit; }
 }
 
 /* ===== Contacts ===== */
 .contacts { padding: 0 14px 56px; }
 
-/* Desktop (как было — если у тебя особая компоновка, она сохранится) */
+/* Desktop layout как было */
 .social-bubbles{
   position:relative;
   height:160px;
@@ -209,16 +217,42 @@ img { width: 100%; height: auto; display: block; }
   max-width:var(--maxw);
 }
 .bubble-wrap{ position:absolute; top:50%; transform:translate(-50%,-50%); }
-.bubble{ --size:76px; width:var(--size); height:var(--size); border-radius:50%; background:#fff; display:grid; place-items:center; }
+.bubble{
+  --size:76px;
+  width:var(--size); height:var(--size);
+  border-radius:50%;
+  background:#fff;
+  display:grid; place-items:center;
+  /* живое движение пузыря */
+  animation: bubble-float 6.5s ease-in-out infinite alternate;
+}
 .bubble img{ width:30px; height:30px; }
 
-/* Mobile — пузыри не наслаиваются, равные промежутки */
+/* Слегка разные траектории и темп для разнообразия */
+.social-bubbles > .bubble-wrap:nth-child(1) .bubble{
+  animation-duration: 7s; animation-delay: 0s;
+}
+.social-bubbles > .bubble-wrap:nth-child(2) .bubble{
+  animation-duration: 6s; animation-delay: .3s;
+}
+.social-bubbles > .bubble-wrap:nth-child(3) .bubble{
+  animation-duration: 7.6s; animation-delay: .6s;
+}
+
+@keyframes bubble-float{
+  0%   { transform: translateY(0) rotate(0deg) scale(1); }
+  50%  { transform: translateY(-6px) rotate(1.2deg) scale(1.01); }
+  100% { transform: translateY(4px) rotate(-1deg) scale(0.995); }
+}
+
+/* Mobile — пузыри в ряд, не наслаиваются, и тоже “дышат” */
 @media (max-width: 768px){
   .social-bubbles{
     position: static;
     display: flex;
     justify-content: center;
-    gap: 16px;            /* расстояние между пузырями */
+    align-items: center;
+    gap: 16px;             /* расстояние между пузырями */
     height: auto;
     margin: 28px auto 56px;
   }
