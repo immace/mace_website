@@ -95,7 +95,7 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
 .posts { display: flex; flex-direction: column; gap: var(--gap); }
 .post  { display: flex; flex-direction: column; }
 
-/* Заголовок типа */
+/* Заголовок типа (desktop / first post) */
 .post-title {
   display: inline-block;
   margin: 8px 0 0;
@@ -118,7 +118,7 @@ section#portfolio.posts { padding: 3.5vh 0 7vh; }
 
 img { width: 100%; height: auto; display: block; }
 
-/* ===== Карусель (общая) ===== */
+/* ===== Карусель ===== */
 .carousel { position: relative; overflow: hidden; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
 .carousel-track { display: flex; align-items: stretch; gap: 0; will-change: transform; }
 .carousel-track img { width: 100%; flex-shrink: 0; }
@@ -157,23 +157,38 @@ img { width: 100%; height: auto; display: block; }
   .carousel::-webkit-scrollbar{ display:none; }
   .carousel-track img{ border:1px solid #eee; border-radius:16px; scroll-snap-align:center; }
 
-  /* на мобиле не показываем десктопные 2 колонки */
+  /* не показываем desktop-версию */
   .post .post-body,
   .post .post-left,
   .post .post-right { display: none; }
 
-  .post .carousel{ display:block; }
+  /* заголовок у первого поста (который под каруселью) скрыть на мобиле */
+  .post.is-first > .post-title { display: none; }
 
-  /* 🔹 мета-блок ПОД каруселью: слева тип, справа название+описание */
+  /* 🔹 мета-блок ПОД каруселью у всех постов */
   .post-meta-under{
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 10px 16px;
-    align-items: start;
-    padding: 8px 6px 0;
+    gap: 6px 12px;
+    align-items: center;
+    padding: 10px 14px 0;        /* добавил правый отступ — больше не липнет к краю */
   }
-  .post-meta-under .post-title{ margin: 0; }
-  .post-meta-under .post-description{ margin: 0; }
+
+  .post-meta-under .post-title{
+    margin: 0;
+    font-size: 14px;             /* меньше шрифт */
+    white-space: nowrap;         /* одна строка */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .post-meta-under .post-description{
+    margin: 0;
+    font-size: 13px;             /* меньше шрифт */
+    white-space: nowrap;         /* одна строка */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+  }
 }
 
 /* ===== Contacts ===== */
