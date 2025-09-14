@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Macé · Home (sandbox)</title>
+
+  <!-- БАЗА: текущие стили/скрипты (НЕ меняем их) -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Страница: локальные стили -->
+  <link rel="stylesheet" href="/css/home.css" />
+</head>
+<body>
+
+  <!-- тот же header что и сейчас (видимый скролл-хедер) -->
+  <header>
+    <div class="header-content">
+      <div id="header-name">Мацé</div>
+    </div>
+  </header>
+
+  <!-- Hero (подключаем твой текущий hero из index) -->
+  <section class="wrap hero">
+    <div class="hero-title">
+      <h1><span id="name">Дима Мальцев</span><br/><span class="role-wrapper"><span id="role">Графический дизайнер</span></span></h1>
+      <div class="accent"></div>
+    </div>
+    <p class="portfolio-name"><img src="/assets/портфолио.svg" alt="портфолио"/></p>
+
+    <!-- вернули кнопку «Создать проект» -->
+    <p style="margin-top:24px">
+      <a class="btn-start" href="/shop">Создать проект →</a>
+    </p>
+  </section>
+
+  <!-- Портфолио (используем существующий генератор из /script.js) -->
+  <section id="portfolio" class="wrap posts"></section>
+
+  <!-- Соц-«пузырьки» как сейчас -->
+  <section class="contacts">
+    <h2 class="sr-only">Сети</h2>
+    <div class="social-bubbles" aria-label="Социальные сети">
+      <!-- оставь свою разметку пузырьков -->
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div id="footer-name">Macé</div>
+      <a href="/links">Связь</a>
+    </div>
+  </footer>
+
+  <!-- БАЗА: текущий скрипт (НЕ меняем) -->
+  <script src="/script.js"></script>
+
+  <!-- Страница: локальный скрипт -->
+  <script src="/js/home.js"></script>
+</body>
+</html>
