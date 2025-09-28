@@ -1,3 +1,90 @@
+// ===== i18n: словари, детект, переключатель =====
+const I18N = {
+  ru: {
+    htmlLang: 'ru',
+    title: 'Мацэ́ · Графический дизайнер',
+    cta: 'Создать дизайн →',
+    roles: [
+      'Графический дизайнер',
+      'Веб-дизайнер',
+      'Иллюстратор',
+      'Дизайнер шрифтов',
+      'Дизайнер айдентики',
+      'Дизайнер постеров'
+    ],
+    modal: {
+      startTitle: 'Начать проект',
+      startSub: 'Выберите услугу, укажите ник Telegram и получите бриф',
+      what: 'Что хотите создать?',
+      tg: 'Telegram аккаунт',
+      optLogo: 'Логотип / айдентика',
+      optFont: 'Шрифт (display / text)',
+      optPattern: 'Дизайн на лекало / принты',
+      optWeb: 'Дизайн сайта / UI',
+      optOther: 'Другое (опишите)',
+      otherPh: 'Опишите задачу (нейминг, презентация, мерч)',
+      tgPh: '@immalcev',
+      tgErr: 'Недействительный ник Telegram',
+      hint: 'После отправки начнётся загрузка персонального брифа',
+      submit: 'Получить бриф',
+      close: 'Закрыть'
+    },
+    contacts: {
+      ig: 'Instagram @immalcev',
+      tg: 'Telegram @immalcev',
+      mail: 'Email mace4681@gmail.com'
+    },
+    footerName: 'Мацэ',
+    post: {
+      descSoon: 'описание: скоро',
+      catMap: { 'Постер':'Постер', 'Айдентика':'Айдентика', 'Логотип':'Логотип', 'Обложка':'Обложка' }
+    },
+    switchLabel: 'EN' // показываем целевую локаль
+  },
+
+  en: {
+    htmlLang: 'en',
+    title: 'Macé · Graphic Designer',
+    cta: 'Start a project →',
+    roles: [
+      'Graphic Designer',
+      'Web Designer',
+      'Illustrator',
+      'Type Designer',
+      'Brand Identity Designer',
+      'Poster Designer'
+    ],
+    modal: {
+      startTitle: 'Start a Project',
+      startSub: 'Choose a service, enter your Telegram handle, and get the brief',
+      what: 'What do you want to create?',
+      tg: 'Telegram account',
+      optLogo: 'Logo / Identity',
+      optFont: 'Typeface (display / text)',
+      optPattern: 'Apparel patterns / prints',
+      optWeb: 'Website / UI design',
+      optOther: 'Other (describe)',
+      otherPh: 'Describe the task (naming, deck, merch)',
+      tgPh: '@immalcev',
+      tgErr: 'Invalid Telegram handle',
+      hint: 'After submitting, your personalized brief will start downloading',
+      submit: 'Get the brief',
+      close: 'Close'
+    },
+    contacts: {
+      ig: 'Instagram @immalcev',
+      tg: 'Telegram @immalcev',
+      mail: 'Email mace4681@gmail.com'
+    },
+    footerName: 'Macé',
+    post: {
+      descSoon: 'description: soon',
+      catMap: { 'Постер':'Poster', 'Айдентика':'Identity', 'Логотип':'Logo', 'Обложка':'Cover' }
+    },
+    switchLabel: 'RU'
+  }
+};
+
 function isLikelyRussia() {
   // эвристика без внешних сервисов (если нужен 100% IP-гео — лучше сделать на сервере)
   const langs = navigator.languages || [navigator.language || ''];
