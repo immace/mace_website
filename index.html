@@ -25,10 +25,24 @@
   <header>
     <div class="wrap header-content">
       <span id="header-name">Дима Мальцев</span>
+
+      <!-- ▼ Переключатель языка -->
+      <button id="lang-switch" class="lang-switch" aria-label="Switch language" type="button">EN</button>
+      <!-- ▲ -->
     </div>
   </header>
 
   <!-- === Start Project: Modal === -->
+  <!-- === Start Project: Modal === -->
+<div id="spm-overlay" class="spm-overlay" aria-hidden="true">
+  <div class="spm-modal" role="dialog" aria-modal="true" aria-labelledby="spm-title">
+    <div class="spm-modal__head">
+      <div>
+        <h2 id="spm-title" class="spm-title">Начать проект</h2>
+        <p class="spm-sub">Выберите услугу, укажите ник Telegram и получите бриф</p>
+      </div>
+      <button id="spm-close" class="spm-icon" aria-label="Закрыть">✕</button>
+    </div>
 
     <div class="spm-block">
       <div class="spm-label">Что хотите создать?</div>
