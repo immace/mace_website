@@ -1,41 +1,120 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru"> <!-- JS поменяет при необходимости -->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#ffffff" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y58BHB892H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Y58BHB892H');
+  </script>
   <title>Мацэ́ · Графический дизайнер</title>
-  <link rel="icon" href="favicon.ico?v3" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v3" />
+
+  <link rel="icon" href="/favicon.ico?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
 </head>
 <body>
+  <!-- Header -->
   <header>
-    <div class="wrap">
-      <div class="header-content">
-        <span id="header-name"></span>
-      </div>
+    <div class="wrap header-content">
+      <span id="header-name">Дима Мальцев</span>
     </div>
   </header>
 
-  <main>
+  <!-- === Start Project: Modal === -->
+
+    <div class="spm-block">
+      <div class="spm-label">Что хотите создать?</div>
+      <ul class="spm-list">
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="logo" checked> <span>Логотип / айдентика</span></label></li>
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="font"> <span>Шрифт (display / text)</span></label></li>
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="pattern"> <span>Дизайн на лекало / принты</span></label></li>
+        <li class="spm-option"><label><input type="radio" name="spm-service" value="web"> <span>Дизайн сайта / UI</span></label></li>
+        <li class="spm-option">
+          <label><input type="radio" name="spm-service" value="other"> <span>Другое (опишите)</span></label>
+          <div id="spm-other-wrap" class="hidden"><input id="spm-other" type="text" placeholder="Опишите задачу (нейминг, презентация, мерч)"></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="spm-block">
+      <div class="spm-label">Telegram аккаунт</div>
+      <div id="spm-tg-card" class="spm-tg">
+        <div class="spm-tg__avatar"><div class="spm-ava"><img id="spm-ava-img" alt="avatar"></div></div>
+        <div class="spm-tg__input" id="spm-tg-inputwrap">
+          <input id="spm-tg" type="text" inputmode="text" placeholder="@immalcev" autocomplete="off">
+          <div id="spm-tg-error" class="spm-error hidden">Недействительный ник Telegram</div>
+          <div id="spm-tg-name" class="spm-tgname hidden"></div>
+        </div>
+      </div>
+      <div class="spm-hint">После отправки начнётся загрузка персонального брифа</div>
+    </div>
+
+    <div class="spm-actions">
+      <button id="spm-submit" class="spm-btn" disabled>Получить бриф</button>
+    </div>
+  </div>
+</div>
+<!-- === /Start Project: Modal === -->
+
+  <!-- === /Start Project: Modal === -->
+
+  <main class="wrap">
+    <!-- Hero -->
     <section class="hero">
-      <h1 class="portfolio-name">
-        <span id="name">Дима Мальцев</span>
+      <h1 class="hero-title">
+        <span class="name-wrapper"><span id="name">Дима Мальцев</span></span>
         <span class="role-wrapper"><span id="role">Графический дизайнер</span></span>
       </h1>
       <div class="accent"></div>
+
+      <!-- CTA -->
+      <div class="hero-cta">
+        <a id="spm-open" class="cta-link" href="javascript:void(0)">Создать дизайн →</a>
+      </div>
     </section>
 
-    <section id="portfolio" class="posts">
-      <!-- Портфолио сюда рендерится скриптом -->
+    <div class="portfolio-name">
+      <img src="/assets/portfolio-name.png" alt="Портфолио">
+    </div>
+
+    <section id="portfolio" class="posts"></section>
+
+    <!-- Контакты -->
+    <section id="contacts" class="contacts">
+      <div class="social-bubbles">
+        <a class="bubble-wrap" href="https://instagram.com/immalcev" target="_blank" rel="noopener"
+           aria-label="Instagram @immalcev">
+          <span class="bubble">
+            <img src="/assets/icons/instagram.svg" width="30" height="30" alt="">
+          </span>
+        </a>
+        <a class="bubble-wrap" href="https://t.me/immalcev" target="_blank" rel="noopener"
+           aria-label="Telegram @immalcev">
+          <span class="bubble">
+            <img src="/assets/icons/telegram.svg" width="30" height="30" alt="">
+          </span>
+        </a>
+        <a class="bubble-wrap" href="mailto:mace4681@gmail.com" aria-label="Email mace4681@gmail.com">
+          <span class="bubble">
+            <img src="/assets/icons/mail.svg" width="30" height="30" alt="">
+          </span>
+        </a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p id="footer-name">Мацэ</p>
+    <div class="wrap">© <span id="footer-name">Мацэ</span></div>
   </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
