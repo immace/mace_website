@@ -1,84 +1,41 @@
 <!doctype html>
-<html lang="ru"> <!-- JS поменяет при необходимости -->
+<html lang="ru">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#ffffff" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y58BHB892H"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Y58BHB892H');
-  </script>
   <title>Мацэ́ · Графический дизайнер</title>
-
-  <link rel="icon" href="/favicon.ico?v=3">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
-
+  <link rel="icon" href="favicon.ico?v3" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v3" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <div class="wrap header-content">
-      <span id="header-name">Дима Мальцев</span>
+    <div class="wrap">
+      <div class="header-content">
+        <span id="header-name"></span>
+      </div>
     </div>
   </header>
 
-  <!-- === /Start Project: Modal === -->
-
-  <main class="wrap">
-    <!-- Hero -->
+  <main>
     <section class="hero">
-      <h1 class="hero-title">
-        <span class="name-wrapper"><span id="name">Дима Мальцев</span></span>
+      <h1 class="portfolio-name">
+        <span id="name">Дима Мальцев</span>
         <span class="role-wrapper"><span id="role">Графический дизайнер</span></span>
       </h1>
       <div class="accent"></div>
-
-      <!-- CTA -->
-      <div class="hero-cta">
-        <a id="spm-open" class="cta-link" href="javascript:void(0)">Создать дизайн →</a>
-      </div>
     </section>
 
-    <div class="portfolio-name">
-      <img src="/assets/portfolio-name.png" alt="Портфолио">
-    </div>
-
-    <section id="portfolio" class="posts"></section>
-
-    <!-- Контакты -->
-    <section id="contacts" class="contacts">
-      <div class="social-bubbles">
-        <a class="bubble-wrap" href="https://instagram.com/immalcev" target="_blank" rel="noopener"
-           aria-label="Instagram @immalcev">
-          <span class="bubble">
-            <img src="/assets/icons/instagram.svg" width="30" height="30" alt="">
-          </span>
-        </a>
-        <a class="bubble-wrap" href="https://t.me/immalcev" target="_blank" rel="noopener"
-           aria-label="Telegram @immalcev">
-          <span class="bubble">
-            <img src="/assets/icons/telegram.svg" width="30" height="30" alt="">
-          </span>
-        </a>
-        <a class="bubble-wrap" href="mailto:mace4681@gmail.com" aria-label="Email mace4681@gmail.com">
-          <span class="bubble">
-            <img src="/assets/icons/mail.svg" width="30" height="30" alt="">
-          </span>
-        </a>
-      </div>
+    <section id="portfolio" class="posts">
+      <!-- Портфолио сюда рендерится скриптом -->
     </section>
   </main>
 
   <footer>
-    <div class="wrap">© <span id="footer-name">Мацэ</span></div>
+    <p id="footer-name">Мацэ</p>
   </footer>
-
-  <script src="script.js" defer></script>
 </body>
 </html>
