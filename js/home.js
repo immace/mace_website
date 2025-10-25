@@ -1,10 +1,9 @@
-// Выбор предустановленной услуги
+// Выбор услуги на /home → переход на /shop/#consultation?service=
 (function servicePicker(){
   const wrap = document.querySelector('.sp-options');
   const hidden = document.getElementById('sp-hidden-service');
   const custom = document.getElementById('sp-custom');
   const form = document.getElementById('sp-form');
-
   if (!wrap || !form) return;
 
   wrap.addEventListener('click', (e)=>{
@@ -17,12 +16,10 @@
   });
 
   form.addEventListener('submit', (e)=>{
-    // если пользователь написал своё — приоритет кастомного
     const val = custom.value.trim() || hidden.value.trim();
     const url = new URL(form.getAttribute('action'), location.origin);
     if (val) url.searchParams.set('service', val);
-    // ведём на /shop/#consultation с параметром ?service=
-    location.href = url.toString();
+    location.href = url.toString(); // /shop/#consultation?service=...
     e.preventDefault();
   });
 })();
