@@ -1,61 +1,166 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en"> <!-- для глобальной версии сразу EN -->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Macé · Home (sandbox)</title>
+  <title>Macé · Graphic & Web Designer</title>
 
-  <!-- БАЗА: текущие стили/скрипты (НЕ меняем их) -->
+  <!-- Базовые стили проекта (НЕ меняем) -->
   <link rel="stylesheet" href="/style.css" />
-
-  <!-- Страница: локальные стили -->
+  <!-- Тёмная тема только для скрытых страниц -->
+  <link rel="stylesheet" href="/css/dark.css" />
+  <!-- Локальные стили этой страницы -->
   <link rel="stylesheet" href="/css/home.css" />
 </head>
 <body>
 
-  <!-- тот же header что и сейчас (видимый скролл-хедер) -->
+  <!-- Оставляем текущий header по стилю -->
   <header>
-    <div class="header-content">
-      <div id="header-name">Мацé</div>
+    <div class="wrap header-content">
+      <a href="/" class="logo" style="text-decoration:none;color:inherit;font-weight:300">Macé</a>
+      <nav class="site-nav">
+        <a href="/shop" class="navlink">Services</a>
+        <a href="/links" class="navlink">Links</a>
+      </nav>
     </div>
   </header>
 
-  <!-- Hero (подключаем твой текущий hero из index) -->
-  <section class="wrap hero">
-    <div class="hero-title">
-      <h1><span id="name">Дима Мальцев</span><br/><span class="role-wrapper"><span id="role">Графический дизайнер</span></span></h1>
-      <div class="accent"></div>
-    </div>
-    <p class="portfolio-name"><img src="/assets/портфолио.svg" alt="портфолио"/></p>
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-title">
+          <div class="name" style="font-size:clamp(28px,6vw,72px);line-height:.96;">Macé</div>
+          <h1 style="margin:.05em 0 .2em;">Graphic & Web Designer</h1>
+          <div class="accent-underline" style="width:48px;height:4px;border-radius:2px;"></div>
+        </div>
 
-    <!-- вернули кнопку «Создать проект» -->
-    <p style="margin-top:24px">
-      <a class="btn-start" href="/shop">Создать проект →</a>
-    </p>
-  </section>
+        <div class="hero-cta">
+          <a class="btn" href="#realized">View Portfolio →</a>
+          <a class="btn-ghost" href="/shop#consultation">Book a Consultation</a>
+        </div>
+      </div>
+    </section>
 
-  <!-- Портфолио (используем существующий генератор из /script.js) -->
-  <section id="portfolio" class="wrap posts"></section>
+    <!-- REALIZED PROJECTS -->
+    <section id="realized" class="wrap realized">
+      <div class="section-head">
+        <h2>Completed Projects</h2>
+        <a class="btn-ghost" href="/home/projects/">More projects →</a>
+      </div>
 
-  <!-- Соц-«пузырьки» как сейчас -->
-  <section class="contacts">
-    <h2 class="sr-only">Сети</h2>
-    <div class="social-bubbles" aria-label="Социальные сети">
-      <!-- оставь свою разметку пузырьков -->
-    </div>
-  </section>
+      <article class="card realized-item">
+        <div class="ri-info">
+          <h3>ORBIC — Typeface</h3>
+          <p class="muted">Custom display typeface exploring orbital rhythm and modular curvature.</p>
+          <ul class="ri-tags">
+            <li>Type Design</li><li>Identity</li><li>Experiment</li>
+          </ul>
+          <div class="ri-actions">
+            <a class="btn" href="https://behance.net" target="_blank" rel="noopener">Open on Behance</a>
+            <a class="btn-ghost" href="#start">Start your project</a>
+          </div>
+        </div>
+        <div class="ri-media">
+          <!-- Пока нет обложки орфайла — используем любую картинку из assets -->
+          <img src="/assets/Обложка-Нотное_издание-1.png" alt="ORBIC Typeface preview">
+        </div>
+      </article>
+    </section>
 
-  <footer class="wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div id="footer-name">Macé</div>
-      <a href="/links">Связь</a>
+    <!-- START YOUR PROJECT -->
+    <section id="start" class="wrap start-project panel">
+      <div class="sp-grid">
+        <div>
+          <h2>Let’s create something meaningful</h2>
+          <p class="muted">Choose a direction or write your idea. You’ll be sent to the consultation page to book and pay.</p>
+          <form id="sp-form" class="sp-form" action="/shop/#consultation">
+            <label class="sp-label">Select a service</label>
+            <div class="sp-options">
+              <button type="button" data-service="Logo">Logo</button>
+              <button type="button" data-service="UX/UI Design">UX/UI Design</button>
+              <button type="button" data-service="Font">Font</button>
+              <button type="button" data-service="Poster">Poster</button>
+              <button type="button" data-service="Graphic element">Graphic element</button>
+              <button type="button" data-service="Identity">Identity</button>
+            </div>
+
+            <label class="sp-label">Or describe your idea</label>
+            <input id="sp-custom" type="text" placeholder="Your idea…" autocomplete="off" />
+
+            <button id="sp-submit" class="btn" type="submit">Start a Project →</button>
+            <input type="hidden" name="service" id="sp-hidden-service" value="">
+          </form>
+        </div>
+        <div class="sp-note muted">
+          Payment via <b>Prodamus</b> (worldwide). You’ll review details before paying.
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT ME -->
+    <section class="wrap about">
+      <div class="about-grid card">
+        <div class="about-photo">
+          <!-- поменяешь на своё фото -->
+          <img src="/assets/portfolio-name.png" alt="Macé portrait">
+        </div>
+        <div class="about-text">
+          <h2>About me</h2>
+          <p>Designer exploring the dialogue between form, silence and rhythm. I craft visual systems, identities and interfaces that breathe meaning and clarity.</p>
+          <a class="btn" href="/links">Links →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="wrap testimonials">
+      <h2>Testimonials</h2>
+      <div class="t-list">
+        <blockquote class="t-item card">
+          <p>“Clear process and beautiful visual logic. The brand feels alive.”</p>
+          <cite>— A., founder</cite>
+        </blockquote>
+        <blockquote class="t-item card">
+          <p>“Smart structure, typography on point. Website loads fast and feels calm.”</p>
+          <cite>— K., producer</cite>
+        </blockquote>
+        <blockquote class="t-item card">
+          <p>“We got a coherent identity and guidelines. Communication was effortless.”</p>
+          <cite>— P., art director</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- SOCIALS (как на основной) -->
+    <section class="socials">
+      <div class="wrap">
+        <a href="https://instagram.com/immalcev"  class="btn-ico" aria-label="Instagram">
+          <span class="ico"><img src="/assets/icons/instagram.svg" width="30" height="30" alt=""></span>
+        </a>
+        <a href="https://t.me/immalcev" class="btn-ico" aria-label="Telegram">
+          <span class="ico"><img src="/assets/icons/telegram.svg" width="30" height="30" alt=""></span>
+        </a>
+        <a href="mailto:mace4681@gmail.com" class="btn-ico" aria-label="Email">
+          <span class="ico"><img src="/assets/icons/mail.svg" width="30" height="30" alt=""></span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-flex">
+      <div>© Macé, 2025</div>
+      <div class="muted">
+        <a href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener">Support</a>
+        · <a href="/offer">Offer</a>
+        · <a href="/privacy">Privacy</a>
+      </div>
     </div>
   </footer>
 
-  <!-- БАЗА: текущий скрипт (НЕ меняем) -->
-  <script src="/script.js"></script>
-
-  <!-- Страница: локальный скрипт -->
-  <script src="/js/home.js"></script>
+  <!-- Скрипты -->
+  <script src="/script.js" defer></script>
+  <script src="/js/home.js" defer></script>
 </body>
 </html>
