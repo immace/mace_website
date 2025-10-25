@@ -1,36 +1,72 @@
-/* только доп.акценты: кнопка, икон-панель поста, аккордеон описания */
-.btn-start{
-  display:inline-block; padding:12px 18px; border-radius:12px;
-  background:#000; color:#fff; text-decoration:none; font-weight:600;
-}
-.btn-start:hover{ opacity:.9; }
+.header-content{ display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.site-nav{ display:flex; gap:16px; }
+.navlink{ text-decoration:none; color: var(--muted); }
+.navlink:hover{ color:#fff; }
 
-/* панель иконок под кадром */
-.post-actions{
-  display:flex; align-items:center; gap:16px;
-  padding:10px 4px 6px; user-select:none;
+/* секция «Completed Projects» */
+.realized .section-head{
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+  margin: 10px 0 16px;
 }
-.post-actions button{
-  appearance:none; border:0; background:transparent; padding:6px; cursor:pointer;
-  display:grid; place-items:center;
+.realized-item{
+  display:grid; grid-template-columns: 1.2fr 1fr; gap: 20px; padding: 18px;
 }
-.post-actions img{ width:24px; height:24px; display:block; }
+.ri-info h3{ margin: 0 0 8px; }
+.ri-tags{ display:flex; gap:8px; padding:0; margin: 10px 0 14px; list-style:none; flex-wrap:wrap; }
+.ri-tags li{ background: var(--surface-2); border:1px solid var(--border); border-radius:999px; padding:6px 10px; color:var(--muted); font-size: .95rem; }
+.ri-media img{ width:100%; height:auto; border-radius:12px; border:1px solid var(--border); background: var(--surface-2); }
+.ri-actions{ display:flex; gap:12px; flex-wrap:wrap; }
 
-/* «три точки» и сворачиваемое описание */
-.post-meta-under .post-description .dots{
-  display:inline-block; width:1.4em; text-align:center; opacity:.5; cursor:pointer;
+/* старт проекта */
+.start-project{ margin: 26px auto; padding: 18px; }
+.sp-grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap: 20px; }
+.sp-form{ display:grid; gap: 12px; }
+.sp-options{ display:flex; flex-wrap:wrap; gap:10px; }
+.sp-options button{
+  appearance:none; border:1px solid var(--border); border-radius:999px;
+  padding:8px 12px; background: var(--surface-2); color: var(--text); cursor:pointer;
 }
-.post-description .full{ display:none; }
-.post.open .post-description .preview{ display:none; }
-.post.open .post-description .full{ display:inline; }
-.post.open .post-description .toggle-close{ display:inline; }
-.post-description .toggle-close{ display:none; color:#777; cursor:pointer; margin-left:.25em; }
+.sp-options button.active{ outline:2px solid var(--accent); }
+.sp-label{ color: var(--muted); font-weight:600; letter-spacing:.02em; }
+#sp-custom{
+  width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--border);
+  background: var(--surface-2); color: var(--text);
+}
 
-/* лёгкая тень кадра на мобиле (добавка к твоему style.css) */
-@media (max-width:768px){
-  .carousel{ padding:0 14px; }
-  .carousel-track img{
-    border:none; border-radius:16px;
-    box-shadow: 0 10px 28px rgba(var(--accent-rgb), .22), 0 2px 8px rgba(0,0,0,.06);
-  }
+/* about */
+.about{ margin: 28px auto; }
+.about-grid{
+  display:grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 18px;
+}
+.about-photo{
+  width: 220px; height: 220px; border-radius: 50%; overflow: hidden;
+  border: 1px solid var(--border); background: var(--surface-2);
+}
+.about-photo img{ width:100%; height:100%; object-fit: cover; }
+.about-text p{ margin: 8px 0 16px; }
+
+/* testimonials */
+.testimonials{ margin: 28px auto 40px; }
+.t-list{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.t-item{ padding: 16px; }
+.t-item p{ margin: 0 0 10px; }
+.t-item cite{ color: var(--muted); }
+
+/* socials */
+.socials .wrap{ display:flex; gap:18px; justify-content:center; align-items:center; padding:28px 0 36px; }
+
+/* footer */
+.footer-flex{ display:flex; justify-content:space-between; align-items:center; gap:16px; padding: 18px 0; }
+
+@media (max-width: 1024px){
+  .realized-item{ grid-template-columns: 1fr; }
+  .sp-grid{ grid-template-columns: 1fr; }
+  .t-list{ grid-template-columns: 1fr 1fr; }
+  .about-grid{ grid-template-columns: 160px 1fr; }
+  .about-photo{ width:160px; height:160px; }
+}
+@media (max-width: 640px){
+  .t-list{ grid-template-columns: 1fr; }
+  .about-grid{ grid-template-columns: 1fr; }
+  .about-photo{ width:120px; height:120px; margin: 0 auto; }
 }
