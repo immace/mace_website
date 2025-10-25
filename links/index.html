@@ -1,51 +1,70 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Macé · Links (sandbox)</title>
+  <title>Macé · Links</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/css/dark.css" />
   <link rel="stylesheet" href="/css/links.css" />
 </head>
 <body>
-
-<header>
-  <div class="header-content"><div id="header-name">Мацé</div></div>
-</header>
-
-<section class="wrap" style="padding-top:12vh">
-  <div class="links-hero">
-    <img class="avatar" src="/assets/avatar.jpg" alt="Macé" />
-    <h1>Macé</h1>
-    <p class="lead">Короткий текст обо мне — 1–2 строки.</p>
-  </div>
-
-  <div class="links-bar">
-    <a class="btn-big" href="/home">Back to Home →</a>
-    <div class="icons">
-      <a href="/shop" aria-label="Shop"><img src="/icons/cart.svg" alt=""></a>
-      <a href="https://instagram.com/authent.art" target="_blank" aria-label="Instagram"><img src="/icons/instagram.svg" alt=""></a>
-      <a href="mailto:mace4681@gmail.com" aria-label="Email"><img src="/icons/mail.svg" alt=""></a>
-      <a href="https://behance.net" target="_blank" aria-label="Behance"><img src="/icons/behance.svg" alt=""></a>
+  <!-- Header как на основной -->
+  <header>
+    <div class="wrap header-content">
+      <span id="header-name">Дима Мальцев</span>
     </div>
-  </div>
+  </header>
 
-  <ul class="list">
-    <li><a href="/shop">Покупки</a></li>
-    <li><a href="https://instagram.com/authent.art" target="_blank">Instagram</a></li>
-    <li><a href="https://behance.net" target="_blank">Behance</a></li>
-    <li><a href="mailto:mace4681@gmail.com">mace4681@gmail.com</a></li>
-    <li><a href="https://t.me/mace_assistant_bot" target="_blank">Поддержка в Telegram</a></li>
-  </ul>
-</section>
+  <main class="wrap">
+    <section class="links-hero">
+      <div class="about-mini card">
+        <div class="about-mini__photo">
+          <img src="/assets/portfolio-name.png" alt="Macé portrait">
+        </div>
+        <div class="about-mini__text">
+          <h1>About me</h1>
+          <p class="muted">Graphic & Web Designer. I design identities, interfaces and type that feel calm and meaningful.</p>
+        </div>
+      </div>
+    </section>
 
-<footer class="wrap">
-  <div style="display:flex;justify-content:space-between;align-items:center;">
-    <div id="footer-name">Macé</div>
-    <a href="/home">На главную</a>
-  </div>
-</footer>
+    <section class="links-list">
+      <a class="link-card" href="https://t.me/immalcev" target="_blank" rel="noopener">
+        <span>Telegram</span><span class="muted">@immalcev</span>
+      </a>
+      <a class="link-card" href="https://instagram.com/authent.art" target="_blank" rel="noopener">
+        <span>Instagram</span><span class="muted">@authent.art</span>
+      </a>
+      <a class="link-card" href="https://www.behance.net" target="_blank" rel="noopener">
+        <span>Behance</span><span class="muted">portfolio</span>
+      </a>
+      <a class="link-card" href="https://pinterest.com" target="_blank" rel="noopener">
+        <span>Pinterest</span><span class="muted">boards</span>
+      </a>
+      <a class="link-card" href="mailto:mace4681@gmail.com">
+        <span>Email</span><span class="muted">mace4681@gmail.com</span>
+      </a>
+      <a class="link-card" href="https://wa.me/" target="_blank" rel="noopener">
+        <span>WhatsApp</span><span class="muted">chat</span>
+      </a>
+    </section>
+  </main>
 
-<script src="/js/links.js"></script>
+  <footer>
+    <div class="wrap footer-flex">
+      <div>© <span id="footer-name">Мацэ</span>, 2025</div>
+      <div class="muted">
+        <a href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener">Support</a>
+        · <a href="/offer">Offer</a>
+        · <a href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/script.js" defer></script>
+  <script src="/js/links.js" defer></script>
 </body>
 </html>
