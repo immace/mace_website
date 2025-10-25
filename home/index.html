@@ -1,73 +1,117 @@
 <!doctype html>
-<html lang="en"> <!-- глобально EN; i18n в /script.js при необходимости -->
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Macé · Graphic & Web Designer</title>
 
-  <!-- Шрифт и базовые стили как на основной -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/style.css" />
+  <!-- Шрифты (Swiss-стек) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet">
 
-  <!-- Тёмная тема только для скрытых -->
-  <link rel="stylesheet" href="/css/dark.css" />
-  <!-- Локальные стили этой страницы -->
-  <link rel="stylesheet" href="/css/home.css" />
+  <!-- Базовые стили проекта (оставляем как есть) -->
+  <link rel="stylesheet" href="/style.css">
+
+  <!-- Тёмная холодная тема + локальные стили -->
+  <link rel="stylesheet" href="/css/dark.css">
+  <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-  <!-- === Header (взято из твоего index.html, структура и id сохранены) === -->
-  <header>
-    <div class="wrap header-content">
-      <span id="header-name">Дима Мальцев</span>
+
+  <!-- Прозрачный header c blur (структура совместима с твоим основным) -->
+  <header class="hdr">
+    <div class="wrap hdr__in">
+      <a class="hdr__brand" href="/">Macé</a>
+      <nav class="hdr__nav">
+        <a href="/home#portfolio">Portfolio</a>
+        <a href="/shop#consultation">Consultation</a>
+        <a href="/links">Links</a>
+      </nav>
     </div>
   </header>
 
-  <main class="wrap">
-    <!-- === Hero (точно такие же id для анимаций) === -->
+  <main>
+
+    <!-- HERO — строгая сетка, анимация ролей -->
     <section class="hero">
-      <h1 class="hero-title">
-        <span class="name-wrapper"><span id="name">Дима Мальцев</span></span>
-        <span class="role-wrapper"><span id="role">Графический дизайнер</span></span>
-      </h1>
-      <div class="accent"></div>
-    </section>
+      <div class="wrap grid">
+        <div class="col col-6">
+          <h1 class="hero__title">
+            <span class="hero__name" id="name">Macé</span>
+            <span class="hero__role">
+              <span id="role">Graphic Designer</span>
+            </span>
+          </h1>
+          <div class="accent-line" aria-hidden="true"></div>
 
-    <!-- === Completed Projects (твой «Реализованные»; первый кейс — ORBIC) === -->
-    <section id="realized" class="realized">
-      <div class="section-head">
-        <h2>Completed Projects</h2>
-        <a class="btn-ghost" href="/home/projects/">More projects →</a>
-      </div>
-
-      <article class="card realized-item">
-        <div class="ri-info">
-          <h3>ORBIC — Typeface</h3>
-          <p class="muted">Custom display typeface exploring orbital rhythm and modular curvature.</p>
-          <ul class="ri-tags">
-            <li>Type Design</li><li>Identity</li><li>Experiment</li>
-          </ul>
-          <div class="ri-actions">
-            <a class="btn" href="https://behance.net" target="_blank" rel="noopener">Open on Behance</a>
-            <a class="btn-ghost" href="#start">Start your project</a>
+          <div class="hero__ctas">
+            <a class="btn btn--primary" href="#portfolio">View Portfolio</a>
+            <a class="btn btn--ghost" href="/shop#consultation">Book a Consultation</a>
           </div>
         </div>
-        <div class="ri-media">
-          <!-- Замени на обложку ORBIC; временно — ассет -->
-          <img src="/assets/Обложка-Нотное_издание-1.png" alt="ORBIC Typeface preview">
+
+        <div class="col col-6 hero__media">
+          <!-- заменишь на актуальный кадр/постер -->
+          <figure class="frame glow">
+            <img src="/assets/Айдентика-Ростов-2.jpg" alt="Selected work preview">
+          </figure>
         </div>
-      </article>
+      </div>
+      <div class="bg-spot bg-spot--tl" aria-hidden="true"></div>
     </section>
 
-    <!-- === Кнопка «создать свой проект» + выбор услуги → /shop/#consultation === -->
-    <section id="start" class="start-project panel">
-      <div class="sp-grid">
-        <div>
-          <h2>Let’s create something meaningful</h2>
-          <p class="muted">Choose a direction or write your idea. You’ll be sent to the consultation to book and pay.</p>
+    <!-- COMPLETED PROJECTS -->
+    <section id="portfolio" class="section">
+      <div class="wrap">
+        <div class="section__head">
+          <h2>Completed Projects</h2>
+          <a class="link-more" href="/home/projects/">More projects →</a>
+        </div>
 
-          <form id="sp-form" class="sp-form" action="/shop/#consultation">
-            <label class="sp-label">Select a service</label>
-            <div class="sp-options">
+        <div class="grid cards">
+          <!-- Card 1: ORBIC — Typeface -->
+          <article class="card glow col col-7">
+            <div class="card__media">
+              <img src="/assets/Обложка-Нотное_издание-1.png" alt="ORBIC Typeface">
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">ORBIC — Typeface</h3>
+              <p class="muted">Custom display typeface exploring orbital rhythm and modular curvature.</p>
+              <ul class="tags">
+                <li>Type Design</li><li>Identity</li><li>Experiment</li>
+              </ul>
+              <div class="card__actions">
+                <a class="btn btn--primary" href="https://behance.net" target="_blank" rel="noopener">Open on Behance</a>
+                <a class="btn btn--ghost" href="#start">Start your project</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Placeholder (можно скрыть/заменить) -->
+          <article class="card glow col col-5">
+            <div class="card__media ratio">
+              <img src="/assets/Айдентика-Ростов-4.jpg" alt="Identity preview">
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">Identity Preview</h3>
+              <p class="muted">Visual system research: structure, rhythm, constraints.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="bg-spot bg-spot--br" aria-hidden="true"></div>
+    </section>
+
+    <!-- START YOUR PROJECT -->
+    <section id="start" class="section">
+      <div class="wrap grid start">
+        <div class="col col-7">
+          <h2>Start Your Project</h2>
+          <p class="muted">Choose a direction or describe your idea. You’ll be redirected to a consultation page to book and pay via Prodamus.</p>
+
+          <form id="sp-form" class="start__form" action="/shop/#consultation">
+            <label class="label">Select a service</label>
+            <div class="chips" id="chips">
               <button type="button" data-service="Logo">Logo</button>
               <button type="button" data-service="UX/UI Design">UX/UI Design</button>
               <button type="button" data-service="Font">Font</button>
@@ -76,92 +120,102 @@
               <button type="button" data-service="Identity">Identity</button>
             </div>
 
-            <label class="sp-label">Or describe your idea</label>
-            <input id="sp-custom" type="text" placeholder="Your idea…" autocomplete="off" />
+            <label class="label">Or describe your idea</label>
+            <input id="sp-custom" class="input" type="text" placeholder="Your idea…" autocomplete="off">
 
-            <button id="sp-submit" class="btn" type="submit">Start a Project →</button>
-            <input type="hidden" name="service" id="sp-hidden-service" value="">
+            <input type="hidden" id="sp-hidden-service" name="service" value="">
+            <button class="btn btn--primary" type="submit">Start a Project</button>
           </form>
         </div>
 
-        <div class="sp-note muted">
-          Payment via <b>Prodamus</b> (worldwide). You’ll review details before paying.
+        <aside class="col col-5 start__note">
+          <div class="note">
+            <p class="muted">Payment via <b>Prodamus</b> (worldwide). You’ll review details before paying.</p>
+          </div>
+        </aside>
+      </div>
+      <div class="bg-spot bg-spot--c" aria-hidden="true"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section">
+      <div class="wrap grid about">
+        <div class="col col-4">
+          <figure class="avatar glow">
+            <img src="/assets/portfolio-name.png" alt="Macé portrait">
+          </figure>
+        </div>
+        <div class="col col-8 about__text">
+          <h2>About Me</h2>
+          <p>Designer exploring the dialogue between form, silence and rhythm. Swiss-influenced systems, typographic clarity, and meaningful restraint.</p>
+          <a class="btn btn--ghost" href="/links">Links →</a>
         </div>
       </div>
     </section>
 
-    <!-- === About me (круглое фото слева, текст справа) === -->
-    <section class="about">
-      <div class="about-grid card">
-        <div class="about-photo">
-          <!-- Замени на своё фото -->
-          <img src="/assets/portfolio-name.png" alt="Macé portrait">
+    <!-- TESTIMONIALS -->
+    <section class="section">
+      <div class="wrap">
+        <h2>Testimonials</h2>
+        <div class="grid tlist">
+          <blockquote class="titem glow col col-4">
+            <p>“Clear process and beautiful visual logic. The brand feels alive.”</p>
+            <cite class="muted">— A., founder</cite>
+          </blockquote>
+          <blockquote class="titem glow col col-4">
+            <p>“Typography on point. Website loads fast and feels calm.”</p>
+            <cite class="muted">— K., producer</cite>
+          </blockquote>
+          <blockquote class="titem glow col col-4">
+            <p>“Coherent identity and guidelines. Communication was effortless.”</p>
+            <cite class="muted">— P., art director</cite>
+          </blockquote>
         </div>
-        <div class="about-text">
-          <h2>About me</h2>
-          <p>Designer exploring the dialogue between form, silence and rhythm. I craft visual systems, identities and interfaces that breathe meaning and clarity.</p>
-          <a class="btn" href="/links">Links →</a>
+      </div>
+      <div class="bg-spot bg-spot--tc" aria-hidden="true"></div>
+    </section>
+
+    <!-- PORTFOLIO FEED PREVIEW (по желанию заполняем из твоего script.js) -->
+    <section class="section">
+      <div class="wrap">
+        <div class="portfolio-name">
+          <img src="/assets/portfolio-name.png" alt="Portfolio">
+        </div>
+        <div id="portfolio-feed" class="grid feed">
+          <!-- при необходимости можно наполнить автоматически -->
         </div>
       </div>
     </section>
 
-    <!-- === Testimonials === -->
-    <section class="testimonials">
-      <h2>Testimonials</h2>
-      <div class="t-list">
-        <blockquote class="t-item card">
-          <p>“Clear process and beautiful visual logic. The brand feels alive.”</p>
-          <cite class="muted">— A., founder</cite>
-        </blockquote>
-        <blockquote class="t-item card">
-          <p>“Smart structure, typography on point. Website loads fast and feels calm.”</p>
-          <cite class="muted">— K., producer</cite>
-        </blockquote>
-        <blockquote class="t-item card">
-          <p>“We got a coherent identity and guidelines. Communication was effortless.”</p>
-          <cite class="muted">— P., art director</cite>
-        </blockquote>
-      </div>
-    </section>
-
-    <!-- === Плашка «Портфолио» и автогенерируемые посты из /script.js (как на главной) === -->
-    <div class="portfolio-name">
-      <img src="/assets/portfolio-name.png" alt="Portfolio">
-    </div>
-    <section id="portfolio" class="posts"></section>
-
-    <!-- === Соцсети (твои «пузырьки») === -->
-    <section id="contacts" class="contacts">
-      <div class="social-bubbles">
-        <a class="bubble-wrap" href="https://instagram.com/authent.art" target="_blank" rel="noopener"
-           aria-label="Official Instagram Account by Macé">
-          <span class="bubble"><img src="/assets/icons/instagram.svg" width="30" height="30" alt=""></span>
+    <!-- SOCIALS -->
+    <section class="section socials">
+      <div class="wrap socials__in">
+        <a class="bubble glow" href="https://instagram.com/authent.art" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="/assets/icons/instagram.svg" width="28" height="28" alt="">
         </a>
-        <a class="bubble-wrap" href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener"
-           aria-label="Official Telegram Account by Macé">
-          <span class="bubble"><img src="/assets/icons/telegram.svg" width="30" height="30" alt=""></span>
+        <a class="bubble glow" href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener" aria-label="Telegram">
+          <img src="/assets/icons/telegram.svg" width="28" height="28" alt="">
         </a>
-        <a class="bubble-wrap" href="mailto:mace4681@gmail.com" aria-label="Email mace4681@gmail.com">
-          <span class="bubble"><img src="/assets/icons/mail.svg" width="30" height="30" alt=""></span>
+        <a class="bubble glow" href="mailto:mace4681@gmail.com" aria-label="Email">
+          <img src="/assets/icons/mail.svg" width="28" height="28" alt="">
         </a>
       </div>
     </section>
+
   </main>
 
-  <footer>
-    <div class="wrap footer-flex">
-      <div>© <span id="footer-name">Мацэ</span>, 2025</div>
+  <footer class="ftr">
+    <div class="wrap ftr__in">
+      <div>© Macé, 2025</div>
       <div class="muted">
-        <a href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener">Support</a>
-        · <a href="/offer">Offer</a>
-        · <a href="/privacy">Privacy</a>
+        <a href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener">Support</a> ·
+        <a href="/offer">Offer</a> · <a href="/privacy">Privacy</a>
       </div>
     </div>
   </footer>
 
-  <!-- Скрипты (тот же, что на текущей главной) -->
-  <script src="/script.js" defer></script>
+  <!-- Скрипты -->
+  <script src="/script.js" defer></script><!-- если есть твой общий -->
   <script src="/js/home.js" defer></script>
-  <script src="/js/dark-bg.js" defer></script>
 </body>
 </html>
