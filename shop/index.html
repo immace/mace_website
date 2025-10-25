@@ -1,34 +1,84 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Macé · Shop (sandbox)</title>
+  <title>Macé · Services</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/css/dark.css" />
   <link rel="stylesheet" href="/css/shop.css" />
 </head>
 <body>
+  <!-- Header как на основной -->
+  <header>
+    <div class="wrap header-content">
+      <span id="header-name">Дима Мальцев</span>
+    </div>
+  </header>
 
-<header>
-  <div class="header-content"><div id="header-name">Мацé</div></div>
-</header>
+  <main class="wrap">
+    <!-- Consultation product -->
+    <section id="consultation" class="consult card">
+      <div class="c-grid">
+        <div>
+          <h1>Consultation</h1>
+          <p class="muted" id="c-desc">Art direction, audit, roadmap for your project.</p>
+          <ul class="c-includes muted">
+            <li>30–60 min call (Telegram / Meet)</li>
+            <li>Brief & priorities</li>
+            <li>Action points</li>
+          </ul>
+          <div class="c-cta">
+            <!-- ЗАМЕНИ на свою ссылку Prodamus -->
+            <a id="prodamus-pay" class="btn" href="https://pay.prodamus.ru/YOUR_SHOP/consultation" target="_blank" rel="noopener">Pay via Prodamus →</a>
+            <a class="btn-ghost" href="/links">Ask a question</a>
+          </div>
+        </div>
+        <div class="consult-note muted">
+          Selected service: <span id="selected-service">—</span>
+        </div>
+      </div>
+    </section>
 
-<section class="wrap" style="padding-top:12vh">
-  <h1>Услуги</h1>
-  <div class="accent"></div>
+    <h2 style="margin:26px 0 10px;">Other Services</h2>
+    <section class="services-grid">
+      <article class="service-card">
+        <h3>Identity</h3>
+        <p class="muted">Logo, visual system, guide.</p>
+        <a class="btn-ghost" href="/links">Discuss →</a>
+      </article>
+      <article class="service-card">
+        <h3>Website / UI</h3>
+        <p class="muted">Landing or multi-page website.</p>
+        <a class="btn-ghost" href="/links">Discuss →</a>
+      </article>
+      <article class="service-card">
+        <h3>Typography</h3>
+        <p class="muted">Custom type / lettering.</p>
+        <a class="btn-ghost" href="/links">Discuss →</a>
+      </article>
+      <article class="service-card">
+        <h3>Poster</h3>
+        <p class="muted">Art direction & production.</p>
+        <a class="btn-ghost" href="/links">Discuss →</a>
+      </article>
+    </section>
+  </main>
 
-  <div class="services-grid" id="services">
-    <!-- карточки генерируются shop.js -->
-  </div>
-</section>
+  <footer>
+    <div class="wrap footer-flex">
+      <div>© <span id="footer-name">Мацэ</span>, 2025</div>
+      <div class="muted">
+        <a href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener">Support</a>
+        · <a href="/offer">Offer</a>
+        · <a href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </footer>
 
-<footer class="wrap">
-  <div style="display:flex;justify-content:space-between;align-items:center;">
-    <a href="/home">← На главную</a>
-    <a href="/links">Связь</a>
-  </div>
-</footer>
-
-<script src="/js/shop.js"></script>
+  <script src="/script.js" defer></script>
+  <script src="/js/shop.js" defer></script>
 </body>
 </html>
