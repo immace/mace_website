@@ -1,93 +1,142 @@
-/* Тёмная холодная версия — глубокая, без жёстких разделов */
+/* Холодно-тёмный фон + мягкие акцент-свечения (obsidian → anthracite) */
 
 :root{
-  --bg-dark: #0a0b0d;           /* почти чёрный, холодный */
-  --bg-mid: #121417;
-  --bg-light: #1d1f23;
-  --text: #e6e8eb;
+  --bg0: #0a0b0d;  /* obsidian */
+  --bg1: #12141a;
+  --bg2: #1c1e22;  /* anthracite */
+  --txt: #e6e8eb;
   --muted: #a5aab3;
   --accent: #a3c1d9;
   --accent-rgb: 163,193,217;
-  --white-rgb: 240,240,240;
 }
 
-/* === общий фон страницы === */
+/* ЕДИНЫЙ ФОН (без карточных панелей) */
 html, body{
-  background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 80%) fixed;
-  color: var(--text);
-  transition: background 1s ease;
-  overflow-x:hidden;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(163,193,217,.08), transparent 60%),
+    radial-gradient(1000px 500px at 85% 110%, rgba(163,193,217,.06), transparent 65%),
+    linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 60%, var(--bg2) 100%);
+  color: var(--txt);
+  font-family: Inter, "Helvetica Neue", Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
-/* тонкий текст и мягкий контраст */
-a{ color: var(--text); text-decoration:none; }
-a:hover{ color:#fff; }
-
-h1,h2,h3{ color:#fff; }
-
-/* === убираем рамки и тени у карточек === */
-.card, .panel, .service-card, .link-card{
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  backdrop-filter: none;
+/* Плавное изменение фона при скролле — управляет JS (home.js) */
+body[data-bg="mid"]{
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(163,193,217,.07), transparent 60%),
+    radial-gradient(1000px 500px at 85% 110%, rgba(163,193,217,.05), transparent 65%),
+    linear-gradient(180deg, #0e1013 0%, #171a1f 60%, #21242a 100%);
+  transition: background .8s ease;
 }
 
-/* === визуальная “дымка” между секциями === */
-section{
-  position: relative;
-  padding: 8vh 0;
+/* HEADER (прозрачный + blur) */
+.hdr{
+  position: sticky; top: 0; z-index: 1000;
+  backdrop-filter: blur(10px);
+  background: color-mix(in oklab, #0b0d10 60%, transparent);
+  border-bottom: 1px solid rgba(255,255,255,.04);
 }
-section::before{
+.hdr__in{ display:flex; align-items:center; justify-content:space-between; gap:20px; padding: 12px 0; }
+.hdr__brand{ color:#fff; font-weight:700; letter-spacing:.02em; text-decoration:none; }
+.hdr__nav a{ color: var(--muted); text-decoration:none; margin-left:18px; }
+.hdr__nav a:hover{ color:#fff; }
+
+/* СЕКЦИИ */
+.section{ position: relative; padding: 10vh 0; }
+.wrap{ width:min(1100px, 92%); margin:0 auto; }
+.grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: 22px; }
+.col{ grid-column: span 12; }
+.col-4{ grid-column: span 4; }
+.col-5{ grid-column: span 5; }
+.col-6{ grid-column: span 6; }
+.col-7{ grid-column: span 7; }
+.col-8{ grid-column: span 8; }
+
+/* HERO */
+.hero{ padding: 12vh 0 8vh; position:relative; }
+.hero__title{ margin:0 0 14px; line-height:.98; }
+.hero__name{ display:block; font-weight:900; font-size:clamp(36px, 8vw, 96px); letter-spacing:-.02em; }
+.hero__role{ display:block; font-weight:700; font-size:clamp(18px, 2.6vw, 28px); color:#fff; opacity:.9; }
+.accent-line{ width:64px; height:6px; background: var(--accent); border-radius:2px; margin: 14px 0 22px; }
+.hero__ctas{ display:flex; gap:14px; }
+
+/* Кнопки (минимальные акценты) */
+.btn{ display:inline-block; padding:12px 18px; border-radius:12px; font-weight:700; text-decoration:none; }
+.btn--primary{ background:#fff; color:#0b0d10; }
+.btn--ghost{ color: var(--muted); }
+.btn--ghost:hover{ color:#fff; }
+
+/* Рамки/свечения вместо карточек */
+.glow{ position:relative; }
+.glow::after{
   content:"";
-  position:absolute;
-  inset:0;
-  background: radial-gradient(ellipse at 50% 10%, rgba(255,255,255,0.03), transparent 70%);
-  opacity: .7;
-  pointer-events:none;
+  position:absolute; inset:-1px;
+  background: radial-gradient(1200px 300px at 40% -20%, rgba(163,193,217,.08), transparent 70%);
+  border-radius: 16px; pointer-events:none;
 }
-section:nth-child(odd)::before{
-  background: radial-gradient(ellipse at 50% 90%, rgba(163,193,217,0.05), transparent 70%);
+.frame{ border-radius: 16px; overflow:hidden; }
+.frame img{ width:100%; height:auto; display:block; }
+
+/* Cards (без «коробок», только сетка + внутренние отступы) */
+.cards .card{ border-radius:16px; overflow:hidden; }
+.card__media img{ width:100%; height:auto; display:block; }
+.card__body{ padding: 14px; }
+.card__title{ margin: 6px 0 10px; font-weight:700; }
+.tags{ display:flex; flex-wrap:wrap; gap:8px; padding:0; margin: 10px 0 14px; list-style:none; }
+.tags li{ padding:6px 10px; border-radius:999px; background: rgba(255,255,255,.04); color: var(--muted); }
+
+/* Start form */
+.start__form{ display:grid; gap:12px; }
+.chips{ display:flex; flex-wrap:wrap; gap:10px; }
+.chips button{
+  appearance:none; border:none; border-radius:999px; padding:8px 12px;
+  background: rgba(255,255,255,.06); color:#fff; cursor:pointer;
 }
-
-/* === плавные переходы фона при скролле === */
-body.scrolled{
-  background: linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-light) 80%);
+.chips button:hover{ background: rgba(255,255,255,.12); }
+.chips button.active{ outline:2px solid var(--accent); }
+.input{
+  width:100%; padding:12px 14px; border-radius:12px;
+  background: rgba(255,255,255,.04); color:#fff; border:1px solid rgba(255,255,255,.08);
 }
+.note{ padding:14px; border-radius:14px; background: rgba(255,255,255,.03); }
 
-/* === кнопки и элементы === */
-.btn{
-  background:#fff; color:#000; border-radius:12px; padding:12px 18px;
-  font-weight:700; transition:opacity .25s;
+/* About */
+.avatar{ width: 240px; height:240px; border-radius:50%; overflow:hidden; margin:0; }
+.avatar img{ width:100%; height:100%; object-fit:cover; }
+.about__text p{ margin: 10px 0 16px; }
+
+/* Testimonials */
+.tlist{ align-items:stretch; }
+.titem{ padding: 16px; border-radius: 14px; background: rgba(255,255,255,.03); }
+.titem p{ margin:0 0 10px; }
+
+/* Socials */
+.socials__in{ display:flex; gap:16px; justify-content:center; }
+.bubble{ width:54px; height:54px; border-radius:50%; display:grid; place-items:center; background: rgba(255,255,255,.04); }
+.bubble:hover{ background: rgba(255,255,255,.1); }
+
+/* Футер */
+.ftr{ padding: 6vh 0 4vh; background: linear-gradient(180deg, transparent, rgba(255,255,255,.02)); }
+.ftr__in{ display:flex; justify-content:space-between; align-items:center; gap:16px; color: var(--muted); }
+.ftr a{ color: var(--muted); }
+.ftr a:hover{ color:#fff; }
+
+/* Радиальные «споты» (микро-свечения между блоками) */
+.bg-spot{ position:absolute; inset:0; pointer-events:none; }
+.bg-spot--tl{ background: radial-gradient(700px 280px at 10% 5%, rgba(163,193,217,.07), transparent 60%); }
+.bg-spot--br{ background: radial-gradient(700px 260px at 90% 95%, rgba(163,193,217,.06), transparent 60%); }
+.bg-spot--c{ background: radial-gradient(900px 320px at 50% 60%, rgba(163,193,217,.05), transparent 65%); }
+.bg-spot--tc{ background: radial-gradient(800px 280px at 50% 0%, rgba(163,193,217,.05), transparent 65%); }
+
+/* Адаптив */
+@media (max-width: 1024px){
+  .col-7,.col-5,.col-6,.col-8,.col-4{ grid-column: span 12; }
+  .avatar{ width:180px; height:180px; }
 }
-.btn:hover{ opacity:.9; }
-
-.btn-ghost{ color:var(--muted); }
-.btn-ghost:hover{ color:#fff; }
-
-input,textarea{
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.1);
-  color:var(--text);
-  border-radius:10px;
-  padding:10px 12px;
-}
-
-/* === текстовые детали === */
-.muted{ color: var(--muted); }
-
-/* === футер === */
-footer{
-  margin-top:10vh;
-  padding:6vh 0 3vh;
-  border-top:1px solid rgba(255,255,255,0.05);
-  text-align:center;
-  font-size:0.9rem;
-  color:var(--muted);
-  background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.02) 100%);
-}
-
-/* === адаптив === */
-@media (max-width:768px){
-  section{ padding:5vh 0; }
+@media (max-width: 640px){
+  .hero{ padding: 10vh 0 6vh; }
+  .avatar{ width:140px; height:140px; }
 }
