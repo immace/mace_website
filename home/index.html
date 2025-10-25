@@ -1,49 +1,39 @@
 <!doctype html>
-<html lang="en"> <!-- для глобальной версии сразу EN -->
+<html lang="en"> <!-- глобально EN; i18n в /script.js при необходимости -->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Macé · Graphic & Web Designer</title>
 
-  <!-- Базовые стили проекта (НЕ меняем) -->
+  <!-- Шрифт и базовые стили как на основной -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
-  <!-- Тёмная тема только для скрытых страниц -->
+
+  <!-- Тёмная тема только для скрытых -->
   <link rel="stylesheet" href="/css/dark.css" />
   <!-- Локальные стили этой страницы -->
   <link rel="stylesheet" href="/css/home.css" />
 </head>
 <body>
-
-  <!-- Оставляем текущий header по стилю -->
+  <!-- === Header (взято из твоего index.html, структура и id сохранены) === -->
   <header>
     <div class="wrap header-content">
-      <a href="/" class="logo" style="text-decoration:none;color:inherit;font-weight:300">Macé</a>
-      <nav class="site-nav">
-        <a href="/shop" class="navlink">Services</a>
-        <a href="/links" class="navlink">Links</a>
-      </nav>
+      <span id="header-name">Дима Мальцев</span>
     </div>
   </header>
 
-  <main>
-    <!-- HERO -->
+  <main class="wrap">
+    <!-- === Hero (точно такие же id для анимаций) === -->
     <section class="hero">
-      <div class="wrap">
-        <div class="hero-title">
-          <div class="name" style="font-size:clamp(28px,6vw,72px);line-height:.96;">Macé</div>
-          <h1 style="margin:.05em 0 .2em;">Graphic & Web Designer</h1>
-          <div class="accent-underline" style="width:48px;height:4px;border-radius:2px;"></div>
-        </div>
-
-        <div class="hero-cta">
-          <a class="btn" href="#realized">View Portfolio →</a>
-          <a class="btn-ghost" href="/shop#consultation">Book a Consultation</a>
-        </div>
-      </div>
+      <h1 class="hero-title">
+        <span class="name-wrapper"><span id="name">Дима Мальцев</span></span>
+        <span class="role-wrapper"><span id="role">Графический дизайнер</span></span>
+      </h1>
+      <div class="accent"></div>
     </section>
 
-    <!-- REALIZED PROJECTS -->
-    <section id="realized" class="wrap realized">
+    <!-- === Completed Projects (твой «Реализованные»; первый кейс — ORBIC) === -->
+    <section id="realized" class="realized">
       <div class="section-head">
         <h2>Completed Projects</h2>
         <a class="btn-ghost" href="/home/projects/">More projects →</a>
@@ -62,18 +52,19 @@
           </div>
         </div>
         <div class="ri-media">
-          <!-- Пока нет обложки орфайла — используем любую картинку из assets -->
+          <!-- Замени на обложку ORBIC; временно — ассет -->
           <img src="/assets/Обложка-Нотное_издание-1.png" alt="ORBIC Typeface preview">
         </div>
       </article>
     </section>
 
-    <!-- START YOUR PROJECT -->
-    <section id="start" class="wrap start-project panel">
+    <!-- === Кнопка «создать свой проект» + выбор услуги → /shop/#consultation === -->
+    <section id="start" class="start-project panel">
       <div class="sp-grid">
         <div>
           <h2>Let’s create something meaningful</h2>
-          <p class="muted">Choose a direction or write your idea. You’ll be sent to the consultation page to book and pay.</p>
+          <p class="muted">Choose a direction or write your idea. You’ll be sent to the consultation to book and pay.</p>
+
           <form id="sp-form" class="sp-form" action="/shop/#consultation">
             <label class="sp-label">Select a service</label>
             <div class="sp-options">
@@ -92,17 +83,18 @@
             <input type="hidden" name="service" id="sp-hidden-service" value="">
           </form>
         </div>
+
         <div class="sp-note muted">
           Payment via <b>Prodamus</b> (worldwide). You’ll review details before paying.
         </div>
       </div>
     </section>
 
-    <!-- ABOUT ME -->
-    <section class="wrap about">
+    <!-- === About me (круглое фото слева, текст справа) === -->
+    <section class="about">
       <div class="about-grid card">
         <div class="about-photo">
-          <!-- поменяешь на своё фото -->
+          <!-- Замени на своё фото -->
           <img src="/assets/portfolio-name.png" alt="Macé portrait">
         </div>
         <div class="about-text">
@@ -113,36 +105,44 @@
       </div>
     </section>
 
-    <!-- TESTIMONIALS -->
-    <section class="wrap testimonials">
+    <!-- === Testimonials === -->
+    <section class="testimonials">
       <h2>Testimonials</h2>
       <div class="t-list">
         <blockquote class="t-item card">
           <p>“Clear process and beautiful visual logic. The brand feels alive.”</p>
-          <cite>— A., founder</cite>
+          <cite class="muted">— A., founder</cite>
         </blockquote>
         <blockquote class="t-item card">
           <p>“Smart structure, typography on point. Website loads fast and feels calm.”</p>
-          <cite>— K., producer</cite>
+          <cite class="muted">— K., producer</cite>
         </blockquote>
         <blockquote class="t-item card">
           <p>“We got a coherent identity and guidelines. Communication was effortless.”</p>
-          <cite>— P., art director</cite>
+          <cite class="muted">— P., art director</cite>
         </blockquote>
       </div>
     </section>
 
-    <!-- SOCIALS (как на основной) -->
-    <section class="socials">
-      <div class="wrap">
-        <a href="https://instagram.com/immalcev"  class="btn-ico" aria-label="Instagram">
-          <span class="ico"><img src="/assets/icons/instagram.svg" width="30" height="30" alt=""></span>
+    <!-- === Плашка «Портфолио» и автогенерируемые посты из /script.js (как на главной) === -->
+    <div class="portfolio-name">
+      <img src="/assets/portfolio-name.png" alt="Portfolio">
+    </div>
+    <section id="portfolio" class="posts"></section>
+
+    <!-- === Соцсети (твои «пузырьки») === -->
+    <section id="contacts" class="contacts">
+      <div class="social-bubbles">
+        <a class="bubble-wrap" href="https://instagram.com/authent.art" target="_blank" rel="noopener"
+           aria-label="Official Instagram Account by Macé">
+          <span class="bubble"><img src="/assets/icons/instagram.svg" width="30" height="30" alt=""></span>
         </a>
-        <a href="https://t.me/immalcev" class="btn-ico" aria-label="Telegram">
-          <span class="ico"><img src="/assets/icons/telegram.svg" width="30" height="30" alt=""></span>
+        <a class="bubble-wrap" href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener"
+           aria-label="Official Telegram Account by Macé">
+          <span class="bubble"><img src="/assets/icons/telegram.svg" width="30" height="30" alt=""></span>
         </a>
-        <a href="mailto:mace4681@gmail.com" class="btn-ico" aria-label="Email">
-          <span class="ico"><img src="/assets/icons/mail.svg" width="30" height="30" alt=""></span>
+        <a class="bubble-wrap" href="mailto:mace4681@gmail.com" aria-label="Email mace4681@gmail.com">
+          <span class="bubble"><img src="/assets/icons/mail.svg" width="30" height="30" alt=""></span>
         </a>
       </div>
     </section>
@@ -150,7 +150,7 @@
 
   <footer>
     <div class="wrap footer-flex">
-      <div>© Macé, 2025</div>
+      <div>© <span id="footer-name">Мацэ</span>, 2025</div>
       <div class="muted">
         <a href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener">Support</a>
         · <a href="/offer">Offer</a>
@@ -159,7 +159,7 @@
     </div>
   </footer>
 
-  <!-- Скрипты -->
+  <!-- Скрипты (тот же, что на текущей главной) -->
   <script src="/script.js" defer></script>
   <script src="/js/home.js" defer></script>
 </body>
