@@ -2,24 +2,32 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Демо-концепции для сайта</title>
+  <title>Демо трёх концепций — переключение тем</title>
+  <!-- Google Fonts подключение — свободные семейства -->
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700|Roboto:400,700|Montserrat:600|Quicksand:700|Comfortaa:700|Open+Sans:400,700|Space+Grotesk:700|Poppins:600|Segoe+UI:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="watermark">MACE.ART DEMO</div>
-  <h1>Предварительные концепции дизайна</h1>
-  <p class="info">Ознакомьтесь с двумя вариантами креативного подхода к вашему проекту.<br>Полные макеты и доработка — после старта сотрудничества.</p>
-
-  <div class="switcher">
-    <button id="btn1" class="active">Концепция 1</button>
-    <button id="btn2">Концепция 2</button>
+  <div id="theme-switcher">
+    <button data-theme="burgundy" class="active">Бордовый</button>
+    <button data-theme="orange">Оранжевый</button>
+    <button data-theme="purple">Фиолетовый</button>
   </div>
-
-  <div class="concepts">
-    <img id="concept1" class="concept-img" src="concept1.jpg" alt="Концепция 1">
-    <img id="concept2" class="concept-img" src="concept2.jpg" alt="Концепция 2" style="display:none;">
+  <div class="container">
+    <div class="left">
+      <canvas id="sphere" width="360" height="500"></canvas>
+    </div>
+    <div class="right">
+      <h1 id="title">Элитный стиль</h1>
+      <h2 id="subtitle">Строгий профессионализм</h2>
+      <p id="text">Сайт, который транслирует статус и надёжность. Строгая геометрия, прямолинейные решения.</p>
+      <div class="icons">
+        <div class="icon" id="icon-menu" title="Меню"></div>
+        <div class="icon" id="icon-contact" title="Контакты"></div>
+        <div class="icon" id="icon-buy" title="Купить"></div>
+      </div>
+    </div>
   </div>
-
   <script src="main.js"></script>
 </body>
 </html>
