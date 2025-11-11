@@ -73,7 +73,7 @@ body.theme-burgundy{
   --font-sub:'Montserrat', sans-serif;
   --font-text:'Roboto', sans-serif;
   --shine-center: #8C2F39;
-  --shine-edge: #270404;
+  --shine-edge: #000000;
   /* --shine-edge: #270404; */
 }
 /* Оранжевый */
@@ -83,7 +83,7 @@ body.theme-orange{
   --font-sub:'Comfortaa', sans-serif;
   --font-text:'Open Sans', sans-serif;
   --shine-center: #C46C23;
-  --shine-edge: #291301;
+  --shine-edge: #000000;
   /* --shine-edge: #291301; */
 }
 /* Фиолетовый */
@@ -93,6 +93,6 @@ body.theme-purple{
   --font-sub:'Poppins', sans-serif;
   --font-text:'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --shine-center: #8A53E9;
-  --shine-edge: #1a0943;
+  --shine-edge: #000000;
   /* --shine-edge: #1a0943; */
 }
