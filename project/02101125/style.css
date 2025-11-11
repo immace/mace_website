@@ -14,83 +14,218 @@ body {
   top:0; left:0;
   min-width: 100vw; min-height: 100vh;
   z-index: 1;
-  pointer-events: none;
+  pointer-events: none;/* =============================================================================
+   БАЗА: сбросы, защита от копирования, корневые переменные
+   ========================================================================== */
+
+/* Запрет выделения/перетаскивания по ТЗ */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
-#theme-switcher {
-  position: absolute;
-  top: 28px; right: 38px; z-index: 20;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-width: 1280px; /* desktop: минимум 1280px */
+  overflow: hidden;  /* исключаем скролл — вся сцена фиксирована */
+  -webkit-tap-highlight-color: transparent;
 }
-#theme-switcher button {
-  margin-left: 12px; padding: 8px 18px;
-  font-size: 1rem; border: none; outline: none;
-  border-radius: 20px; background: #fff; color: #8A53E9; font-weight: 500;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 7px rgba(0,0,0,0.09);
-  cursor: pointer;
+
+/* Три темы управляются через CSS-переменные на <body> */
+body {
+  /* ПАЛИТРА ПО ТЗ — значения меняются классами theme-... */
+  --bg-gradient: linear-gradient(135deg, #380303 0%, #8C2F39 100%);
+  --card-bg: #FFEBDD;
+  --text-main: #B54245;
+  --text-sub: #E04E5A;
+
+  /* ТИПОГРАФИКА — меняем семейства шрифтов по темам */
+  --font-title: 'Playfair Display', serif;
+  --font-sub: 'Montserrat', sans-serif;
+  --font-text: 'Roboto', sans-serif;
+
+  /* ТЕНИ, ГЛОУ, РАДИУСЫ */
+  --card-radius: 38px;
+  --card-shadow: 0 30px 120px rgba(0,0,0,0.35), 0 12px 36px rgba(0,0,0,0.28);
+  --card-border: 1px solid rgba(255,255,255,0.25);
+
+  /* Цвета лавы для текущей темы (обновляются классами и JS) */
+  --lava-c1: #8C2F39; /* старт */
+  --lava-c2: #591818; /* конец */
+
+  /* Общая сцена */
+  background: var(--bg-gradient) fixed;
+  transition: background 600ms ease;
 }
-#theme-switcher .active {
-  background: #8A53E9; color: #fff;
-  box-shadow: 0 2px 14px rgba(138,83,233,0.14);
-}
-.container {
-  min-height: 100vh; height: 100vh;
-  display: flex; align-items: center; justify-content: center;
-  position: relative; z-index: 2;
-}
-.accent-square {
-  min-width: 440px;
-  min-height: 380px;
-  border-radius: 38px;
-  box-shadow: 0 14px 48px 0 rgba(140,47,57,0.11), 0 1.5px 8px rgba(255,219,204,0.14);
-  padding: 50px 68px 50px 68px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-  /* Для 3D shine */
-  overflow: hidden;
-  transition: background 1s, box-shadow 0.8s;
-}
-.accent-square:before {
-  content: "";
-  position: absolute;
-  left: var(--shine-x,60px);
-  top: var(--shine-y,38px);
-  width: 160px; height: 120px;
-  background: radial-gradient(circle, rgba(255,255,255,0.33) 0%, rgba(255,255,255,0.0) 100%);
-  filter: blur(12px);
-  pointer-events: none;
-  transition: left 0.18s, top 0.18s;
-}
-h1 { font-size:2.55rem; font-weight: bold; margin: 0 0 18px 0;}
-h2 { font-size:1.26rem; font-weight:600; margin: 0 0 20px 0;}
-p  { font-size:1.10rem; margin:0; opacity: 0.97;}
-/* Бордовая тема */
-body.burgundy { background: linear-gradient(135deg, #380303 0%, #8C2F39 100%);}
-.burgundy .accent-square {
-  background: #FFEBDD;
-  color: #B54245;
-  box-shadow: 0 18px 58px 0 rgba(140,47,57,0.22), 0 5.5px 18px rgba(255,219,204,0.18);
-}
-.burgundy #title, .burgundy #subtitle, .burgundy #text { color: #B54245; }
-.burgundy #subtitle { color: #E04E5A; }
 
 /* Оранжевая тема */
-body.orange { background: linear-gradient(135deg, #6E3B10 0%, #C46C23 100%);}
-.orange .accent-square {
-  background: #FFF6E3;
-  color: #C46C23;
-  box-shadow: 0 18px 58px 0 rgba(196,108,35,0.16), 0 5.5px 18px rgba(255,227,184,0.16);
+body.theme-orange {
+  --bg-gradient: linear-gradient(135deg, #6E3B10 0%, #C46C23 100%);
+  --card-bg: #FFF6E3;
+  --text-main: #C46C23;
+  --text-sub: #E89036;
+
+  --font-title: 'Quicksand', sans-serif;
+  --font-sub: 'Comfortaa', sans-serif;
+  --font-text: 'Open Sans', sans-serif;
+
+  --lava-c1: #C46C23;
+  --lava-c2: #884610;
 }
-.orange #title, .orange #subtitle, .orange #text { color: #C46C23; }
-.orange #subtitle { color: #E89036; }
 
 /* Фиолетовая тема */
-body.purple { background: linear-gradient(135deg, #380D9C 0%, #8A53E9 100%);}
-.purple .accent-square {
-  background: #F0E8FF;
-  color: #693AD4;
-  box-shadow: 0 18px 58px 0 rgba(138,83,233,0.13), 0 5.5px 18px rgba(240,232,255,0.18);
+body.theme-purple {
+  --bg-gradient: linear-gradient(135deg, #380D9C 0%, #8A53E9 100%);
+  --card-bg: #F0E8FF;
+  --text-main: #693AD4;
+  --text-sub: #8A53E9;
+
+  --font-title: 'Space Grotesk', sans-serif;
+  --font-sub: 'Poppins', sans-serif;
+  --font-text: 'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+
+  --lava-c1: #8A53E9;
+  --lava-c2: #693AD4;
 }
-.purple #title, .purple #subtitle, .purple #text { color: #693AD4; }
-.purple #subtitle { color: #8A53E9; }
+
+/* =============================================================================
+   СЛОИ СЦЕНЫ
+   ========================================================================== */
+
+/* Лава-лампа (canvas) занимает фон и всегда под контентом */
+#lava {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Переключатель тем (правый верхний угол) */
+.theme-switcher {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+}
+.switch-btn {
+  font: 600 12px/1 var(--font-sub);
+  letter-spacing: 0.3px;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.22);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .15s ease, background .25s ease, border-color .25s ease;
+}
+.switch-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.14); }
+.switch-btn.is-active { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.22); }
+
+/* Центральная сцена с карточкой */
+.stage {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  z-index: 2; /* выше лавы */
+  display: grid;
+  place-items: center;
+  padding: 40px;
+}
+
+/* =============================================================================
+   АКЦЕНТНЫЙ КВАДРАТ + SHINE
+   ========================================================================== */
+
+.accent-card {
+  position: relative;
+  min-width: 440px;
+  min-height: 380px;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  background: var(--card-bg);
+  border: var(--card-border);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 400ms ease, background 400ms ease, border-color 400ms ease;
+}
+
+/* Псевдоэлемент-блик (shine) */
+.accent-card::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  /* Блик — радиальный градиент с высокой прозрачностью */
+  background: radial-gradient(
+      circle at var(--shine-x, 50%) var(--shine-y, 50%),
+      rgba(255,255,255,0.55) 0%,
+      rgba(255,255,255,0.35) 18%,
+      rgba(255,255,255,0.12) 36%,
+      rgba(255,255,255,0.0) 60%
+  );
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: background-position 80ms linear;
+}
+
+/* Внутренний контент карточки */
+.card-inner {
+  position: relative;
+  z-index: 1;
+  padding: 42px 48px;
+}
+.title {
+  margin: 0 0 10px 0;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 1.12;
+  letter-spacing: 0.2px;
+  color: var(--text-main);
+}
+.subtitle {
+  margin: 0 0 18px 0;
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--text-sub);
+}
+.text {
+  margin: 0;
+  max-width: 56ch;
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(0,0,0,0.72);
+}
+
+/* Немного глубины при наведении */
+.accent-card:hover {
+  box-shadow: 0 40px 160px rgba(0,0,0,0.42), 0 16px 48px rgba(0,0,0,0.34);
+}
+
+/* =============================================================================
+   ДОП. ЭФФЕКТЫ
+   ========================================================================== */
+
+/* Лёгкая анти-алиасинговая коррекция шрифтов */
+body, .title, .subtitle, .text, .switch-btn {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* На всякий случай — отключение перетаскиваний изображений/ссылок, если появятся */
+img, a { -webkit-user-drag: none; user-drag: none; pointer-events: auto; }
