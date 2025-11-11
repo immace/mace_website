@@ -57,7 +57,7 @@ body.theme-purple{
 .accent-card::before{
   content:"";position:absolute;inset:-20%;
   background:radial-gradient(circle at var(--shine-x,50%) var(--shine-y,50%),
-    var(--shine-center)0%, var(--shine-edge)55%);
+    var(--shine-center)-26%, var(--shine-edge)55%);
   pointer-events:none;mix-blend-mode:screen;transition:background 0.4s ease;
 }
 .card-inner{display:flex;flex-direction:column;gap:16px;padding:42px 48px;color:#fff;}
@@ -73,7 +73,7 @@ body.theme-burgundy{
   --font-sub:'Montserrat', sans-serif;
   --font-text:'Roboto', sans-serif;
   --shine-center: #8C2F39;
-  --shine-edge: #380303;
+  --shine-edge: #270404;
 }
 /* Оранжевый */
 body.theme-orange{
@@ -81,6 +81,8 @@ body.theme-orange{
   --font-title:'Quicksand', sans-serif;
   --font-sub:'Comfortaa', sans-serif;
   --font-text:'Open Sans', sans-serif;
+  --shine-center: #C46C23;
+  --shine-edge: #6E3B10;
 }
 /* Фиолетовый */
 body.theme-purple{
@@ -88,4 +90,6 @@ body.theme-purple{
   --font-title:'Space Grotesk', sans-serif;
   --font-sub:'Poppins', sans-serif;
   --font-text:'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --shine-center: #8A53E9;
+  --shine-edge: #380D9C;
 }
