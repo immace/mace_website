@@ -1,147 +1,216 @@
-// Темы: цвета, стили, фоновые параметры
-const themes = {
-  burgundy: {
-    class: "burgundy",
-    accent: "#FFEBDD",
-    shadow: "0 18px 58px 0 rgba(140,47,57,0.22)",
-    title: "Просто заголовок",
-    subtitle: "Подзаголовок",
-    text: "Пример текста пример текста пример текста…",
-    lava: [
-      { color: "#8C2F39", colorTo: "#591818" }
-    ],
-    fonts: {
-      h1: "'Playfair Display', serif",
-      h2: "'Montserrat', sans-serif",
-      p: "'Roboto', sans-serif"
-    }
-  },
-  orange: {
-    class: "orange",
-    accent: "#FFF6E3",
-    shadow: "0 18px 58px 0 rgba(196,108,35,0.16)",
-    title: "Просто заголовок",
-    subtitle: "Подзаголовок",
-    text: "Пример текста пример текста пример текста…",
-    lava: [
-      { color: "#C46C23", colorTo: "#884610" }
-    ],
-    fonts: {
-      h1: "'Quicksand', sans-serif",
-      h2: "'Comfortaa', sans-serif",
-      p: "'Open Sans', sans-serif"
-    }
-  },
-  purple: {
-    class: "purple",
-    accent: "#F0E8FF",
-    shadow: "0 18px 58px 0 rgba(138,83,233,0.13)",
-    title: "Просто заголовок",
-    subtitle: "Подзаголовок",
-    text: "Пример текста пример текста пример текста…",
-    lava: [
-      { color: "#8A53E9", colorTo: "#693AD4" }
-    ],
-    fonts: {
-      h1: "'Space Grotesk', sans-serif",
-      h2: "'Poppins', sans-serif",
-      p: "'Segoe UI', sans-serif"
-    }
+/* ============================================================================
+   MAIN.JS
+   - Переключение тем и шрифтов
+   - Анимация shine/параллакс для акцент-карточки
+   - Анимация лавовой лампы (canvas)
+   - Защита: контекстное меню, хоткеи PrintScreen/F12/Ctrl+Shift+I и пр.
+   ========================================================================== */
+
+/* ------------------------------
+   Переключатель тем
+   ------------------------------ */
+const body = document.body;
+const buttons = document.querySelectorAll('.switch-btn');
+
+function setActiveTheme(name) {
+  body.classList.remove('theme-burgundy', 'theme-orange', 'theme-purple');
+  body.classList.add(`theme-${name}`);
+  buttons.forEach(b => b.classList.toggle('is-active', b.dataset.theme === name));
+  // Обновляем цвета лавы из CSS custom props
+  updateLavaColors();
+}
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => setActiveTheme(btn.dataset.theme));
+});
+
+/* По умолчанию — бордовая */
+setActiveTheme('burgundy');
+
+/* ------------------------------
+   Shine + 3D tilt на карточке
+   ------------------------------ */
+const card = document.getElementById('accentCard');
+(function initShine() {
+  const maxTilt = 10; // градусов
+  let rect = card.getBoundingClientRect();
+
+  function onMove(e) {
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const px = x / rect.width;
+    const py = y / rect.height;
+
+    // координаты блика для ::before
+    card.style.setProperty('--shine-x', `${px * 100}%`);
+    card.style.setProperty('--shine-y', `${py * 100}%`);
+
+    // 3D-поворот
+    const rx = (py - 0.5) * -2 * maxTilt;
+    const ry = (px - 0.5) * 2 * maxTilt;
+    card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  }
+
+  function onLeave() {
+    card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+  }
+
+  window.addEventListener('resize', () => { rect = card.getBoundingClientRect(); });
+  card.addEventListener('mousemove', onMove);
+  card.addEventListener('mouseleave', onLeave);
+})();
+
+/* ------------------------------
+   ЛАВА-ЛАМПА (Canvas)
+   ------------------------------ */
+const canvas = document.getElementById('lava');
+const ctx = canvas.getContext('2d', {alpha: true});
+
+let W = canvas.width = window.innerWidth;
+let H = canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  // переразмещаем (чуть растягиваем поле)
+  blobs.forEach(b => {
+    b.x = Math.random() * W;
+    b.y = Math.random() * H;
+  });
+});
+
+const THEME = {
+  lava: {
+    c1: getComputedStyle(document.body).getPropertyValue('--lava-c1').trim() || '#8C2F39',
+    c2: getComputedStyle(document.body).getPropertyValue('--lava-c2').trim() || '#591818',
   }
 };
 
-// Переключение темы
-function setTheme(themeKey='burgundy') {
-  document.body.className = themes[themeKey].class;
-  document.getElementById('title').textContent = themes[themeKey].title;
-  document.getElementById('subtitle').textContent = themes[themeKey].subtitle;
-  document.getElementById('text').textContent = themes[themeKey].text;
-  document.getElementById('title').style.fontFamily = themes[themeKey].fonts.h1;
-  document.getElementById('subtitle').style.fontFamily = themes[themeKey].fonts.h2;
-  document.getElementById('text').style.fontFamily = themes[themeKey].fonts.p;
-  drawLavaLamp(themes[themeKey].lava);
-  document.querySelectorAll('#theme-switcher button').forEach(btn=>btn.classList.remove('active'));
-  document.querySelector(`#theme-switcher button[data-theme="${themeKey}"]`).classList.add('active');
+function updateLavaColors() {
+  THEME.lava.c1 = getComputedStyle(document.body).getPropertyValue('--lava-c1').trim();
+  THEME.lava.c2 = getComputedStyle(document.body).getPropertyValue('--lava-c2').trim();
 }
-document.querySelectorAll('#theme-switcher button').forEach(btn=>{
-  btn.onclick = ()=>setTheme(btn.dataset.theme);
-});
-setTheme('burgundy');
 
-// --- 3D shine на квадрате
-const square = document.getElementById('accent-square');
-square.addEventListener('mousemove', function(e){
-  const rect = square.getBoundingClientRect();
-  let x = e.clientX - rect.left - 80;
-  let y = e.clientY - rect.top - 40;
-  square.style.setProperty('--shine-x', `${Math.max(0, x)}px`);
-  square.style.setProperty('--shine-y', `${Math.max(0, y)}px`);
-});
-square.addEventListener('mouseleave', function(){
-  square.style.setProperty('--shine-x', `60px`);
-  square.style.setProperty('--shine-y', `38px`);
-});
+/* Параметры лавы */
+const BLOB_COUNT = 6;          // >4 по ТЗ
+const BASE_ALPHA = 0.22;       // 0.18–0.32
+const BLUR_PX = 60;            // мягкий blur
+const MAX_R = Math.max(W, H) * 0.18;  // крупные шары
+const MIN_R = Math.max(W, H) * 0.08;
 
-// --- Лавовая лампа на canvas (colorful blobs)
-const canvas = document.getElementById('lava');
-const ctx = canvas.getContext('2d');
-let w = window.innerWidth, h = window.innerHeight;
-canvas.width = w; canvas.height = h;
-window.addEventListener('resize', ()=>{
-  w = window.innerWidth; h = window.innerHeight;
-  canvas.width = w; canvas.height = h;
-});
-
-let blobs = [];
-function drawLavaLamp(colors) {
-  blobs = [];
-  // Генерируем 4 больших шара разных цветов на экране с мягким blur и alpha
-  for(let i=0;i<4;i++){
-    const col = colors[0];
-    blobs.push({
-      x: Math.random()*w, y: Math.random()*h,
-      r: 220+Math.random()*150,
-      dx: 0.5 + Math.random()*0.7, dy: 0.5 + Math.random()*0.7,
-      a: 0.23+0.09*Math.random(),
-      color1: col.color,
-      color2: col.colorTo,
-      phase: Math.random()*6.28
-    });
+class Blob {
+  constructor() {
+    this.reset();
   }
-}
-function animateLava() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  for(const b of blobs) {
-    // Пульсация радиуса
-    let r = b.r + Math.sin(Date.now()/1100 + b.phase)*25;
-    let grad = ctx.createRadialGradient(b.x, b.y, r*0.4, b.x, b.y, r);
-    grad.addColorStop(0, b.color1);
-    grad.addColorStop(1, b.color2);
-    ctx.globalAlpha = b.a;
-    ctx.beginPath(); ctx.arc(b.x, b.y, r, 0, 2*Math.PI);
-    ctx.fillStyle = grad; ctx.fill();
-    // движение
-    b.x += b.dx*(Math.sin((Date.now()/600)+b.phase)*0.9+1.1);
-    b.y += b.dy*(Math.sin((Date.now()/700)-b.phase)*0.7+1.3);
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.r = MIN_R + Math.random() * (MAX_R - MIN_R);
+    const s = 0.3 + Math.random() * 0.6; // скорость
+    const a = Math.random() * Math.PI * 2;
+    this.vx = Math.cos(a) * s;
+    this.vy = Math.sin(a) * s;
+    this.jitter = 0.6 + Math.random() * 0.8; // лёгкий пульс радиуса
+    this.phase = Math.random() * Math.PI * 2;
+  }
+  step(dt) {
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+
     // отскок от краёв
-    if(b.x-r<0||b.x+r>w) b.dx*=-1;
-    if(b.y-r<0||b.y+r>h) b.dy*=-1;
-  }
-  ctx.globalAlpha = 1;
-  requestAnimationFrame(animateLava);
-}
-drawLavaLamp(themes['burgundy'].lava);
-animateLava();
+    if (this.x < -this.r*0.3 || this.x > W + this.r*0.3) this.vx *= -1;
+    if (this.y < -this.r*0.3 || this.y > H + this.r*0.3) this.vy *= -1;
 
-// --- Защита (скриншоты, копирование)
-document.addEventListener('selectstart', e => e.preventDefault());
-document.addEventListener('contextmenu', e => e.preventDefault());
-window.addEventListener('keydown', function(e) {
-  if (
-    e.key === 'PrintScreen' ||
-    e.key === 'F12' ||
-    (e.ctrlKey && e.shiftKey && e.key?.toUpperCase() === 'I')
-  ) {
-    document.body.innerHTML = `<div style="background:#191919;color:#fff;font-size:2rem;display:flex;align-items:center;justify-content:center;height:100vh;">Доступ запрещён</div>`;
+    // пульсация радиуса (морфинг)
+    this.phase += 0.0025 * dt;
+    const pulse = 1 + Math.sin(this.phase) * 0.08 * this.jitter;
+    this.pr = this.r * pulse;
+  }
+  draw(g) {
+    // радиальный градиент от c1 к c2
+    const grad = g.createRadialGradient(this.x, this.y, this.pr*0.1, this.x, this.y, this.pr);
+    grad.addColorStop(0, hexToRgba(THEME.lava.c1, BASE_ALPHA + 0.1));
+    grad.addColorStop(1, hexToRgba(THEME.lava.c2, BASE_ALPHA - 0.04));
+
+    g.fillStyle = grad;
+    g.beginPath();
+    g.arc(this.x, this.y, this.pr, 0, Math.PI * 2);
+    g.fill();
+  }
+}
+
+// Утилита: #RRGGBB -> rgba(...)
+function hexToRgba(hex, a = 1) {
+  const h = hex.replace('#','').trim();
+  const bigint = parseInt(h.length === 3 ? h.split('').map(x=>x+x).join('') : h, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// Создаём шары
+const blobs = Array.from({length: BLOB_COUNT}, () => new Blob());
+
+let prev = performance.now();
+function animate(now = performance.now()) {
+  const dt = Math.min(60, now - prev);
+  prev = now;
+
+  // Очистка + режим сложения
+  ctx.clearRect(0, 0, W, H);
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.filter = `blur(${BLUR_PX}px)`; // мягкий blur на всём слое
+
+  // Рисуем шары
+  for (const b of blobs) {
+    b.step(dt);
+    b.draw(ctx);
+  }
+
+  ctx.restore();
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+
+/* ------------------------------
+   Защита от копирования/инспектора (best effort)
+   ------------------------------ */
+document.addEventListener('contextmenu', (e) => e.preventDefault(), {passive: false});
+
+document.addEventListener('keydown', (e) => {
+  // F12
+  if (e.key === 'F12' || e.keyCode === 123) {
+    e.preventDefault(); e.stopPropagation();
+  }
+  // Ctrl+Shift+I / J / C (DevTools) и Ctrl+U (View Source)
+  if ((e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) ||
+      (e.ctrlKey && e.key.toUpperCase() === 'U')) {
+    e.preventDefault(); e.stopPropagation();
+  }
+  // PrintScreen (keyCode 44) — перехват на уровне браузера ограничен
+  if (e.key === 'PrintScreen' || e.keyCode === 44) {
+    e.preventDefault(); e.stopPropagation();
+    // Мягкая реакция (best effort): затемнить на мгновение
+    flashBlocker();
   }
 });
+
+// Визуальный флэш при попытках скриншота/инспектора (мягкий UX-ответ)
+let blockerTimer = null;
+function flashBlocker() {
+  let overlay = document.getElementById('blocker-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'blocker-overlay';
+    Object.assign(overlay.style, {
+      position: 'fixed', inset: '0', zIndex: '9999',
+      background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(3px)',
+      transition: 'opacity 200ms ease', opacity: '0'
+    });
+    document.body.appendChild(overlay);
+  }
+  overlay.style.opacity = '1';
+  clearTimeout(blockerTimer);
+  blockerTimer = setTimeout(() => { overlay.style.opacity = '0'; }, 300);
+}
