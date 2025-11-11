@@ -4,13 +4,13 @@ body{transition:background 0.6s ease}
 
 /* Темы — только цвета лавы и фона */
 body.theme-burgundy{
-  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;
+  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;--accent:#8C2F39;
 }
 body.theme-orange{
-  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;
+  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;--accent:#C46C23;
 }
 body.theme-purple{
-  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;
+  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;--accent:#8A53E9;
 }
 
 #lava{position:fixed;inset:0;z-index:0;width:100%;height:100%}
