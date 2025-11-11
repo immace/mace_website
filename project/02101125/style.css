@@ -57,7 +57,7 @@ body.theme-purple{
 .accent-card::before{
   content:"";position:absolute;inset:-20%;
   background:radial-gradient(circle at var(--shine-x,50%) var(--shine-y,50%),
-    rgba(255,255,255,0.45) 0%,rgba(255,255,255,0.25) 25%,rgba(255,255,255,0) 55%);
+    var(--shine-center)0%, var(--shine-edge)55%);
   pointer-events:none;mix-blend-mode:screen;transition:background 0.4s ease;
 }
 .card-inner{display:flex;flex-direction:column;gap:16px;padding:42px 48px;color:#fff;}
