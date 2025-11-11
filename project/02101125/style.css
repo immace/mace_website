@@ -1,98 +1,66 @@
-/* ================= БАЗА + запрет выделения ================= */
-*{user-select:none;-webkit-user-select:none;-moz-user-select:none}
-html,body{margin:0;padding:0;height:100%;min-width:1280px;overflow:hidden;-webkit-tap-highlight-color:transparent}
+*{user-select:none;-webkit-user-select:none}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000;font-family:'Montserrat',Helvetica,Arial,sans-serif;min-width:1280px}
+body{transition:background 0.6s ease}
 
-/* Переменные темы + общий фон */
-body{
-  --bg-gradient: linear-gradient(135deg,#380303 0%,#8C2F39 100%);
-  --card-bg:#FFEBDD; --text-main:#B54245; --text-sub:#E04E5A;
-  --font-title:'Playfair Display',serif; --font-sub:'Montserrat',sans-serif; --font-text:'Roboto',sans-serif;
-  --lava-c1:#8C2F39; --lava-c2:#591818;
-  --card-radius:38px; --card-shadow:0 30px 120px rgba(0,0,0,.35),0 12px 36px rgba(0,0,0,.28);
-  --card-border:1px solid rgba(255,255,255,.25);
-  background:var(--bg-gradient) fixed !important;
-  transition:background 600ms ease;
+/* Темы — только цвета лавы и фона */
+body.theme-burgundy{
+  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;
 }
-
-/* Оранжевая тема */
 body.theme-orange{
-  --bg-gradient:linear-gradient(135deg,#6E3B10 0%,#C46C23 100%);
-  --card-bg:#FFF6E3; --text-main:#C46C23; --text-sub:#E89036;
-  --font-title:'Quicksand',sans-serif; --font-sub:'Comfortaa',sans-serif; --font-text:'Open Sans',sans-serif;
-  --lava-c1:#C46C23; --lava-c2:#884610;
+  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;
 }
-/* Фиолетовая тема */
 body.theme-purple{
-  --bg-gradient:linear-gradient(135deg,#380D9C 0%,#8A53E9 100%);
-  --card-bg:#F0E8FF; --text-main:#693AD4; --text-sub:#8A53E9;
-  --font-title:'Space Grotesk',sans-serif; --font-sub:'Poppins',sans-serif;
-  --font-text:'Segoe UI',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
-  --lava-c1:#8A53E9; --lava-c2:#693AD4;
+  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;
 }
 
-/* ================= СЛОИ ================= */
-#lava{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block}
+#lava{position:fixed;inset:0;z-index:0;width:100%;height:100%}
 
-.stage{position:relative;height:100vh;width:100vw;z-index:2;display:grid;place-items:center;padding:40px}
-
-/* ================= LIQUID SWITCHER ================= */
+/* Переключатель */
 .theme-switcher{
   position:fixed;top:24px;right:24px;z-index:3;display:flex;gap:8px;
-  padding:8px;border-radius:16px;border:1px solid rgba(255,255,255,.18);
-  background:rgba(255,255,255,.06);backdrop-filter:blur(14px);
-  box-shadow:0 10px 40px rgba(0,0,0,.25);isolation:isolate; /* для индикатора */
+  padding:8px;border-radius:16px;
+  background:rgba(255,255,255,0.06);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.2);
+  box-shadow:0 10px 40px rgba(0,0,0,0.25);
+  font-family:'Montserrat',sans-serif;isolation:isolate;
 }
-.theme-switcher .switch-btn{
-  position:relative;z-index:1;
-  font:600 12px/1 var(--font-sub);letter-spacing:.3px;color:#fff;
-  background:transparent;border:0;padding:12px 16px;border-radius:12px;cursor:pointer;
-  transition:transform .12s ease; white-space:nowrap;
+.switch-btn{
+  position:relative;z-index:1;padding:12px 16px;
+  border:0;background:transparent;color:#fff;font-weight:600;
+  font-size:13px;letter-spacing:.3px;cursor:pointer;
+  transition:transform .2s ease,color .3s ease;
 }
-.theme-switcher .switch-btn:hover{transform:translateY(-1px)}
-.theme-switcher .switch-btn.is-active{color:#fff}
+.switch-btn:hover{transform:translateY(-1px);color:#fff}
+.switch-btn.is-active{color:#fff}
+.liquid-indicator{
+  position:absolute;z-index:0;top:6px;left:6px;height:calc(100% - 12px);
+  width:0;border-radius:12px;
+  background:rgba(255,255,255,0.15);
+  box-shadow:0 0 20px rgba(255,255,255,0.25);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),width .45s cubic-bezier(.22,1,.36,1);
+}
 
-/* «жидкий» индикатор под активной кнопкой */
-.theme-switcher .liquid-indicator{
-  position:absolute;z-index:0;top:6px;left:6px;height:calc(100% - 12px);width:1px;border-radius:12px;
-  background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.18));
-  box-shadow:0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.35);
-  backdrop-filter:blur(18px);
-  transition:transform .45s cubic-bezier(.22,1,.36,1), width .45s cubic-bezier(.22,1,.36,1);
-}
-
-/* ================= АКЦЕНТ-КАРТА + постоянный 3D ================= */
+/* Центральный блок — стекло */
+.stage{position:relative;z-index:2;display:grid;place-items:center;height:100vh;width:100vw}
 .accent-card{
-  position:relative;min-width:440px;min-height:380px;border-radius:var(--card-radius);
-  background:var(--card-bg);border:var(--card-border);box-shadow:var(--card-shadow);
-  overflow:hidden;transform-style:preserve-3d;will-change:transform;
-  transition:box-shadow 400ms ease, background 400ms ease, border-color 400ms ease;
+  position:relative;min-width:440px;min-height:380px;
+  border-radius:32px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(25px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.25);
+  box-shadow:0 0 80px rgba(0,0,0,0.4),0 0 20px rgba(0,0,0,0.3);
+  transform-style:preserve-3d;will-change:transform;
+  overflow:hidden;
+  transition:transform .3s ease;
 }
 /* shine */
 .accent-card::before{
   content:"";position:absolute;inset:-20%;
   background:radial-gradient(circle at var(--shine-x,50%) var(--shine-y,50%),
-  rgba(255,255,255,.55) 0%, rgba(255,255,255,.35) 18%, rgba(255,255,255,.12) 36%, rgba(255,255,255,0) 60%);
-  pointer-events:none;mix-blend-mode:screen;transition:background-position 80ms linear;
+    rgba(255,255,255,0.45) 0%,rgba(255,255,255,0.25) 25%,rgba(255,255,255,0) 55%);
+  pointer-events:none;mix-blend-mode:screen;
 }
-
-.card-inner{position:relative;z-index:1;padding:42px 48px}
-.title{
-  margin:0 0 10px;font-family:var(--font-title);font-weight:700;font-size:42px;line-height:1.12;letter-spacing:.2px;
-  /* светлее заголовок: color-mix, с фолбэком */
-  color:color-mix(in srgb, var(--text-main) 80%, white);
-}
-.subtitle{
-  margin:0 0 18px;font-family:var(--font-sub);font-weight:600;font-size:20px;line-height:1.4;
-  color:color-mix(in srgb, var(--text-sub) 78%, white);
-}
-.text{
-  margin:0;max-width:56ch;font-family:var(--font-text);font-size:16px;line-height:1.7;
-  /* немного светлее обычного текста */
-  color:rgba(0,0,0,.84);
-}
-
-.accent-card:hover{box-shadow:0 40px 160px rgba(0,0,0,.42),0 16px 48px rgba(0,0,0,.34)}
-
-body, .title, .subtitle, .text, .switch-btn{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-
-img,a{-webkit-user-drag:none;user-drag:none;pointer-events:auto}
+.card-inner{position:relative;z-index:1;padding:42px 48px;text-align:left;color:#fff;}
+.title{margin:0 0 10px;font-size:42px;font-weight:700;color:#fff}
+.subtitle{margin:0 0 18px;font-size:20px;font-weight:600;color:#fff;opacity:.9}
+.text{margin:0;font-size:16px;line-height:1.6;color:#fff;opacity:.8}
