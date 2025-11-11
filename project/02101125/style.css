@@ -60,12 +60,11 @@ body.theme-purple{
     rgba(255,255,255,0.45) 0%,rgba(255,255,255,0.25) 25%,rgba(255,255,255,0) 55%);
   pointer-events:none;mix-blend-mode:screen;
 }
-.card-inner{position:relative;z-index:1;padding:42px 48px;text-align:left;color:#fff;}
-.title{ font-family: var(--font-title); }
-.subtitle{ font-family: var(--font-sub); }
-.text{ font-family: var(--font-text); }
-
-
+.card-inner{display:flex;flex-direction:column;gap:16px;color:#fff;}
+.title-row{display:flex;justify-content:space-between;align-items:baseline;}
+.title{ font-family: var(--font-title); font-size:36px;font-weight:700;}
+.subtitle{ font-family: var(--font-sub); font-size:18px;font-weight:500;color:#ccc;}
+.text{ font-family: var(--font-text); margin-top:8px;line-height:1.6;color:#ddd;}
 
 /* Бордовый */
 body.theme-burgundy{
