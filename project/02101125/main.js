@@ -12,6 +12,13 @@
 const body = document.body;
 const buttons = document.querySelectorAll('.switch-btn');
 
+const THEME = {
+  lava: {
+    c1: getComputedStyle(document.body).getPropertyValue('--lava-c1').trim() || '#8C2F39',
+    c2: getComputedStyle(document.body).getPropertyValue('--lava-c2').trim() || '#591818',
+  }
+};
+
 function setActiveTheme(name) {
   body.classList.remove('theme-burgundy', 'theme-orange', 'theme-purple');
   body.classList.add(`theme-${name}`);
@@ -77,13 +84,6 @@ window.addEventListener('resize', () => {
     b.y = Math.random() * H;
   });
 });
-
-const THEME = {
-  lava: {
-    c1: getComputedStyle(document.body).getPropertyValue('--lava-c1').trim() || '#8C2F39',
-    c2: getComputedStyle(document.body).getPropertyValue('--lava-c2').trim() || '#591818',
-  }
-};
 
 function updateLavaColors() {
   THEME.lava.c1 = getComputedStyle(document.body).getPropertyValue('--lava-c1').trim();
