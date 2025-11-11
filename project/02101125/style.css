@@ -72,6 +72,8 @@ body.theme-burgundy{
   --font-title:'Playfair Display', serif;
   --font-sub:'Montserrat', sans-serif;
   --font-text:'Roboto', sans-serif;
+  --glow-center: #8C2F39;
+  --glow-edge: #380303;
 }
 /* Оранжевый */
 body.theme-orange{
