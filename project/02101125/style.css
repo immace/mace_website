@@ -43,7 +43,7 @@ body.theme-purple{
 /* Центральный блок — стекло */
 .stage{position:relative;z-index:2;display:grid;place-items:center;height:100vh;width:100vw}
 .accent-card{
-  position:relative;min-width:440px;min-height:380px;
+  position:relative;min-width:440px;min-height:380px;max-width:720px;
   border-radius:32px;
   background:rgba(255,255,255,0.08);
   backdrop-filter:blur(25px) saturate(180%);
