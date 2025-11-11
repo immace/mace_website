@@ -1,32 +1,29 @@
 <!doctype html>
-<html lang="ru" class="no-js">
+<html lang="ru">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Интерактивная демо-страница — 3 цветовые концепции</title>
-  <meta name="description" content="Демо 3-х цветовых тем: бордовая, оранжевая, фиолетовая. 3D-акцентный квадрат, лавовая лампа, WOW-анимации." />
+  <title>Демо — стекло и лава</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600&family=Montserrat:wght@400;600&family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&family=Playfair+Display:wght@700&family=Quicksand:wght@500;700&family=Roboto:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css?v=4" />
+  <!-- Шрифты -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body class="theme-burgundy">
 
-  <!-- Фон: лава -->
   <canvas id="lava"></canvas>
 
-  <!-- Переключатель тем (liquid glass) -->
-  <div class="theme-switcher" aria-label="Переключение темы">
+  <!-- Переключатель -->
+  <div class="theme-switcher">
     <div class="liquid-indicator"></div>
     <button class="switch-btn is-active" data-theme="burgundy">Бордовый</button>
     <button class="switch-btn" data-theme="orange">Оранжевый</button>
     <button class="switch-btn" data-theme="purple">Фиолетовый</button>
   </div>
 
-  <!-- Центральный акцентный квадрат -->
+  <!-- Стеклянный блок -->
   <main class="stage">
-    <section class="accent-card" id="accentCard" aria-label="Акцентный блок">
+    <section class="accent-card" id="accentCard">
       <div class="card-inner">
         <h1 class="title">Просто заголовок</h1>
         <h2 class="subtitle">Подзаголовок</h2>
@@ -37,6 +34,6 @@
     </section>
   </main>
 
-  <script src="main.js?v=4"></script>
+  <script src="main.js?v=5"></script>
 </body>
 </html>
