@@ -58,7 +58,7 @@ body.theme-purple{
   content:"";position:absolute;inset:-20%;
   background:radial-gradient(circle at var(--shine-x,50%) var(--shine-y,50%),
     rgba(255,255,255,0.45) 0%,rgba(255,255,255,0.25) 25%,rgba(255,255,255,0) 55%);
-  pointer-events:none;mix-blend-mode:screen;
+  pointer-events:none;mix-blend-mode:screen;transition:background 0.4s ease;
 }
 .card-inner{display:flex;flex-direction:column;gap:16px;padding:42px 48px;color:#fff;}
 .title-row{display:flex;justify-content:space-between;align-items:baseline;}
@@ -72,8 +72,8 @@ body.theme-burgundy{
   --font-title:'Playfair Display', serif;
   --font-sub:'Montserrat', sans-serif;
   --font-text:'Roboto', sans-serif;
-  --glow-center: #8C2F39;
-  --glow-edge: #380303;
+  --shine-center: #8C2F39;
+  --shine-edge: #380303;
 }
 /* Оранжевый */
 body.theme-orange{
