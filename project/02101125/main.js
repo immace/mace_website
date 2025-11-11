@@ -1,95 +1,139 @@
-// Темы со всеми нужными стилями и текстами
+// Темы: цвета, стили, фоновые параметры
 const themes = {
   burgundy: {
-    bg: 'linear-gradient(135deg, #380303 0%, #8C2F39 100%)',
-    sphere: {color1: '#8C2F39', color2: '#591818'},
-    title: 'Элитный стиль',
-    subtitle: 'Строгий профессионализм',
-    text: 'Сайт, который транслирует статус и надёжность. Строгая геометрия, прямолинейные решения.',
-    h1font: "'Playfair Display', serif",
-    h2font: "'Montserrat', sans-serif",
-    pfont: "'Roboto', sans-serif"
+    class: "burgundy",
+    accent: "#FFEBDD",
+    shadow: "0 18px 58px 0 rgba(140,47,57,0.22)",
+    title: "Просто заголовок",
+    subtitle: "Подзаголовок",
+    text: "Пример текста пример текста пример текста…",
+    lava: [
+      { color: "#8C2F39", colorTo: "#591818" }
+    ],
+    fonts: {
+      h1: "'Playfair Display', serif",
+      h2: "'Montserrat', sans-serif",
+      p: "'Roboto', sans-serif"
+    }
   },
   orange: {
-    bg: 'linear-gradient(135deg, #6E3B10 0%, #C46C23 100%)',
-    sphere: {color1: '#C46C23', color2: '#884610'},
-    title: 'Дружелюбный стиль',
-    subtitle: 'Тепло и доступность',
-    text: 'Сайт, вызывающий доверие, плавные формы, тепло и забота.',
-    h1font: "'Quicksand', sans-serif",
-    h2font: "'Comfortaa', sans-serif",
-    pfont: "'Open Sans', sans-serif"
+    class: "orange",
+    accent: "#FFF6E3",
+    shadow: "0 18px 58px 0 rgba(196,108,35,0.16)",
+    title: "Просто заголовок",
+    subtitle: "Подзаголовок",
+    text: "Пример текста пример текста пример текста…",
+    lava: [
+      { color: "#C46C23", colorTo: "#884610" }
+    ],
+    fonts: {
+      h1: "'Quicksand', sans-serif",
+      h2: "'Comfortaa', sans-serif",
+      p: "'Open Sans', sans-serif"
+    }
   },
   purple: {
-    bg: 'linear-gradient(135deg, #380D9C 0%, #8A53E9 100%)',
-    sphere: {color1: '#8A53E9', color2: '#693AD4'},
-    title: 'Креативный стиль',
-    subtitle: 'Современность и энергия',
-    text: 'Сайт, который захватывает, удивляет и мотивирует к действию. Футуристические формы, glow-эффекты.',
-    h1font: "'Space Grotesk', sans-serif",
-    h2font: "'Poppins', sans-serif",
-    pfont: "'Segoe UI', sans-serif"
+    class: "purple",
+    accent: "#F0E8FF",
+    shadow: "0 18px 58px 0 rgba(138,83,233,0.13)",
+    title: "Просто заголовок",
+    subtitle: "Подзаголовок",
+    text: "Пример текста пример текста пример текста…",
+    lava: [
+      { color: "#8A53E9", colorTo: "#693AD4" }
+    ],
+    fonts: {
+      h1: "'Space Grotesk', sans-serif",
+      h2: "'Poppins', sans-serif",
+      p: "'Segoe UI', sans-serif"
+    }
   }
 };
 
 // Переключение темы
-function setTheme(theme='burgundy') {
-  document.body.style.background = themes[theme].bg;
-  document.getElementById('title').textContent = themes[theme].title;
-  document.getElementById('subtitle').textContent = themes[theme].subtitle;
-  document.getElementById('text').textContent = themes[theme].text;
-  document.getElementById('title').style.fontFamily = themes[theme].h1font;
-  document.getElementById('subtitle').style.fontFamily = themes[theme].h2font;
-  document.getElementById('text').style.fontFamily = themes[theme].pfont;
-  drawSphere(themes[theme].sphere.color1, themes[theme].sphere.color2);
+function setTheme(themeKey='burgundy') {
+  document.body.className = themes[themeKey].class;
+  document.getElementById('title').textContent = themes[themeKey].title;
+  document.getElementById('subtitle').textContent = themes[themeKey].subtitle;
+  document.getElementById('text').textContent = themes[themeKey].text;
+  document.getElementById('title').style.fontFamily = themes[themeKey].fonts.h1;
+  document.getElementById('subtitle').style.fontFamily = themes[themeKey].fonts.h2;
+  document.getElementById('text').style.fontFamily = themes[themeKey].fonts.p;
+  drawLavaLamp(themes[themeKey].lava);
   document.querySelectorAll('#theme-switcher button').forEach(btn=>btn.classList.remove('active'));
-  document.querySelector(`#theme-switcher button[data-theme="${theme}"]`).classList.add('active');
+  document.querySelector(`#theme-switcher button[data-theme="${themeKey}"]`).classList.add('active');
 }
-
-// Обработка кликов по кнопкам тем
 document.querySelectorAll('#theme-switcher button').forEach(btn=>{
   btn.onclick = ()=>setTheme(btn.dataset.theme);
 });
-setTheme(); // сразу применить тему 1
+setTheme('burgundy');
 
-// 3D-Шар: вращение блика по движению мышки
-let lightX = 180, lightY = 160;
-function drawSphere(c1, c2) {
-  const canvas = document.getElementById('sphere');
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+// --- 3D shine на квадрате
+const square = document.getElementById('accent-square');
+square.addEventListener('mousemove', function(e){
+  const rect = square.getBoundingClientRect();
+  let x = e.clientX - rect.left - 80;
+  let y = e.clientY - rect.top - 40;
+  square.style.setProperty('--shine-x', `${Math.max(0, x)}px`);
+  square.style.setProperty('--shine-y', `${Math.max(0, y)}px`);
+});
+square.addEventListener('mouseleave', function(){
+  square.style.setProperty('--shine-x', `60px`);
+  square.style.setProperty('--shine-y', `38px`);
+});
 
-  // Основной градиент
-  const grad = ctx.createRadialGradient(180,250,90,180,250,186);
-  grad.addColorStop(0, c1); grad.addColorStop(1, c2);
-  ctx.beginPath(); ctx.arc(180,250,125,0,2*Math.PI);
-  ctx.fillStyle = grad; ctx.fill();
+// --- Лавовая лампа на canvas (colorful blobs)
+const canvas = document.getElementById('lava');
+const ctx = canvas.getContext('2d');
+let w = window.innerWidth, h = window.innerHeight;
+canvas.width = w; canvas.height = h;
+window.addEventListener('resize', ()=>{
+  w = window.innerWidth; h = window.innerHeight;
+  canvas.width = w; canvas.height = h;
+});
 
-  // Shine — динамическая "блик"-область
-  const shineGrad = ctx.createRadialGradient(lightX,lightY,8,lightX,lightY,40);
-  shineGrad.addColorStop(0, 'rgba(255,255,255,0.55)');
-  shineGrad.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.beginPath(); ctx.arc(180,250,120,0,2*Math.PI);
-  ctx.fillStyle = shineGrad; ctx.fill();
+let blobs = [];
+function drawLavaLamp(colors) {
+  blobs = [];
+  // Генерируем 4 больших шара разных цветов на экране с мягким blur и alpha
+  for(let i=0;i<4;i++){
+    const col = colors[0];
+    blobs.push({
+      x: Math.random()*w, y: Math.random()*h,
+      r: 220+Math.random()*150,
+      dx: 0.5 + Math.random()*0.7, dy: 0.5 + Math.random()*0.7,
+      a: 0.23+0.09*Math.random(),
+      color1: col.color,
+      color2: col.colorTo,
+      phase: Math.random()*6.28
+    });
+  }
 }
+function animateLava() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(const b of blobs) {
+    // Пульсация радиуса
+    let r = b.r + Math.sin(Date.now()/1100 + b.phase)*25;
+    let grad = ctx.createRadialGradient(b.x, b.y, r*0.4, b.x, b.y, r);
+    grad.addColorStop(0, b.color1);
+    grad.addColorStop(1, b.color2);
+    ctx.globalAlpha = b.a;
+    ctx.beginPath(); ctx.arc(b.x, b.y, r, 0, 2*Math.PI);
+    ctx.fillStyle = grad; ctx.fill();
+    // движение
+    b.x += b.dx*(Math.sin((Date.now()/600)+b.phase)*0.9+1.1);
+    b.y += b.dy*(Math.sin((Date.now()/700)-b.phase)*0.7+1.3);
+    // отскок от краёв
+    if(b.x-r<0||b.x+r>w) b.dx*=-1;
+    if(b.y-r<0||b.y+r>h) b.dy*=-1;
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animateLava);
+}
+drawLavaLamp(themes['burgundy'].lava);
+animateLava();
 
-document.getElementById('sphere').addEventListener('mousemove', function(e){
-  // Корректная координата блика
-  const rect = this.getBoundingClientRect();
-  lightX = e.clientX - rect.left;
-  lightY = e.clientY - rect.top;
-  // Красим
-  const theme = document.querySelector('#theme-switcher .active').dataset.theme;
-  drawSphere(themes[theme].sphere.color1, themes[theme].sphere.color2);
-});
-document.getElementById('sphere').addEventListener('mouseleave', function(){
-  // Вернуть на середину
-  lightX=180; lightY=160;
-  const theme = document.querySelector('#theme-switcher .active').dataset.theme;
-  drawSphere(themes[theme].sphere.color1, themes[theme].sphere.color2);
-});
-
-// --- Защита от копирования ---
+// --- Защита (скриншоты, копирование)
 document.addEventListener('selectstart', e => e.preventDefault());
 document.addEventListener('contextmenu', e => e.preventDefault());
 window.addEventListener('keydown', function(e) {
