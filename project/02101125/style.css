@@ -184,3 +184,48 @@ body.theme-purple{
   .product-card{grid-template-columns:1fr 430px}
   .pc-media img{height:380px}
 }
+
+/* ===== Lightbox fullscreen ===== */
+.lightbox{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(10px);
+  z-index:999;
+  display:none;justify-content:center;align-items:center;
+  cursor:zoom-out;
+  transition:opacity .3s ease;
+}
+.lightbox.active{display:flex;animation:fadeIn .25s ease forwards}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.lightbox-inner{
+  position:relative;max-width:88vw;max-height:88vh;
+  border-radius:18px;overflow:hidden;
+  background:rgba(255,255,255,.05);
+  box-shadow:0 0 60px rgba(0,0,0,.5);
+}
+.lightbox img{
+  display:block;width:100%;height:auto;
+  max-height:88vh;object-fit:contain;
+  user-select:none;pointer-events:none;
+}
+
+/* стрелки и крест */
+.lb-prev,.lb-next,.lb-close{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(8px);
+  border:none;color:#fff;font-size:34px;
+  line-height:1;padding:10px 16px;border-radius:50%;
+  cursor:pointer;transition:background .2s ease,box-shadow .2s ease;
+}
+.lb-prev:hover,.lb-next:hover,.lb-close:hover{
+  background:color-mix(in srgb,var(--accent) 35%, rgba(255,255,255,.15));
+  box-shadow:0 0 15px color-mix(in srgb,var(--accent) 45%,transparent);
+}
+.lb-prev{left:20px}
+.lb-next{right:20px}
+.lb-close{
+  top:24px;right:24px;transform:none;
+  font-size:26px;cursor:pointer;
+}
