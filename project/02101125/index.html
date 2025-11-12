@@ -42,11 +42,37 @@
   <main class="stage">
     <section class="accent-card" id="accentCard">
       <div class="card-inner">
-        <div class="title-row">
-          <h1 class="title">РОДНЫЕ КРАЯ</h1>
-          <h2 class="subtitle">Строительная компания</h2>
-        </div>
-        <p class="text">Компания предлагает фиксированную цену и сроки, гарантирует качество работ (гарантия 5 лет), использует качественные материалы. В каталоге представлены проекты домов разной площади, этажности и количества комнат</p>
+        <div class="product-card">
+  <!-- ЛЕВАЯ КОЛОНКА: изображение + мини-переключатели -->
+  <div class="pc-left">
+    <figure class="pc-media">
+      <img id="pcMain" src="assets/img/house-demo/01.jpg" alt="Проект дома — вид 1" loading="eager" />
+    </figure>
+
+    <div class="pc-thumbs" aria-label="Переключатели изображений">
+      <button class="pc-thumb is-active" data-src="assets/img/house-demo/01.jpg" aria-label="Фото 1">
+        <img src="assets/img/house-demo/01.jpg" alt="" />
+      </button>
+      <button class="pc-thumb" data-src="assets/img/house-demo/02.jpg" aria-label="Фото 2">
+        <img src="assets/img/house-demo/02.jpg" alt="" />
+      </button>
+    </div>
+  </div>
+
+  <!-- ПРАВАЯ КОЛОНКА: характеристики + CTA -->
+  <div class="pc-right">
+    <h2 class="pc-subtitle">Характеристики</h2>
+
+    <ul class="pc-specs">
+      <li><span>Площадь</span><strong>154&nbsp;м²</strong></li>
+      <li><span>Этажей</span><strong>1</strong></li>
+      <li><span>Количество комнат</span><strong>3</strong></li>
+      <li><span>Количество санузлов</span><strong>2</strong></li>
+    </ul>
+
+    <button class="pc-cta" type="button">Получить смету</button>
+  </div>
+</div>
       </div>
     </section>
   </main>
