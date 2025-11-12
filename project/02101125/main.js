@@ -1,117 +1,151 @@
-const body=document.body;
-const buttons=document.querySelectorAll('.switch-btn');
-const indicator=document.querySelector('.liquid-indicator');
+/* ================== GLOBAL / THEMES ================== */
+const body = document.body;
 
-/* цвет лавы из CSS */
-const THEME={lava:{c1:'#8C2F39',c2:'#591818'}};
+/* lava colors from CSS */
+const THEME = { lava: { c1: '#8C2F39', c2: '#591818' } };
 function updateLavaColors(){
-  const s=getComputedStyle(body);
-  THEME.lava.c1=s.getPropertyValue('--lava1').trim();
-  THEME.lava.c2=s.getPropertyValue('--lava2').trim();
+  const s = getComputedStyle(body);
+  THEME.lava.c1 = s.getPropertyValue('--lava1').trim() || THEME.lava.c1;
+  THEME.lava.c2 = s.getPropertyValue('--lava2').trim() || THEME.lava.c2;
 }
 
-/* смена темы */
+/* ================== THEME SWITCHER ================== */
+const switcher  = document.querySelector('.theme-switcher');
+const indicator = switcher.querySelector('.liquid-indicator');
+const buttons   = switcher.querySelectorAll('.switch-btn');
 
-function moveIndicator(btn){
-  const wrap=document.querySelector('.theme-switcher');
-  const rWrap=wrap.getBoundingClientRect();
-  const rBtn=btn.getBoundingClientRect();
-  const x=rBtn.left-rWrap.left+6;
-  const w=rBtn.width;
-  indicator.style.width=`${w}px`;
-  indicator.style.transform=`translateX(${x}px)`;
+function moveIndicatorTo(btn){
+  const wrapRect  = switcher.getBoundingClientRect();
+  const label     = btn.querySelector('.label') || btn;
+  const labelRect = label.getBoundingClientRect();
+
+  const padX = 10, padY = 6;
+  const width  = Math.ceil(labelRect.width)  + padX * 2;
+  const height = Math.ceil(labelRect.height) + padY * 2;
+  const x = Math.floor(labelRect.left - wrapRect.left) - padX;
+  const y = Math.floor(labelRect.top  - wrapRect.top)  - padY;
+
+  indicator.style.width  = `${width}px`;
+  indicator.style.height = `${height}px`;
+  indicator.style.transform = `translate(${x}px, ${y}px)`;
 }
+
 function setTheme(name){
-  body.className=`theme-${name}`;
-  buttons.forEach(b=>b.classList.toggle('is-active',b.dataset.theme===name));
+  body.classList.remove('theme-burgundy','theme-orange','theme-purple');
+  body.classList.add(`theme-${name}`);
+  buttons.forEach(b => b.classList.toggle('is-active', b.dataset.theme === name));
   updateLavaColors();
-  const active=[...buttons].find(b=>b.classList.contains('is-active'));
-  if(active)moveIndicator(active);
+  const active = switcher.querySelector('.switch-btn.is-active');
+  if (active) moveIndicatorTo(active);
 }
-buttons.forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.theme)));
-setTheme('burgundy');
-window.addEventListener('load',()=>moveIndicator(document.querySelector('.is-active')));
-window.addEventListener('resize',()=>moveIndicator(document.querySelector('.is-active')));
 
-
-/* доп. фиксация на смену шрифтов/языка — пересчитать размеры, когда шрифты доезжают */
-if ('fonts' in document){
-  document.fonts.addEventListener('loadingdone', () => {
-    const active = document.querySelector('.switch-btn.is-active');
+buttons.forEach(b => b.addEventListener('click', () => setTheme(b.dataset.theme)));
+setTheme('burgundy'); // first render
+window.addEventListener('load',   () => moveIndicatorTo(switcher.querySelector('.switch-btn.is-active')));
+window.addEventListener('resize', () => moveIndicatorTo(switcher.querySelector('.switch-btn.is-active')));
+if ('fonts' in document && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    const active = switcher.querySelector('.switch-btn.is-active');
     if (active) moveIndicatorTo(active);
   });
 }
 
-/* постоянный 3D */
-const card=document.getElementById('accentCard');
-(function(){
-  const maxTilt=2;
-  const oscAmp = 0.02;
-  const smooth = 0.06;
-  
-  let rect=card.getBoundingClientRect();
-  let targetX=0.5,targetY=0.5;
+/* ================== PERSISTENT TILT (very subtle) ================== */
+const card = document.getElementById('accentCard');
+(function persistentTilt(){
+  if(!card) return;
+  const maxTilt = 2;      // едва заметно
+  const smooth  = 0.06;
+  const oscAmp  = 0.02;
+  let rect = card.getBoundingClientRect();
+  let mouseX = 0.5, mouseY = 0.5;
+  let targetX = 0.5, targetY = 0.5;
+
+  card.addEventListener('mousemove', (e)=>{
+    mouseX = (e.clientX - rect.left) / rect.width;
+    mouseY = (e.clientY - rect.top)  / rect.height;
+  });
+  card.addEventListener('mouseleave', ()=>{ mouseX = 0.5; mouseY = 0.5; });
+  window.addEventListener('resize', ()=>{ rect = card.getBoundingClientRect(); });
+
   function raf(now){
-    const t=now*0.001;
-    const ox=0.5+Math.sin(t*1.3)*0.12;
-    const oy=0.5+Math.cos(t*1.1)*0.12;
-    targetX+=(ox-targetX)*0.1;
-    targetY+=(oy-targetY)*0.1;
-    card.style.setProperty('--shine-x',`${targetX*100}%`);
-    card.style.setProperty('--shine-y',`${targetY*100}%`);
-    const rx=(targetY-0.5)*-2*maxTilt;
-    const ry=(targetX-0.5)*2*maxTilt;
-    card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    const t = now * 0.0012;
+    const ox = 0.5 + Math.sin(t*1.3) * oscAmp;
+    const oy = 0.5 + Math.cos(t*1.1) * oscAmp;
+    const mixX = ox*0.7 + mouseX*0.3;
+    const mixY = oy*0.7 + mouseY*0.3;
+
+    targetX += (mixX - targetX) * smooth;
+    targetY += (mixY - targetY) * smooth;
+
+    card.style.setProperty('--shine-x', `${targetX*100}%`);
+    card.style.setProperty('--shine-y', `${targetY*100}%`);
+
+    const rx = (targetY - 0.5) * -2 * maxTilt;
+    const ry = (targetX - 0.5) *  2 * maxTilt;
+    card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
     requestAnimationFrame(raf);
   }
   requestAnimationFrame(raf);
 })();
 
-/* Лава */
-const canvas=document.getElementById('lava');
-const ctx=canvas.getContext('2d',{alpha:true});
-let W=canvas.width=innerWidth,H=canvas.height=innerHeight;
-addEventListener('resize',()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;blobs.forEach(b=>{b.x=Math.random()*W;b.y=Math.random()*H;});});
+/* ================== LAVA (canvas) ================== */
+const canvas = document.getElementById('lava');
+const ctx = canvas.getContext('2d', { alpha:true });
+let W = canvas.width  = innerWidth;
+let H = canvas.height = innerHeight;
 
-const SPEED=0.3,COUNT=6,BLUR=60,ALPHA=0.26;
+addEventListener('resize', ()=>{
+  W = canvas.width  = innerWidth;
+  H = canvas.height = innerHeight;
+  blobs.forEach(b => { b.x = Math.random()*W; b.y = Math.random()*H; });
+});
+
+const SPEED=0.3, COUNT=6, BLUR=60, ALPHA=0.26;
 class Blob{
-  constructor(){this.reset();}
-  reset(){this.x=Math.random()*W;this.y=Math.random()*H;
+  constructor(){ this.reset(); }
+  reset(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
     this.r=Math.max(W,H)*(.08+.1*Math.random());
-    const s=(.06+.1*Math.random())*SPEED;const a=Math.random()*Math.PI*2;
-    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;this.phase=Math.random()*Math.PI*2;}
-  step(dt){this.x+=this.vx*dt;this.y+=this.vy*dt;
-    if(this.x<-this.r*.3||this.x>W+this.r*.3)this.vx*=-1;
-    if(this.y<-this.r*.3||this.y>H+this.r*.3)this.vy*=-1;
-    this.phase+=.0025*dt;this.pr=this.r*(1+Math.sin(this.phase)*.08);}
+    const s=(.06+.1*Math.random())*SPEED; const a=Math.random()*Math.PI*2;
+    this.vx=Math.cos(a)*s; this.vy=Math.sin(a)*s; this.phase=Math.random()*Math.PI*2;
+  }
+  step(dt){
+    this.x+=this.vx*dt; this.y+=this.vy*dt;
+    if(this.x<-this.r*.3||this.x>W+this.r*.3) this.vx*=-1;
+    if(this.y<-this.r*.3||this.y>H+this.r*.3) this.vy*=-1;
+    this.phase+=.0025*dt; this.pr=this.r*(1+Math.sin(this.phase)*.08);
+  }
   draw(g){
     const grad=g.createRadialGradient(this.x,this.y,this.pr*.1,this.x,this.y,this.pr);
-    grad.addColorStop(0,hexToRgba(THEME.lava.c1,ALPHA+.1));
-    grad.addColorStop(1,hexToRgba(THEME.lava.c2,ALPHA-.05));
-    g.fillStyle=grad;g.beginPath();g.arc(this.x,this.y,this.pr,0,Math.PI*2);g.fill();
+    grad.addColorStop(0, hexToRgba(THEME.lava.c1, ALPHA+.10));
+    grad.addColorStop(1, hexToRgba(THEME.lava.c2, ALPHA-.05));
+    g.fillStyle=grad; g.beginPath(); g.arc(this.x,this.y,this.pr,0,Math.PI*2); g.fill();
   }
 }
-function hexToRgba(h,a=1){const n=parseInt(h.replace('#',''),16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;return`rgba(${r},${g},${b},${a})`;}
-const blobs=Array.from({length:COUNT},()=>new Blob());
-let prev=performance.now();
+function hexToRgba(h,a=1){const n=parseInt(h.replace('#',''),16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;return `rgba(${r},${g},${b},${a})`; }
+const blobs = Array.from({length:COUNT}, ()=> new Blob());
+let prev = performance.now();
 function anim(now=performance.now()){
-  const dt=Math.min(60,now-prev);prev=now;
-  ctx.clearRect(0,0,W,H);ctx.save();ctx.globalCompositeOperation='lighter';ctx.filter=`blur(${BLUR}px)`;
-  for(const b of blobs){b.step(dt);b.draw(ctx);}
-  ctx.restore();requestAnimationFrame(anim);
+  const dt = Math.min(60, now-prev); prev = now;
+  ctx.clearRect(0,0,W,H);
+  ctx.save(); ctx.globalCompositeOperation='lighter'; ctx.filter = `blur(${BLUR}px)`;
+  for(const b of blobs){ b.step(dt); b.draw(ctx); }
+  ctx.restore();
+  requestAnimationFrame(anim);
 }
 requestAnimationFrame(anim);
 
-/* === thumbs -> main image (product card) === */
+/* ================== THUMBS & PARALLAX ================== */
 (function(){
   const main = document.getElementById('pcMain');
-  if(!main) return; // блок может отсутствовать на других страницах
+  if(!main) return;
 
   const thumbs = document.querySelectorAll('.pc-thumb');
   thumbs.forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const src = btn.getAttribute('data-src');
-      if(!src || main.src.endsWith(src)) return;
+      if (!src || main.src.endsWith(src)) return;
       main.style.opacity = '0';
       setTimeout(()=>{
         main.src = src;
@@ -122,26 +156,19 @@ requestAnimationFrame(anim);
     });
   });
 
-  /* === Parallax для главного изображения внутри стеклянного блока === */
-(function(){
-  const card = document.getElementById('accentCard');
-  const img  = document.getElementById('pcMain');
-  if(!card || !img) return;
-
-  const MAX_TX = 14; // пиксели по X
-  const MAX_TY = 10; // пиксели по Y
+  // Parallax for main image while cursor is over the glass card
+  const img  = main;
+  const MAX_TX = 14, MAX_TY = 10;
   let rect = card.getBoundingClientRect();
 
   function onMove(e){
-    const x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5..0.5
+    const x = (e.clientX - rect.left) / rect.width  - 0.5;
     const y = (e.clientY - rect.top)  / rect.height - 0.5;
-    img.style.transform = translate3d(${x*MAX_TX}px, ${y*MAX_TY}px, 0) scale(1.04);
+    img.style.transform = `translate3d(${x*MAX_TX}px, ${y*MAX_TY}px, 0) scale(1.04)`;
   }
-  function onLeave(){
-    img.style.transform = 'translate3d(0,0,0) scale(1)';
-  }
-  window.addEventListener('resize', ()=> rect = card.getBoundingClientRect());
+  function onLeave(){ img.style.transform = 'translate3d(0,0,0) scale(1)'; }
+
+  window.addEventListener('resize', () => { rect = card.getBoundingClientRect(); });
   card.addEventListener('mousemove', onMove);
   card.addEventListener('mouseleave', onLeave);
-})();
 })();
