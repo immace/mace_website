@@ -160,3 +160,54 @@ requestAnimationFrame(anim);
   card.addEventListener('mousemove', onMove);
   card.addEventListener('mouseleave', onLeave);
 })();
+
+/* === Lightbox fullscreen === */
+(function(){
+  const lightbox = document.getElementById('lightbox');
+  const imgMain  = document.getElementById('pcMain');
+  const imgLb    = document.getElementById('lightboxImage');
+  const thumbs   = Array.from(document.querySelectorAll('.pc-thumb'));
+  const btnPrev  = document.querySelector('.lb-prev');
+  const btnNext  = document.querySelector('.lb-next');
+  const btnClose = document.querySelector('.lb-close');
+  let current = 0;
+
+  // открыть
+  function open(index=0){
+    current = index;
+    const src = thumbs[index]?.getAttribute('data-src') || imgMain.src;
+    imgLb.src = src;
+    lightbox.classList.add('active');
+  }
+
+  // закрыть
+  function close(){
+    lightbox.classList.remove('active');
+  }
+
+  // навигация
+  function next(){
+    current = (current + 1) % thumbs.length;
+    imgLb.src = thumbs[current].getAttribute('data-src');
+  }
+  function prev(){
+    current = (current - 1 + thumbs.length) % thumbs.length;
+    imgLb.src = thumbs[current].getAttribute('data-src');
+  }
+
+  // клики
+  imgMain.addEventListener('click',()=>open(current));
+  btnClose.addEventListener('click',close);
+  lightbox.addEventListener('click',e=>{
+    if(e.target===lightbox) close();
+  });
+  btnNext.addEventListener('click',e=>{e.stopPropagation();next();});
+  btnPrev.addEventListener('click',e=>{e.stopPropagation();prev();});
+
+  // esc
+  window.addEventListener('keydown',e=>{
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowRight') next();
+    if(e.key==='ArrowLeft') prev();
+  });
+})();
