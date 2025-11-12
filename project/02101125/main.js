@@ -4,124 +4,87 @@ const indicator=document.querySelector('.liquid-indicator');
 
 /* цвет лавы из CSS */
 const THEME={lava:{c1:'#8C2F39',c2:'#591818'}};
-
-function updateLavaColors(){  
-  const s=getComputedStyle(body);  
-  THEME.lava.c1=s.getPropertyValue('--lava1').trim();  
+function updateLavaColors(){
+  const s=getComputedStyle(body);
+  THEME.lava.c1=s.getPropertyValue('--lava1').trim();
   THEME.lava.c2=s.getPropertyValue('--lava2').trim();
 }
 
 /* смена темы */
-function moveIndicator(btn){  
-  const wrap=document.querySelector('.theme-switcher');  
-  const rWrap=wrap.getBoundingClientRect();  
-  const rBtn=btn.getBoundingClientRect();  
-  const x=rBtn.left-rWrap.left+6;  
-  const w=rBtn.width;  
-  indicator.style.width=`${w}px`;  
+function moveIndicator(btn){
+  const wrap=document.querySelector('.theme-switcher');
+  const rWrap=wrap.getBoundingClientRect();
+  const rBtn=btn.getBoundingClientRect();
+  const x=rBtn.left-rWrap.left+6;
+  const w=rBtn.width;
+  indicator.style.width=`${w}px`;
   indicator.style.transform=`translateX(${x}px)`;
 }
-
-function setTheme(name){  
-  body.className=`theme-${name}`;  
-  buttons.forEach(b=>b.classList.toggle('is-active',b.dataset.theme===name));  
-  updateLavaColors();  
-  const active=[...buttons].find(b=>b.classList.contains('is-active'));  
+function setTheme(name){
+  body.className=`theme-${name}`;
+  buttons.forEach(b=>b.classList.toggle('is-active',b.dataset.theme===name));
+  updateLavaColors();
+  const active=[...buttons].find(b=>b.classList.contains('is-active'));
   if(active)moveIndicator(active);
 }
-
 buttons.forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.theme)));
 setTheme('burgundy');
-
 window.addEventListener('load',()=>moveIndicator(document.querySelector('.is-active')));
 window.addEventListener('resize',()=>moveIndicator(document.querySelector('.is-active')));
 
 /* постоянный 3D */
 const card=document.getElementById('accentCard');
-(function(){  
-  const maxTilt=14;  
-  let rect=card.getBoundingClientRect();  
-  let targetX=0.5,targetY=0.5;  
-  function raf(now){    
-    const t=now*0.001;    
-    const ox=0.5+Math.sin(t*1.3)*0.12;    
-    const oy=0.5+Math.cos(t*1.1)*0.12;    
-    
-    targetX+=(ox-targetX)*0.1;    
-    targetY+=(oy-targetY)*0.1;    
-    
-    card.style.setProperty('--shine-x',`${targetX*100}%`);    
-    card.style.setProperty('--shine-y',`${targetY*100}%`);    
-    
-    const rx=(targetY-0.5)*-2*maxTilt;    
-    const ry=(targetX-0.5)*2*maxTilt;    
-    
+(function(){
+  const maxTilt=14;
+  let rect=card.getBoundingClientRect();
+  let targetX=0.5,targetY=0.5;
+  function raf(now){
+    const t=now*0.001;
+    const ox=0.5+Math.sin(t*1.3)*0.12;
+    const oy=0.5+Math.cos(t*1.1)*0.12;
+    targetX+=(ox-targetX)*0.1;
+    targetY+=(oy-targetY)*0.1;
+    card.style.setProperty('--shine-x',`${targetX*100}%`);
+    card.style.setProperty('--shine-y',`${targetY*100}%`);
+    const rx=(targetY-0.5)*-2*maxTilt;
+    const ry=(targetX-0.5)*2*maxTilt;
     card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-    const card = document.getElementById('accentCard');  
     requestAnimationFrame(raf);
   }
-  )();
+  requestAnimationFrame(raf);
+})();
 
 /* Лава */
 const canvas=document.getElementById('lava');
 const ctx=canvas.getContext('2d',{alpha:true});
 let W=canvas.width=innerWidth,H=canvas.height=innerHeight;
-addEventListener('resize',()=>{
-  W=canvas.width=innerWidth;
-  H=canvas.height=innerHeight;
-  blobs.forEach(b=>{
-    b.x=Math.random()*W;
-    b.y=Math.random()*H;
-  });
-});
+addEventListener('resize',()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;blobs.forEach(b=>{b.x=Math.random()*W;b.y=Math.random()*H;});});
 
-const SPEED=0.3,COUNT=6,BLUR=60,ALPHA=0.26;class Blob{  
-  constructor(){
-    this.reset
-  }  
-  reset(){
-    this.x=Math.random()*W;this.y=Math.random()*H;
+const SPEED=0.3,COUNT=6,BLUR=60,ALPHA=0.26;
+class Blob{
+  constructor(){this.reset();}
+  reset(){this.x=Math.random()*W;this.y=Math.random()*H;
     this.r=Math.max(W,H)*(.08+.1*Math.random());
-    const s=(.06+.1*Math.random())*SPEED;
-    const a=Math.random()*Math.PI*2;    
-    this.vx=Math.cos(a)*s;
-    this.vy=Math.sin(a)*s;
-    this.phase=Math.random()*Math.PI*2;
-         }  
-  step(dt){
-    this.x+=this.vx*dt;this.y+=this.vy*dt;    
-    if(this.x<-this.r*.3||this.x>W+this.r*.3)this.vx*=-1;    
-    if(this.y<-this.r*.3||this.y>H+this.r*.3)this.vy*=-1;    
-    this.phase+=.0025*dt;this.pr=this.r*(1+Math.sin(this.phase)*.08);
-  }  
-  draw(g){    
-    const grad=g.createRadialGradient(this.x,this.y,this.pr*.1,this.x,this.y,this.pr);    
-    grad.addColorStop(0,hexToRgba(THEME.lava.c1,ALPHA+.1));    
-    grad.addColorStop(1,hexToRgba(THEME.lava.c2,ALPHA-.05));    
-    g.fillStyle=grad;g.beginPath();g.arc(this.x,this.y,this.pr,0,Math.PI*2);g.fill();  
+    const s=(.06+.1*Math.random())*SPEED;const a=Math.random()*Math.PI*2;
+    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;this.phase=Math.random()*Math.PI*2;}
+  step(dt){this.x+=this.vx*dt;this.y+=this.vy*dt;
+    if(this.x<-this.r*.3||this.x>W+this.r*.3)this.vx*=-1;
+    if(this.y<-this.r*.3||this.y>H+this.r*.3)this.vy*=-1;
+    this.phase+=.0025*dt;this.pr=this.r*(1+Math.sin(this.phase)*.08);}
+  draw(g){
+    const grad=g.createRadialGradient(this.x,this.y,this.pr*.1,this.x,this.y,this.pr);
+    grad.addColorStop(0,hexToRgba(THEME.lava.c1,ALPHA+.1));
+    grad.addColorStop(1,hexToRgba(THEME.lava.c2,ALPHA-.05));
+    g.fillStyle=grad;g.beginPath();g.arc(this.x,this.y,this.pr,0,Math.PI*2);g.fill();
   }
 }
-
-function hexToRgba(h,a=1){
-  const n=parseInt(h.replace('#',''),16);
-  const r=(n>>16)&255,g=(n>>8)&255,b=n&255;
-  return`rgba(${r},${g},${b},${a})`;
-}
-
+function hexToRgba(h,a=1){const n=parseInt(h.replace('#',''),16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;return`rgba(${r},${g},${b},${a})`;}
 const blobs=Array.from({length:COUNT},()=>new Blob());
 let prev=performance.now();
-
-function anim(now=performance.now()){  
-  const dt=Math.min(60,now-prev);prev=now;  
-  ctx.clearRect(0,0,W,H);ctx.save();
-  ctx.globalCompositeOperation='lighter';
-  ctx.filter=`blur(${BLUR}px)`;  
-  for(const b of blobs){
-    b.step(dt);b.draw(ctx);
-  }  
-  
-  ctx.restore();
-  requestAnimationFrame(anim);
+function anim(now=performance.now()){
+  const dt=Math.min(60,now-prev);prev=now;
+  ctx.clearRect(0,0,W,H);ctx.save();ctx.globalCompositeOperation='lighter';ctx.filter=`blur(${BLUR}px)`;
+  for(const b of blobs){b.step(dt);b.draw(ctx);}
+  ctx.restore();requestAnimationFrame(anim);
 }
-
 requestAnimationFrame(anim);
