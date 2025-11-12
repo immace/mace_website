@@ -98,3 +98,24 @@ function anim(now=performance.now()){
   ctx.restore();requestAnimationFrame(anim);
 }
 requestAnimationFrame(anim);
+
+/* === thumbs -> main image (product card) === */
+(function(){
+  const main = document.getElementById('pcMain');
+  if(!main) return; // блок может отсутствовать на других страницах
+
+  const thumbs = document.querySelectorAll('.pc-thumb');
+  thumbs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const src = btn.getAttribute('data-src');
+      if(!src || main.src.endsWith(src)) return;
+      main.style.opacity = '0';
+      setTimeout(()=>{
+        main.src = src;
+        thumbs.forEach(t=>t.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        main.onload = () => { main.style.opacity = '1'; };
+      }, 120);
+    });
+  });
+})();
