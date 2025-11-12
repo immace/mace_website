@@ -115,3 +115,55 @@ body.theme-purple{
   --shine-edge: #000000;
   /* --shine-edge: #1a0943; */
 }
+
+/* accent-цвет уже есть: --accent задаётся темами */
+.site-header{
+  position: fixed; top: 24px; left: 24px; right: 220px; /* оставили место под свитчер справа */
+  z-index: 3;
+  border-radius: 26px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+}
+
+.header-inner{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px 10px 16px; gap: 14px;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+}
+
+/* левая часть — бренд */
+.brand{
+  display:inline-block; text-decoration:none; color:#fff;
+  font-weight: 800; letter-spacing: .4px; font-size: 16px;
+  padding: 8px 12px; border-radius: 12px;
+  transition: background .25s ease, color .25s ease, transform .12s ease;
+}
+.brand:hover{ background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+
+/* правая часть — контейнер со ссылками (как маленький свитчер) */
+.nav-pills{
+  display:flex; gap:8px; padding:6px; border-radius:14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.16);
+  backdrop-filter: blur(14px);
+}
+
+.nav-link{
+  display:inline-block; color:#fff; text-decoration:none;
+  font-weight: 700; font-size: 13px; letter-spacing:.3px;
+  padding: 10px 14px; border-radius: 10px;
+  transition: color .25s ease, background .25s ease, transform .12s ease;
+}
+.nav-link:hover{
+  color: var(--accent); background: rgba(255,255,255,0.10);
+  transform: translateY(-1px);
+}
+
+/* если нужно сделать одну ссылку "активной" визуально */
+.nav-link.is-active{
+  color: var(--accent);
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.25);
+}
