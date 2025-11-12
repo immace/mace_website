@@ -211,3 +211,32 @@ requestAnimationFrame(anim);
     if(e.key==='ArrowLeft') prev();
   });
 })();
+
+/* === LIGHT/DARK MODE TOGGLE === */
+(function(){
+  const body = document.body;
+  const toggleBtn = document.querySelector('.theme-switcher.dots .dot.toggle');
+
+  function setMode(mode){
+    body.setAttribute('data-mode', mode);
+    // если у тебя лава берёт цвета из CSS переменных — обновим
+    if (typeof updateLavaColors === 'function') updateLavaColors();
+    // доступность/тултип
+    if (toggleBtn){
+      toggleBtn.setAttribute('aria-pressed', mode === 'light' ? 'true' : 'false');
+      toggleBtn.title = mode === 'light' ? 'Тёмная тема' : 'Светлая тема';
+    }
+  }
+
+  function toggleMode(){
+    const current = body.getAttribute('data-mode') || 'dark';
+    setMode(current === 'dark' ? 'light' : 'dark');
+  }
+
+  if (toggleBtn){
+    toggleBtn.addEventListener('click', toggleMode);
+  }
+
+  // стартовое состояние, если вдруг атрибут не поставили в HTML
+  if (!body.hasAttribute('data-mode')) setMode('dark');
+})();
