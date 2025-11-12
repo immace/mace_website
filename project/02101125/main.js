@@ -11,26 +11,31 @@ function updateLavaColors(){
 }
 
 /* смена темы */
-function moveIndicator(btn){
-  const wrap=document.querySelector('.theme-switcher');
-  const rWrap=wrap.getBoundingClientRect();
-  const rBtn=btn.getBoundingClientRect();
-  const x=rBtn.left-rWrap.left+6;
-  const w=rBtn.width;
-  indicator.style.width=`${w}px`;
-  indicator.style.transform=`translateX(${x}px)`;
+function moveIndicatorTo(btn){
+  const wrap = document.querySelector('.theme-switcher');
+  const label = btn.querySelector('.label');
+  const wrapRect  = wrap.getBoundingClientRect();
+  const labelRect = label.getBoundingClientRect();
+
+  // ширина/позиция ровно по тексту
+  const pad = 10; // небольшой «воздух» вокруг слова
+  const width = labelRect.width + pad * 2;
+  const x = (labelRect.left - wrapRect.left) - pad;
+
+  indicator.style.width = ${width}px;
+  indicator.style.transform = translateX(${x}px);
 }
 function setTheme(name){
-  body.className=`theme-${name}`;
-  buttons.forEach(b=>b.classList.toggle('is-active',b.dataset.theme===name));
+  body.className = theme-${name};
+  buttons.forEach(b => b.classList.toggle('is-active', b.dataset.theme === name));
   updateLavaColors();
-  const active=[...buttons].find(b=>b.classList.contains('is-active'));
-  if(active)moveIndicator(active);
+  const active = [...buttons].find(b => b.classList.contains('is-active'));
+  if (active) moveIndicatorTo(active);
 }
-buttons.forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.theme)));
-setTheme('burgundy');
-window.addEventListener('load',()=>moveIndicator(document.querySelector('.is-active')));
-window.addEventListener('resize',()=>moveIndicator(document.querySelector('.is-active')));
+
+buttons.forEach(btn => btn.addEventListener('click', () => setTheme(btn.dataset.theme)));
+window.addEventListener('load',   () => moveIndicatorTo(document.querySelector('.switch-btn.is-active')));
+window.addEventListener('resize', () => moveIndicatorTo(document.querySelector('.switch-btn.is-active')));
 
 /* постоянный 3D */
 const card=document.getElementById('accentCard');
