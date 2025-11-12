@@ -20,9 +20,7 @@ body.theme-purple{
   position:fixed;top:24px;right:24px;z-index:3;display:flex;gap:8px;
   padding:8px;border-radius:16px;
   background:rgba(255,255,255,0.06);backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,0.2);
   box-shadow:0 10px 40px rgba(0,0,0,0.25);
-  font-family:'Montserrat',sans-serif;isolation:isolate;
 }
 .theme-switcher, .theme-switcher .switch-btn{ font-family:'Montserrat', Helvetica, Arial, sans-serif !important; }
 .switch-btn .label{ position:relative; z-index:2; display:inline-block; }
