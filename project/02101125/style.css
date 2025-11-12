@@ -196,3 +196,77 @@ body.theme-purple{
   top:50%;
   transform:translateY(-50%);     /* выравнивание по вертикали */
 }
+
+/* Карточка проекта: двухколоночная сетка */
+.product-card{
+  display:grid;
+  grid-template-columns: minmax(520px, 1fr) 460px;
+  gap:32px;
+  align-items:start;
+}
+
+/* Левая колонка: медиа */
+.pc-media{
+  margin:0; padding:0;
+  border-radius:16px; overflow:hidden;
+  border:1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 6px 30px rgba(0,0,0,0.35);
+}
+.pc-media img{
+  display:block; width:100%; height:420px; object-fit:cover;
+}
+
+/* Мини-переключатели под фото */
+.pc-thumbs{ display:flex; gap:10px; margin-top:12px; }
+.pc-thumb{
+  padding:0; border:1px solid rgba(255,255,255,0.18);
+  border-radius:10px; background:rgba(255,255,255,0.06);
+  overflow:hidden; cursor:pointer; transition:transform .15s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.pc-thumb:hover{ transform:translateY(-1px); }
+.pc-thumb.is-active{ border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent); }
+.pc-thumb img{ display:block; width:96px; height:72px; object-fit:cover; }
+
+/* Правая колонка */
+.pc-right{ display:flex; flex-direction:column; gap:18px; }
+
+/* Подзаголовок — шрифт темы */
+.pc-subtitle{
+  margin:0 0 6px;
+  font-family: var(--font-sub);
+  font-weight:600;
+  font-size:20px;
+  color:#fff;
+  opacity:.95;
+}
+
+/* Характеристики — шрифт текста темы */
+.pc-specs{
+  list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;
+  font-family: var(--font-text); color:#fff; opacity:.9;
+}
+.pc-specs li{
+  display:flex; align-items:baseline; justify-content:space-between; gap:16px;
+  padding:10px 12px; border-radius:10px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);
+}
+.pc-specs li span{ opacity:.85; }
+.pc-specs li strong{ font-weight:700; }
+
+/* CTA */
+.pc-cta{
+  margin-top:8px; align-self:flex-start;
+  padding:12px 18px; border-radius:12px; border:1px solid transparent;
+  background: var(--accent);
+  color:#fff; font-weight:800; letter-spacing:.2px; cursor:pointer;
+  transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
+}
+.pc-cta:hover{ transform:translateY(-1px); filter:saturate(1.05) brightness(1.05); box-shadow:0 10px 30px color-mix(in srgb, var(--accent) 35%, transparent); }
+
+/* Немного сжимаем внутри маленьких ширин, если понадобится */
+@media (max-width: 1400px){
+  .product-card{ grid-template-columns: 1fr 430px; }
+  .pc-media img{ height:380px; }
+}
