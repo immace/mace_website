@@ -4,7 +4,7 @@ body{transition:background 0.6s ease}
 
 /* Темы — только цвета лавы и фона */
 body.theme-burgundy{
-  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;--accent:#cb5461;
+  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;--accent:#dd7d87;
 }
 body.theme-orange{
   --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;--accent:#f5a562;
