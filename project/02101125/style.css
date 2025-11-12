@@ -168,3 +168,31 @@ body.theme-purple{
   background: rgba(255,255,255,0.14);
   border: 1px solid rgba(255,255,255,0.25);
 }
+
+/* общий контейнер верхней панели */
+.top-bar{
+  position:fixed;
+  top:24px; left:0; width:100%;
+  display:flex;
+  align-items:center;             /* одна координата Y */
+  justify-content:center;         /* центрируем header */
+  z-index:5;
+  pointer-events:none;            /* чтобы мышь проходила сквозь пустоту */
+}
+
+/* чтобы элементы внутри были кликабельны */
+.top-bar > *{ pointer-events:auto; }
+
+/* header по центру */
+.site-header{
+  position:relative;
+  flex-shrink:0;
+}
+
+/* переключатель прижат к правому краю */
+.theme-switcher{
+  position:absolute;
+  right:24px;                     /* отступ от края */
+  top:50%;
+  transform:translateY(-50%);     /* выравнивание по вертикали */
+}
