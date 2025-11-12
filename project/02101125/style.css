@@ -121,6 +121,7 @@ body.theme-purple{
   position: fixed; top: 24px; left: 24px; right: 220px; /* оставили место под свитчер справа */
   z-index: 3;
   border-radius: 26px;
+  width:920px;
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.18);
@@ -144,7 +145,7 @@ body.theme-purple{
 
 /* правая часть — контейнер со ссылками (как маленький свитчер) */
 .nav-pills{
-  display:flex; gap:8px; padding:6px; border-radius:14px;width:920px;
+  display:flex; gap:8px; padding:6px; border-radius:14px;
 }
 
 .nav-link{
