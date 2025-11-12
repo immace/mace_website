@@ -122,7 +122,7 @@ body.theme-purple{
   position: fixed; top: 24px; left: 24px; right: 220px; /* оставили место под свитчер справа */
   z-index: 3;
   border-radius: 26px;
-  width:920px;
+  width:1340px;
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.18);
