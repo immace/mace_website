@@ -317,3 +317,99 @@ body.theme-purple{
   .footer-inner{flex-direction:column;align-items:flex-start;padding:28px 32px;}
   .footer-right{text-align:left;}
 }
+
+/* ======= FOOTER (стеклянный, по центру, 1400px) ======= */
+.site-footer {
+  position: relative;
+  z-index: 3;
+  width: 1340px; /* ширина, как у header */
+  margin: 48px auto 32px; /* центрируем и даём отступ снизу */
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  color: #fff;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 24px 36px;
+}
+
+.footer-info {
+  max-width: 520px;
+}
+
+.footer-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.footer-desc {
+  margin: 0 0 12px;
+  font-size: 14px;
+  opacity: .9;
+}
+
+.footer-contacts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.footer-contacts a {
+  color: #fff;
+  text-decoration: none;
+  transition: color .25s ease, text-shadow .25s ease;
+}
+
+.footer-contacts a:hover {
+  color: var(--accent);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.footer-right {
+  text-align: right;
+  font-size: 14px;
+  opacity: .85;
+}
+
+.footer-credit a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: text-shadow .25s ease, color .25s ease;
+}
+
+.footer-credit a:hover {
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent) 65%, transparent);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .site-footer {
+    width: calc(100% - 48px);
+    margin: 32px auto;
+  }
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px 28px;
+  }
+  .footer-right {
+    text-align: left;
+  }
+}
