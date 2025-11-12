@@ -25,7 +25,7 @@ setTheme('burgundy');   // первичная тема
 const card = document.getElementById('accentCard');
 (function persistentTilt(){
   if (!card) return;
-  const maxTilt = 2;      // едва заметно
+  const maxTilt = 4;      // едва заметно
   const smooth  = 0.06;
   const oscAmp  = 0.02;
   let rect = card.getBoundingClientRect();
