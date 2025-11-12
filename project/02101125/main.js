@@ -172,3 +172,16 @@ requestAnimationFrame(anim);
   card.addEventListener('mousemove', onMove);
   card.addEventListener('mouseleave', onLeave);
 })();
+
+/* === macOS dots theme switcher === */
+const dots = document.querySelectorAll('.theme-switcher.dots .dot');
+
+function setTheme(name){
+  body.classList.remove('theme-burgundy','theme-orange','theme-purple');
+  body.classList.add(`theme-${name}`);
+  dots.forEach(d=>d.classList.toggle('is-active', d.dataset.theme===name));
+  updateLavaColors();
+}
+
+dots.forEach(dot => dot.addEventListener('click', ()=> setTheme(dot.dataset.theme)));
+setTheme('burgundy');
