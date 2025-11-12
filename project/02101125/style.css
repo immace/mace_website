@@ -4,13 +4,13 @@ body{transition:background 0.6s ease}
 
 /* Темы — только цвета лавы и фона */
 body.theme-burgundy{
-  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;--accent:#dd7d87;
+  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;--accent:#dd7d87; --accent-hue: 2deg;
 }
 body.theme-orange{
-  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;--accent:#f5a562;
+  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;--accent:#f5a562;  --accent-hue: 29deg;
 }
 body.theme-purple{
-  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;--accent:#aa8ed9;
+  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;--accent:#aa8ed9;  --accent-hue: 266deg;
 }
 
 #lava{position:fixed;inset:0;z-index:0;width:100%;height:100%}
@@ -270,3 +270,23 @@ body.theme-purple{
   .product-card{ grid-template-columns: 1fr 430px; }
   .pc-media img{ height:380px; }
 }
+
+/* главное изображение: плавный трансформ для параллакса */
+.pc-media{ position:relative; overflow:hidden; border-radius:16px; }
+.pc-media img{
+  display:block; width:100%; height:420px; object-fit:cover;
+  transition: transform .3s ease, filter .25s ease, opacity .2s ease;
+  will-change: transform;
+  /* дуотон: акцент темы + белый */
+  filter: grayscale(1) sepia(1) hue-rotate(var(--accent-hue)) saturate(480%) brightness(110%);
+}
+
+/* мини-превью — тот же дуотон */
+.pc-thumb img{
+  display:block; width:96px; height:72px; object-fit:cover;
+  filter: grayscale(1) sepia(1) hue-rotate(var(--accent-hue)) saturate(480%) brightness(112%);
+}
+.pc-thumb.is-active img{ filter: grayscale(.2) sepia(1) hue-rotate(var(--accent-hue)) saturate(520%) brightness(115%); }
+
+/* чуть мягче карточку (почти статична), 3D заметен едва-едва */
+.accent-card{ transition: transform .3s ease; }
