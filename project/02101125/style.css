@@ -1,6 +1,14 @@
 /* ======= базовое ======= */
 *{user-select:none;-webkit-user-select:none}
-html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000;min-width:1280px}
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  overflow-x:hidden;
+  background:#000;
+  font-family:'Montserrat',Helvetica,Arial,sans-serif;
+}
+
 body{transition:background .6s ease;font-family:'Montserrat',Helvetica,Arial,sans-serif}
 
 /* ======= темы: фон, лава, акцент и сила дуотона ======= */
@@ -98,7 +106,15 @@ body.theme-purple{
 .theme-switcher.dots .dot:hover{opacity:.8;transform:scale(1.1)}
 
 /* ======= сцена и стеклянная карточка ======= */
-.stage{position:relative;z-index:2;display:grid;place-items:center;height:100vh;width:100vw}
+.stage{
+  position:relative;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  min-height:calc(100vh - 140px); /* оставим место под футер */
+  width:100%;
+  padding-bottom:120px; /* чтобы не прилипал к футеру */
+}
 .accent-card{
   position:relative;min-width:440px;min-height:380px;border-radius:32px;
   background:rgba(255,255,255,.08);
