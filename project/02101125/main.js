@@ -45,7 +45,10 @@ if ('fonts' in document){
 /* постоянный 3D */
 const card=document.getElementById('accentCard');
 (function(){
-  const maxTilt=14;
+  const maxTilt=2;
+  const oscAmp = 0.02;
+  const smooth = 0.06;
+  
   let rect=card.getBoundingClientRect();
   let targetX=0.5,targetY=0.5;
   function raf(now){
@@ -118,4 +121,27 @@ requestAnimationFrame(anim);
       }, 120);
     });
   });
+
+  /* === Parallax для главного изображения внутри стеклянного блока === */
+(function(){
+  const card = document.getElementById('accentCard');
+  const img  = document.getElementById('pcMain');
+  if(!card || !img) return;
+
+  const MAX_TX = 14; // пиксели по X
+  const MAX_TY = 10; // пиксели по Y
+  let rect = card.getBoundingClientRect();
+
+  function onMove(e){
+    const x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5..0.5
+    const y = (e.clientY - rect.top)  / rect.height - 0.5;
+    img.style.transform = translate3d(${x*MAX_TX}px, ${y*MAX_TY}px, 0) scale(1.04);
+  }
+  function onLeave(){
+    img.style.transform = 'translate3d(0,0,0) scale(1)';
+  }
+  window.addEventListener('resize', ()=> rect = card.getBoundingClientRect());
+  card.addEventListener('mousemove', onMove);
+  card.addEventListener('mouseleave', onLeave);
+})();
 })();
