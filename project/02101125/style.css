@@ -113,7 +113,7 @@ body.theme-purple{
   place-items:center;
   min-height:calc(100vh - 140px); /* оставим место под футер */
   width:100%;
-  padding-bottom:120px; /* чтобы не прилипал к футеру */
+  padding-bottom:20px; /* чтобы не прилипал к футеру */
 }
 .accent-card{
   position:relative;min-width:440px;min-height:380px;border-radius:32px;
@@ -323,7 +323,7 @@ body.theme-purple{
   position: relative;
   z-index: 3;
   width: 1340px; /* ширина, как у header */
-  margin: 48px auto 32px; /* центрируем и даём отступ снизу */
+  margin: 24px auto 32px; /* центрируем и даём отступ снизу */
   border-radius: 26px;
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(14px);
