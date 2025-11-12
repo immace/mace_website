@@ -144,10 +144,7 @@ body.theme-purple{
 
 /* правая часть — контейнер со ссылками (как маленький свитчер) */
 .nav-pills{
-  display:flex; gap:8px; padding:6px; border-radius:14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.16);
-  backdrop-filter: blur(14px);
+  display:flex; gap:8px; padding:6px; border-radius:14px;width:920px;
 }
 
 .nav-link{
