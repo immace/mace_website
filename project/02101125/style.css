@@ -1,405 +1,185 @@
+/* ======= базовое ======= */
 *{user-select:none;-webkit-user-select:none}
-html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000;font-family:'Montserrat',Helvetica,Arial,sans-serif;min-width:1280px}
-body{transition:background 0.6s ease}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000;min-width:1280px}
+body{transition:background .6s ease;font-family:'Montserrat',Helvetica,Arial,sans-serif}
 
-/* Темы — только цвета лавы и фона */
+/* ======= темы: фон, лава, акцент и сила дуотона ======= */
 body.theme-burgundy{
-  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;--accent:#dd7d87; --accent-hue: 347deg;
+  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;
+  --accent:#dd7d87; --duo-strength:.36;
+  --font-title:'Playfair Display',serif;
+  --font-brand:'Playfair Display',serif;
+  --font-sub:'Montserrat',sans-serif;
+  --font-text:'Roboto',sans-serif;
+  --shine-center:#8C2F39; --shine-edge:#000;
 }
 body.theme-orange{
-  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;--accent:#f5a562;  --accent-hue: 35deg;
+  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;
+  --accent:#f5a562; --duo-strength:.34;
+  --font-title:'Quicksand',sans-serif;
+  --font-brand:'Quicksand',sans-serif;
+  --font-sub:'Comfortaa',sans-serif;
+  --font-text:'Open Sans',sans-serif;
+  --shine-center:#C46C23; --shine-edge:#000;
 }
 body.theme-purple{
-  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;--accent:#aa8ed9;  --accent-hue: 270deg;
+  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;
+  --accent:#aa8ed9; --duo-strength:.32;
+  --font-title:'Space Grotesk',sans-serif;
+  --font-brand:'Space Grotesk',sans-serif;
+  --font-sub:'Poppins',sans-serif;
+  --font-text:'Segoe UI',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --shine-center:#8A53E9; --shine-edge:#000;
 }
 
+/* лава */
 #lava{position:fixed;inset:0;z-index:0;width:100%;height:100%}
 
-/* Переключатель */
-.theme-switcher{
-  position:fixed;top:24px;right:24px;z-index:3;display:flex;gap:8px;
-  padding:8px;border-radius:16px;
-  background:rgba(255,255,255,0.06);backdrop-filter:blur(14px);
-  box-shadow:0 10px 40px rgba(0,0,0,0.25);
+/* ======= верхняя панель ======= */
+.top-bar{
+  position:fixed;top:24px;left:0;width:100%;
+  display:flex;align-items:center;justify-content:center;
+  z-index:5;pointer-events:none;
 }
-.theme-switcher, .theme-switcher .switch-btn{ font-family:'Montserrat', Helvetica, Arial, sans-serif !important; }
-.switch-btn .label{ position:relative; z-index:2; display:inline-block; }
-/* .switch-btn{
-  position:relative;z-index:1;padding:12px 16px;
-  border:0;background:transparent;color:#fff;font-weight:600;
-  font-size:13px;letter-spacing:.3px;cursor:pointer;
-  transition:transform .2s ease,color .3s ease;
-} */
-.switch-btn{
-  position:relative; z-index:1;
-  padding:12px 18px; background:transparent; border:0; color:#fff; font-weight:700; font-size:13px;
+.top-bar > *{pointer-events:auto}
+
+/* header по центру (капсула) */
+.site-header{
+  position:relative;flex-shrink:0;
+  border-radius:26px;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 10px 40px rgba(0,0,0,.25);
 }
-.switch-btn:hover{transform:translateY(-1px);color:#fff}
-.switch-btn.is-active{color:#fff}
-/* .liquid-indicator{
-  position:absolute;z-index:0;top:6px;left:6px;height:calc(100% - 12px);
-  width:0;border-radius:12px;
-  background:rgba(255,255,255,0.15);
-  box-shadow:0 0 20px rgba(255,255,255,0.25);
-  transition:transform .45s cubic-bezier(.22,1,.36,1),width .45s cubic-bezier(.22,1,.36,1);
-} */
-.liquid-indicator{
-  position:absolute; z-index:0; 
-  top:10px; height:calc(100% - 20px);  /* было выше — теперь ниже */
-  left:0; width:0;
-  border-radius:10px;
-  background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px rgba(0,0,0,.35);
-  transition: transform .45s cubic-bezier(.22,1,.36,1), width .45s cubic-bezier(.22,1,.36,1);
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px 10px 16px;gap:14px;
+  font-family:'Montserrat',Helvetica,Arial,sans-serif;
 }
+.brand{
+  display:inline-block;text-decoration:none;color:#fff;
+  font-weight:800;letter-spacing:.4px;font-size:16px;
+  padding:8px 12px;border-radius:12px;
+  transition:background .25s ease,color .25s ease,transform .12s ease;
+}
+.brand:hover{background:rgba(255,255,255,.08);transform:translateY(-1px)}
+.nav-pills{display:flex;gap:8px;padding:6px;border-radius:14px}
+.nav-link{
+  display:inline-block;color:#fff;text-decoration:none;
+  font-weight:700;font-size:13px;letter-spacing:.3px;
+  padding:10px 14px;border-radius:10px;
+  transition:color .25s ease,background .25s ease,transform .12s ease;
+}
+.nav-link:hover{color:var(--accent);background:rgba(255,255,255,.10);transform:translateY(-1px)}
+.nav-link.is-active{color:var(--accent);background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25)}
 
-/* активное слово — в цвет темы */
-.switch-btn.is-active .label{ color: var(--accent); }
+/* переключатель-три точки (справа) */
+.theme-switcher.dots{
+  position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  display:flex;gap:10px;z-index:10;
+}
+.theme-switcher.dots .dot{
+  width:14px;height:14px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,.18);
+  transition:all .25s ease;
+  box-shadow:0 0 0 1px rgba(255,255,255,.15) inset;
+}
+.theme-switcher.dots .dot.is-active{
+  transform:scale(1.2);
+  box-shadow:0 0 8px color-mix(in srgb,var(--accent) 60%,transparent);
+  background:var(--accent);
+}
+.theme-burgundy .dot[data-theme="burgundy"]{background:#dd7d87}
+.theme-orange   .dot[data-theme="orange"]  {background:#f5a562}
+.theme-purple   .dot[data-theme="purple"]  {background:#aa8ed9}
+.theme-switcher.dots .dot:not(.is-active){opacity:.5;filter:grayscale(1)}
+.theme-switcher.dots .dot:hover{opacity:.8;transform:scale(1.1)}
 
-
-/* Центральный блок — стекло */
+/* ======= сцена и стеклянная карточка ======= */
 .stage{position:relative;z-index:2;display:grid;place-items:center;height:100vh;width:100vw}
 .accent-card{
-  position:relative;min-width:440px;min-height:380px;
-  border-radius:32px;
-  background:rgba(255,255,255,0.08);
+  position:relative;min-width:440px;min-height:380px;border-radius:32px;
+  background:rgba(255,255,255,.08);
   backdrop-filter:blur(25px) saturate(180%);
-  border:1px solid rgba(255,255,255,0.25);
-  box-shadow:0 0 80px rgba(0,0,0,0.4),0 0 20px rgba(0,0,0,0.3);
-  transform-style:preserve-3d;will-change:transform;
-  overflow:hidden;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 0 80px rgba(0,0,0,.4),0 0 20px rgba(0,0,0,.3);
+  transform-style:preserve-3d;will-change:transform;overflow:hidden;
   transition:transform .3s ease;
 }
-/* shine */
+/* мягкий цветной shine */
 .accent-card::before{
   content:"";position:absolute;inset:-20%;
   background:radial-gradient(circle at var(--shine-x,50%) var(--shine-y,50%),
-    var(--shine-center)-26%, var(--shine-edge)55%);
-  pointer-events:none;mix-blend-mode:screen;transition:background 0.4s ease;
+    color-mix(in srgb,var(--shine-center) 55%,transparent) 0%,
+    color-mix(in srgb,var(--shine-edge)  0%,transparent) 100%);
+  pointer-events:none;mix-blend-mode:screen;transition:background .4s ease;
 }
-.card-inner{display:flex;flex-direction:column;gap:16px;padding:42px 48px;color:#fff;}
-.title-row{display:flex;justify-content:space-between;align-items:baseline;}
-.title{ font-family: var(--font-title); font-size:36px;font-weight:700;}
-.subtitle{ font-family: var(--font-sub); font-size:18px;font-weight:500;color:#ccc;}
-.text{ font-family: var(--font-text); margin-top:8px;line-height:1.6;color:#ddd;}
+.card-inner{display:flex;flex-direction:column;gap:16px;padding:42px 48px;color:#fff}
+.title-row{display:flex;justify-content:space-between;align-items:baseline}
+.title{font-family:var(--font-title);font-size:36px;font-weight:700}
+.subtitle{font-family:var(--font-sub);font-size:18px;font-weight:500;color:#ccc}
+.text{font-family:var(--font-text);margin-top:8px;line-height:1.6;color:#ddd}
 
-/* Бордовый */
-body.theme-burgundy{
-  --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;
-  --font-title:'Playfair Display', serif;
-  --font-brand:'Playfair Display', serif;
-  --font-sub:'Montserrat', sans-serif;
-  --font-text:'Roboto', sans-serif;
-  --shine-center: #8C2F39;
-  --shine-edge: #000000;
-  /* --shine-edge: #270404; */
-}
-/* Оранжевый */
-body.theme-orange{
-  --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;
-  --font-title:'Quicksand', sans-serif;
-  --font-brand:'Quicksand', sans-serif;
-  --font-sub:'Comfortaa', sans-serif;
-  --font-text:'Open Sans', sans-serif;
-  --shine-center: #C46C23;
-  --shine-edge: #000000;
-  /* --shine-edge: #291301; */
-}
-/* Фиолетовый */
-body.theme-purple{
-  --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;
-  --font-title:'Space Grotesk', sans-serif;
-  --font-brand:'Space Grotesk', sans-serif;
-  --font-sub:'Poppins', sans-serif;
-  --font-text:'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-  --shine-center: #8A53E9;
-  --shine-edge: #000000;
-  /* --shine-edge: #1a0943; */
+/* ======= карточка проекта ======= */
+.product-card{display:grid;grid-template-columns:minmax(520px,1fr) 460px;gap:32px;align-items:start}
+
+/* медиа-секция слева */
+.pc-media{margin:0;padding:0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);box-shadow:0 6px 30px rgba(0,0,0,.35);position:relative}
+.pc-media img{display:block;width:100%;height:420px;object-fit:cover;transition:transform .3s ease,opacity .2s ease,filter .25s ease;filter:grayscale(1) contrast(1.05) brightness(.98)}
+/* дуотон: акцент + белый */
+.pc-media.duotone::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;background:var(--accent);
+  mix-blend-mode:screen;opacity:var(--duo-strength);pointer-events:none;
 }
 
-/* accent-цвет уже есть: --accent задаётся темами */
-.site-header{
-  position: fixed; top: 24px; left: 24px; right: 220px; /* оставили место под свитчер справа */
-  z-index: 3;
-  border-radius: 26px;
-  width:1340px;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-}
+/* мини-превью */
+.pc-thumbs{display:flex;gap:10px;margin-top:12px}
+.pc-thumb{position:relative;padding:0;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:rgba(255,255,255,.06);overflow:hidden;cursor:pointer;transition:transform .15s ease,border-color .2s ease,box-shadow .2s ease}
+.pc-thumb:hover{transform:translateY(-1px)}
+.pc-thumb.is-active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent)}
+.pc-thumb img{display:block;width:96px;height:72px;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(.98)}
+.pc-thumb::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--accent);mix-blend-mode:screen;opacity:calc(var(--duo-strength) - .06);pointer-events:none}
+.pc-thumb.is-active::after{opacity:calc(var(--duo-strength) - .02)}
 
-.header-inner{
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 14px 10px 16px; gap: 14px;
-  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
-}
+/* правая колонка */
+.pc-right{display:flex;flex-direction:column;gap:18px}
+.pc-subtitle{margin:0 0 6px;font-family:var(--font-sub);font-weight:600;font-size:20px;color:#fff;opacity:.95}
+.pc-specs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-family:var(--font-text);color:#fff;opacity:.9}
+.pc-specs li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12)}
+.pc-specs li span{opacity:.85}
+.pc-specs li strong{font-weight:700}
 
-/* левая часть — бренд */
-.brand{
-  display:inline-block; text-decoration:none; color:#fff;
-  font-weight: 800; letter-spacing: .4px; font-size: 16px;
-  padding: 8px 12px; border-radius: 12px;
-  transition: background .25s ease, color .25s ease, transform .12s ease;
-}
-.brand:hover{ background: rgba(255,255,255,0.08); transform: translateY(-1px); }
-
-/* правая часть — контейнер со ссылками (как маленький свитчер) */
-.nav-pills{
-  display:flex; gap:8px; padding:6px; border-radius:14px;
-}
-
-.nav-link{
-  display:inline-block; color:#fff; text-decoration:none;
-  font-weight: 700; font-size: 13px; letter-spacing:.3px;
-  padding: 10px 14px; border-radius: 10px;
-  transition: color .25s ease, background .25s ease, transform .12s ease;
-}
-.nav-link:hover{
-  color: var(--accent); background: rgba(255,255,255,0.10);
-  transform: translateY(-1px);
-}
-
-/* если нужно сделать одну ссылку "активной" визуально */
-.nav-link.is-active{
-  color: var(--accent);
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.25);
-}
-
-/* общий контейнер верхней панели */
-.top-bar{
-  position:fixed;
-  top:24px; left:0; width:100%;
-  display:flex;
-  align-items:center;             /* одна координата Y */
-  justify-content:center;         /* центрируем header */
-  z-index:5;
-  pointer-events:none;            /* чтобы мышь проходила сквозь пустоту */
-}
-
-/* чтобы элементы внутри были кликабельны */
-.top-bar > *{ pointer-events:auto; }
-
-/* header по центру */
-.site-header{
-  position:relative;
-  flex-shrink:0;
-}
-
-/* переключатель прижат к правому краю */
-.theme-switcher{
-  position:absolute;
-  right:24px;                     /* отступ от края */
-  top:50%;
-  transform:translateY(-50%);     /* выравнивание по вертикали */
-}
-
-/* Карточка проекта: двухколоночная сетка */
-.product-card{
-  display:grid;
-  grid-template-columns: minmax(520px, 1fr) 460px;
-  gap:32px;
-  align-items:start;
-}
-
-/* Левая колонка: медиа */
-.pc-media{
-  margin:0; padding:0;
-  border-radius:16px; overflow:hidden;
-  border:1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.04);
-  box-shadow: 0 6px 30px rgba(0,0,0,0.35);
-}
-.pc-media img{
-  display:block; width:100%; height:420px; object-fit:cover;
-}
-
-/* Мини-переключатели под фото */
-.pc-thumbs{ display:flex; gap:10px; margin-top:12px; }
-.pc-thumb{
-  padding:0; border:1px solid rgba(255,255,255,0.18);
-  border-radius:10px; background:rgba(255,255,255,0.06);
-  overflow:hidden; cursor:pointer; transition:transform .15s ease, border-color .2s ease, box-shadow .2s ease;
-}
-.pc-thumb:hover{ transform:translateY(-1px); }
-.pc-thumb.is-active{ border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent); }
-.pc-thumb img{ display:block; width:96px; height:72px; object-fit:cover; }
-
-/* Правая колонка */
-.pc-right{ display:flex; flex-direction:column; gap:18px; }
-
-/* Подзаголовок — шрифт темы */
-.pc-subtitle{
-  margin:0 0 6px;
-  font-family: var(--font-sub);
-  font-weight:600;
-  font-size:20px;
-  color:#fff;
-  opacity:.95;
-}
-
-/* Характеристики — шрифт текста темы */
-.pc-specs{
-  list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;
-  font-family: var(--font-text); color:#fff; opacity:.9;
-}
-.pc-specs li{
-  display:flex; align-items:baseline; justify-content:space-between; gap:16px;
-  padding:10px 12px; border-radius:10px;
-  border:1px solid rgba(255,255,255,0.12);
-}
-.pc-specs li span{ opacity:.85; }
-.pc-specs li strong{ font-weight:700; }
-
-/* CTA */
+/* CTA — стеклянная с градиентной окантовкой и свечением */
 .pc-cta{
-  margin-top:8px; align-self:flex-start;
-  padding:12px 18px; border-radius:12px; border:1px solid transparent;
-  background: var(--accent);
-  color:#fff; font-weight:800; letter-spacing:.2px; cursor:pointer;
-  transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
+  position:relative;display:inline-block;margin-top:8px;align-self:flex-start;
+  padding:12px 18px;border-radius:12px;background:rgba(255,255,255,.06);
+  backdrop-filter:blur(12px) saturate(160%);-webkit-backdrop-filter:blur(12px) saturate(160%);
+  color:#fff;font-weight:600;letter-spacing:.2px;cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  transition:color .2s ease,box-shadow .25s ease,filter .25s ease,transform .12s ease;isolation:isolate
 }
-.pc-cta:hover{ transform:translateY(-1px); filter:saturate(1.05) brightness(1.05); box-shadow:0 10px 30px color-mix(in srgb, var(--accent) 35%, transparent); }
-
-/* Немного сжимаем внутри маленьких ширин, если понадобится */
-@media (max-width: 1400px){
-  .product-card{ grid-template-columns: 1fr 430px; }
-  .pc-media img{ height:380px; }
-}
-
-/* главное изображение: плавный трансформ для параллакса */
-.pc-media{ position:relative; overflow:hidden; border-radius:16px; }
-.pc-media img{
-  display:block; width:100%; height:420px; object-fit:cover;
-  transition: transform .3s ease, filter .25s ease, opacity .2s ease;
-  will-change: transform;
-  /* дуотон: акцент темы + белый */
-  filter: grayscale(1) sepia(1) hue-rotate(var(--accent-hue)) saturate(480%) brightness(110%);
-}
-
-/* мини-превью — тот же дуотон */
-.pc-thumb img{
-  display:block; width:96px; height:72px; object-fit:cover;
-  filter: grayscale(1) sepia(1) hue-rotate(var(--accent-hue)) saturate(480%) brightness(112%);
-}
-.pc-thumb.is-active img{ filter: grayscale(.2) sepia(1) hue-rotate(var(--accent-hue)) saturate(520%) brightness(115%); }
-
-/* чуть мягче карточку (почти статична), 3D заметен едва-едва */
-.accent-card{ transition: transform .3s ease; }
-filter: grayscale(1) sepia(1) hue-rotate(var(--accent-hue))
-         saturate(480%) brightness(110%);
-
-/* общий контейнер */
-.theme-switcher.dots {
-  position: fixed;
-  top: 28px;
-  right: 28px;
-  display: flex;
-  gap: 10px;
-  z-index: 10;
-}
-
-/* каждая точка */
-.theme-switcher.dots .dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  background: rgba(255,255,255,0.18);
-  transition: all .25s ease;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.15) inset;
-}
-
-/* активная подсветка */
-.theme-switcher.dots .dot.is-active {
-  transform: scale(1.2);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
-  background: var(--accent);
-}
-
-/* цвета по теме */
-.theme-burgundy .dot[data-theme="burgundy"] { background: #dd7d87; }
-.theme-orange   .dot[data-theme="orange"]   { background: #f5a562; }
-.theme-purple   .dot[data-theme="purple"]   { background: #aa8ed9; }
-
-/* неактивные — слегка сероватые */
-.theme-switcher.dots .dot:not(.is-active) {
-  opacity: 0.5;
-  filter: grayscale(1);
-}
-.theme-switcher.dots .dot:hover {
-  opacity: 0.8;
-  transform: scale(1.1);
-}
-
-/* Стеклянная CTA с градиентной окантовкой в цвет темы */
-.pc-cta{
-  position: relative;
-  display: inline-block;
-  padding: 12px 18px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.06);        /* стеклянная подложка */
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  color:#fff;
-  font-weight: 600;
-  letter-spacing:.2px;
-  cursor:pointer;
-  border: 1px solid rgba(255,255,255,0.18);  /* тонкий внутренний контур */
-  transition: 
-    color .2s ease,
-    box-shadow .25s ease,
-    filter .25s ease,
-    transform .12s ease;
-  isolation:isolate;                          /* чтобы свечение не уходило внутрь */
-}
-
-/* Градиентная окантовка (перелив) — псевдоэлемент поверх рамки */
 .pc-cta::before{
-  content:"";
-  position:absolute; inset:-1px;              /* наезжаем на внешний край */
-  border-radius: inherit;
-  padding:1px;                                /* толщина перелива */
-  background: linear-gradient(135deg,
-      color-mix(in srgb, var(--accent) 85%, transparent) 0%,
-      rgba(255,255,255,0.45) 40%,
-      color-mix(in srgb, var(--accent) 70%, transparent) 100%);
-  /* вырезаем внутреннюю часть, оставляя только «бордер» */
-  -webkit-mask: 
-     linear-gradient(#000 0 0) content-box,
-     linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events:none;
-  opacity:.9;
+  content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--accent) 85%,transparent) 0%,
+    rgba(255,255,255,.45) 40%,
+    color-mix(in srgb,var(--accent) 70%,transparent) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.9
 }
-
-/* Hover / Focus — ярче свечение, акцентные буквы */
-.pc-cta:hover,
-.pc-cta:focus-visible{
-  color:#fff;
-  text-shadow:
-    0 0 8px color-mix(in srgb, var(--accent) 80%, transparent),
-    0 0 16px color-mix(in srgb, var(--accent) 40%, transparent);
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent),
-    0 12px 32px color-mix(in srgb, var(--accent) 35%, transparent);
-  transform: translateY(-1px);
+.pc-cta:hover,.pc-cta:focus-visible{
+  color:#fff;text-shadow:0 0 8px color-mix(in srgb,var(--accent) 80%,transparent),0 0 16px color-mix(in srgb,var(--accent) 40%,transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent),0 12px 32px color-mix(in srgb,var(--accent) 35%,transparent);
+  transform:translateY(-1px)
 }
-
-/* Active — чуть приглушаем и «нажимаем» */
 .pc-cta:active{
-  transform: translateY(0);
-  box-shadow:
-    0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent),
-    0 6px 18px color-mix(in srgb, var(--accent) 25%, transparent);
-  filter: brightness(0.98);
+  transform:translateY(0);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent),0 6px 18px color-mix(in srgb,var(--accent) 25%,transparent);
+  filter:brightness(.98)
 }
+@supports not (-webkit-mask:none){.pc-cta::before{display:none}.pc-cta{border-color:color-mix(in srgb,var(--accent) 65%,rgba(255,255,255,.18))}}
 
-/* Фоллбек, если mask не поддерживается — просто цветной бордер */
-@supports not (-webkit-mask: none) {
-  .pc-cta::before{ display:none; }
-  .pc-cta{ border-color: color-mix(in srgb, var(--accent) 65%, rgba(255,255,255,0.18)); }
+@media (max-width:1400px){
+  .product-card{grid-template-columns:1fr 430px}
+  .pc-media img{height:380px}
 }
