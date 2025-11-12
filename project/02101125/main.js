@@ -211,26 +211,3 @@ requestAnimationFrame(anim);
     if(e.key==='ArrowLeft') prev();
   });
 })();
-
-/* === LIGHT/DARK MODE TOGGLE (фон меняется, лава — нет) === */
-(function(){
-  const body = document.body;
-  const toggleBtn = document.querySelector('.theme-switcher.dots .dot.toggle');
-
-  function setMode(mode){
-    body.setAttribute('data-mode', mode);
-    // Лава берёт цвета из --lava1/--lava2, мы их НЕ трогаем
-    if (typeof updateLavaColors === 'function') updateLavaColors();
-    if (toggleBtn){
-      toggleBtn.setAttribute('aria-pressed', mode === 'light' ? 'true' : 'false');
-      toggleBtn.title = mode === 'light' ? 'Тёмная тема' : 'Светлая тема';
-    }
-  }
-  function toggleMode(){
-    setMode((body.getAttribute('data-mode') || 'dark') === 'dark' ? 'light' : 'dark');
-  }
-  if (toggleBtn) toggleBtn.addEventListener('click', toggleMode);
-
-  // дефолт
-  if (!body.hasAttribute('data-mode')) setMode('dark');
-})();
