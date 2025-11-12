@@ -89,6 +89,7 @@ body.theme-purple{
 body.theme-burgundy{
   --bg1:#380303;--bg2:#8C2F39;--lava1:#8C2F39;--lava2:#591818;
   --font-title:'Playfair Display', serif;
+  --font-brand:'Playfair Display', serif;
   --font-sub:'Montserrat', sans-serif;
   --font-text:'Roboto', sans-serif;
   --shine-center: #8C2F39;
@@ -99,6 +100,7 @@ body.theme-burgundy{
 body.theme-orange{
   --bg1:#6E3B10;--bg2:#C46C23;--lava1:#C46C23;--lava2:#884610;
   --font-title:'Quicksand', sans-serif;
+  --font-brand:'Quicksand', sans-serif;
   --font-sub:'Comfortaa', sans-serif;
   --font-text:'Open Sans', sans-serif;
   --shine-center: #C46C23;
@@ -109,6 +111,7 @@ body.theme-orange{
 body.theme-purple{
   --bg1:#380D9C;--bg2:#8A53E9;--lava1:#8A53E9;--lava2:#693AD4;
   --font-title:'Space Grotesk', sans-serif;
+  --font-brand:'Space Grotesk', sans-serif;
   --font-sub:'Poppins', sans-serif;
   --font-text:'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --shine-center: #8A53E9;
