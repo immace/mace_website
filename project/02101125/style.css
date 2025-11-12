@@ -291,3 +291,47 @@ body.theme-purple{
 .accent-card{ transition: transform .3s ease; }
 filter: grayscale(1) sepia(1) hue-rotate(var(--accent-hue))
          saturate(480%) brightness(110%);
+
+/* общий контейнер */
+.theme-switcher.dots {
+  position: fixed;
+  top: 28px;
+  right: 28px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+/* каждая точка */
+.theme-switcher.dots .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: rgba(255,255,255,0.18);
+  transition: all .25s ease;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15) inset;
+}
+
+/* активная подсветка */
+.theme-switcher.dots .dot.is-active {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+  background: var(--accent);
+}
+
+/* цвета по теме */
+.theme-burgundy .dot[data-theme="burgundy"] { background: #dd7d87; }
+.theme-orange   .dot[data-theme="orange"]   { background: #f5a562; }
+.theme-purple   .dot[data-theme="purple"]   { background: #aa8ed9; }
+
+/* неактивные — слегка сероватые */
+.theme-switcher.dots .dot:not(.is-active) {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+.theme-switcher.dots .dot:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
