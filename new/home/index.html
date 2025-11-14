@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Macé · Graphic & Web Designer</title>
+
+  <!-- Шрифты (Swiss-стек) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Базовые стили проекта (оставляем как есть) -->
+  <link rel="stylesheet" href="/style.css">
+
+  <!-- Тёмная холодная тема + локальные стили -->
+  <link rel="stylesheet" href="/css/dark.css">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+
+  <!-- Прозрачный header c blur (структура совместима с твоим основным) -->
+  <header class="hdr">
+    <div class="wrap hdr__in">
+      <a class="hdr__brand" href="/">Macé</a>
+      <nav class="hdr__nav">
+        <a href="/home#portfolio">Portfolio</a>
+        <a href="/shop#consultation">Consultation</a>
+        <a href="/links">Links</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO — строгая сетка, анимация ролей -->
+    <section class="hero">
+      <div class="wrap grid">
+        <div class="col col-6">
+          <h1 class="hero__title">
+            <span class="hero__name" id="name">Macé</span>
+            <span class="hero__role">
+              <span id="role">Graphic Designer</span>
+            </span>
+          </h1>
+          <div class="accent-line" aria-hidden="true"></div>
+
+          <div class="hero__ctas">
+            <a class="btn btn--primary" href="#portfolio">View Portfolio</a>
+            <a class="btn btn--ghost" href="/shop#consultation">Book a Consultation</a>
+          </div>
+        </div>
+
+        <div class="col col-6 hero__media">
+          <!-- заменишь на актуальный кадр/постер -->
+          <figure class="frame glow">
+            <img src="/assets/Айдентика-Ростов-2.jpg" alt="Selected work preview">
+          </figure>
+        </div>
+      </div>
+      <div class="bg-spot bg-spot--tl" aria-hidden="true"></div>
+    </section>
+
+    <!-- COMPLETED PROJECTS -->
+    <section id="portfolio" class="section">
+      <div class="wrap">
+        <div class="section__head">
+          <h2>Completed Projects</h2>
+          <a class="link-more" href="/home/projects/">More projects →</a>
+        </div>
+
+        <div class="grid cards">
+          <!-- Card 1: ORBIC — Typeface -->
+          <article class="card glow col col-7">
+            <div class="card__media">
+              <img src="/assets/Обложка-Нотное_издание-1.png" alt="ORBIC Typeface">
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">ORBIC — Typeface</h3>
+              <p class="muted">Custom display typeface exploring orbital rhythm and modular curvature.</p>
+              <ul class="tags">
+                <li>Type Design</li><li>Identity</li><li>Experiment</li>
+              </ul>
+              <div class="card__actions">
+                <a class="btn btn--primary" href="https://behance.net" target="_blank" rel="noopener">Open on Behance</a>
+                <a class="btn btn--ghost" href="#start">Start your project</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Placeholder (можно скрыть/заменить) -->
+          <article class="card glow col col-5">
+            <div class="card__media ratio">
+              <img src="/assets/Айдентика-Ростов-4.jpg" alt="Identity preview">
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">Identity Preview</h3>
+              <p class="muted">Visual system research: structure, rhythm, constraints.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="bg-spot bg-spot--br" aria-hidden="true"></div>
+    </section>
+
+    <!-- START YOUR PROJECT -->
+    <section id="start" class="section">
+      <div class="wrap grid start">
+        <div class="col col-7">
+          <h2>Start Your Project</h2>
+          <p class="muted">Choose a direction or describe your idea. You’ll be redirected to a consultation page to book and pay via Prodamus.</p>
+
+          <form id="sp-form" class="start__form" action="/shop/#consultation">
+            <label class="label">Select a service</label>
+            <div class="chips" id="chips">
+              <button type="button" data-service="Logo">Logo</button>
+              <button type="button" data-service="UX/UI Design">UX/UI Design</button>
+              <button type="button" data-service="Font">Font</button>
+              <button type="button" data-service="Poster">Poster</button>
+              <button type="button" data-service="Graphic element">Graphic element</button>
+              <button type="button" data-service="Identity">Identity</button>
+            </div>
+
+            <label class="label">Or describe your idea</label>
+            <input id="sp-custom" class="input" type="text" placeholder="Your idea…" autocomplete="off">
+
+            <input type="hidden" id="sp-hidden-service" name="service" value="">
+            <button class="btn btn--primary" type="submit">Start a Project</button>
+          </form>
+        </div>
+
+        <aside class="col col-5 start__note">
+          <div class="note">
+            <p class="muted">Payment via <b>Prodamus</b> (worldwide). You’ll review details before paying.</p>
+          </div>
+        </aside>
+      </div>
+      <div class="bg-spot bg-spot--c" aria-hidden="true"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section">
+      <div class="wrap grid about">
+        <div class="col col-4">
+          <figure class="avatar glow">
+            <img src="/assets/portfolio-name.png" alt="Macé portrait">
+          </figure>
+        </div>
+        <div class="col col-8 about__text">
+          <h2>About Me</h2>
+          <p>Designer exploring the dialogue between form, silence and rhythm. Swiss-influenced systems, typographic clarity, and meaningful restraint.</p>
+          <a class="btn btn--ghost" href="/links">Links →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section">
+      <div class="wrap">
+        <h2>Testimonials</h2>
+        <div class="grid tlist">
+          <blockquote class="titem glow col col-4">
+            <p>“Clear process and beautiful visual logic. The brand feels alive.”</p>
+            <cite class="muted">— A., founder</cite>
+          </blockquote>
+          <blockquote class="titem glow col col-4">
+            <p>“Typography on point. Website loads fast and feels calm.”</p>
+            <cite class="muted">— K., producer</cite>
+          </blockquote>
+          <blockquote class="titem glow col col-4">
+            <p>“Coherent identity and guidelines. Communication was effortless.”</p>
+            <cite class="muted">— P., art director</cite>
+          </blockquote>
+        </div>
+      </div>
+      <div class="bg-spot bg-spot--tc" aria-hidden="true"></div>
+    </section>
+
+    <!-- PORTFOLIO FEED PREVIEW (по желанию заполняем из твоего script.js) -->
+    <section class="section">
+      <div class="wrap">
+        <div class="portfolio-name">
+          <img src="/assets/portfolio-name.png" alt="Portfolio">
+        </div>
+        <div id="portfolio-feed" class="grid feed">
+          <!-- при необходимости можно наполнить автоматически -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SOCIALS -->
+    <section class="section socials">
+      <div class="wrap socials__in">
+        <a class="bubble glow" href="https://instagram.com/authent.art" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="/assets/icons/instagram.svg" width="28" height="28" alt="">
+        </a>
+        <a class="bubble glow" href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener" aria-label="Telegram">
+          <img src="/assets/icons/telegram.svg" width="28" height="28" alt="">
+        </a>
+        <a class="bubble glow" href="mailto:mace4681@gmail.com" aria-label="Email">
+          <img src="/assets/icons/mail.svg" width="28" height="28" alt="">
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="ftr">
+    <div class="wrap ftr__in">
+      <div>© Macé, 2025</div>
+      <div class="muted">
+        <a href="https://t.me/mace_assistant_bot" target="_blank" rel="noopener">Support</a> ·
+        <a href="/offer">Offer</a> · <a href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Скрипты -->
+  <script src="/script.js" defer></script><!-- если есть твой общий -->
+  <script src="/js/home.js" defer></script>
+</body>
+</html>
