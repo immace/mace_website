@@ -1,0 +1,30 @@
+/* Локальные стили /shop поверх /style.css и /css/dark.css */
+
+.header-content{ display:flex; justify-content:center; align-items:center; padding:12px 0; }
+
+.consult{ margin: 24px 0; padding: 18px; }
+.c-grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap: 20px; align-items:start; }
+.c-includes{ margin: 10px 0 16px; padding-left: 18px; }
+.c-cta{ display:flex; gap:12px; flex-wrap:wrap; }
+.consult-note{
+  background: var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:12px; padding:12px 14px;
+}
+
+/* Другие услуги */
+.services-grid{
+  display:grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px; margin: 10px 0 60px;
+}
+.service-card{ padding: 16px; }
+
+.footer-flex{ display:flex; justify-content:space-between; align-items:center; gap:16px; padding: 14px 0; }
+
+@media (max-width: 1024px){
+  .c-grid{ grid-template-columns: 1fr; }
+  .services-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+  .services-grid{ grid-template-columns: 1fr; }
+}
