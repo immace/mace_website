@@ -638,3 +638,49 @@ async function applyTgAccentFromAvatar(tg){
     await applyTgAccentFromAvatar(tg);
   });
 })();
+
+// 🎄 Reconstruction Notice (shows once, can be muted for 7 days)
+(() => {
+  const KEY = "mace_xmas_notice_until";
+  const DAYS = 7;
+
+  const root = document.getElementById("xmasNotice");
+  if (!root) return;
+
+  const until = Number(localStorage.getItem(KEY) || "0");
+  const now = Date.now();
+
+  // Если пользователь уже скрывал — не показываем до даты
+  if (until && now < until) return;
+
+  const open = () => {
+    root.classList.add("is-open");
+    root.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+  };
+
+  const close = () => {
+    // если включена галочка — скрываем на 7 дней
+    const remember = document.getElementById("xmasRemember");
+    if (remember?.checked) {
+      const future = now + DAYS * 24 * 60 * 60 * 1000;
+      localStorage.setItem(KEY, String(future));
+    }
+    root.classList.remove("is-open");
+    root.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+  };
+
+  // Закрытие по клику
+  root.querySelectorAll("[data-xmas-close]").forEach(el => {
+    el.addEventListener("click", close);
+  });
+
+  // Закрытие по Esc
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && root.classList.contains("is-open")) close();
+  });
+
+  // Открываем чуть позже, чтобы не мигало при загрузке
+  window.addEventListener("load", () => setTimeout(open, 250));
+})();
