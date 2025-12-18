@@ -89,37 +89,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </footer>
 
   <script src="script.js" defer></script>
-  <!-- 🎄 Reconstruction Notice (Christmas) -->
-<div id="xmasNotice" class="xmas" aria-hidden="true">
-  <div class="xmas__backdrop" data-xmas-close></div>
+ <!-- 🎄 Reconstruction Countdown Modal -->
+<div id="reconModal" class="recon">
+  <div class="recon__card">
+    <div class="recon__badge">🎄 Site update in progress</div>
 
-  <div class="xmas__card" role="dialog" aria-modal="true" aria-labelledby="xmasTitle">
-    <div class="xmas__top">
-      <div class="xmas__badge">🎄 18 Dec — Update</div>
-      <button class="xmas__close" type="button" aria-label="Close" data-xmas-close>✕</button>
-    </div>
+    <h2 class="recon__title">Website is under reconstruction</h2>
 
-    <h2 id="xmasTitle" class="xmas__title">Website is under reconstruction</h2>
-    <p class="xmas__text">
-      I’m rebuilding the experience right now. Meanwhile, you can still explore my work and projects.
+    <p class="recon__text">
+      I’m rebuilding the experience.<br>
+      You can explore selected works meanwhile.
     </p>
 
-    <div class="xmas__actions">
-      <!-- поменяй ссылку на то, куда хочешь вести -->
-      <a class="xmas__btn xmas__btn--primary" href="/">View works</a>
+    <!-- Countdown -->
+    <div class="recon__timer" id="reconTimer">
+      <div class="recon__unit">
+        <span class="num" id="days">00</span>
+        <span class="label">Days</span>
+      </div>
+      <div class="recon__unit">
+        <span class="num" id="hours">00</span>
+        <span class="label">Hours</span>
+      </div>
+      <div class="recon__unit">
+        <span class="num" id="minutes">00</span>
+        <span class="label">Minutes</span>
+      </div>
+      <div class="recon__unit">
+        <span class="num" id="seconds">00</span>
+        <span class="label">Seconds</span>
+      </div>
     </div>
 
-    <div class="xmas__foot">
-      <label class="xmas__remember">
-        <input id="xmasRemember" type="checkbox" checked />
-        Don’t show again for 7 days
-      </label>
-    </div>
-
-    <!-- декоративные “огоньки” (очень аккуратно) -->
-    <div class="xmas__lights" aria-hidden="true"></div>
+    <button class="recon__btn" id="reconClose">
+      View projects
+    </button>
   </div>
 </div>
+
 
 </body>
 </html>
