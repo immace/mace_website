@@ -639,48 +639,49 @@ async function applyTgAccentFromAvatar(tg){
   });
 })();
 
-// 🎄 Reconstruction Notice (shows once, can be muted for 7 days)
+// 🎄 Reconstruction Countdown (MSK)
 (() => {
-  const KEY = "mace_xmas_notice_until";
-  const DAYS = 7;
+  const modal = document.getElementById("reconModal");
+  const closeBtn = document.getElementById("reconClose");
 
-  const root = document.getElementById("xmasNotice");
-  if (!root) return;
+  const daysEl = document.getElementById("days");
+  const hoursEl = document.getElementById("hours");
+  const minutesEl = document.getElementById("minutes");
+  const secondsEl = document.getElementById("seconds");
 
-  const until = Number(localStorage.getItem(KEY) || "0");
-  const now = Date.now();
+  // Target date: 17 Jan 2026, 17:09 MSK (UTC+3)
+  const target = new Date(Date.UTC(2026, 0, 17, 14, 9, 0)); // UTC time
 
-  // Если пользователь уже скрывал — не показываем до даты
-  if (until && now < until) return;
+  function updateTimer() {
+    const now = new Date();
+    const diff = target - now;
 
-  const open = () => {
-    root.classList.add("is-open");
-    root.setAttribute("aria-hidden", "false");
-    document.documentElement.style.overflow = "hidden";
-  };
-
-  const close = () => {
-    // если включена галочка — скрываем на 7 дней
-    const remember = document.getElementById("xmasRemember");
-    if (remember?.checked) {
-      const future = now + DAYS * 24 * 60 * 60 * 1000;
-      localStorage.setItem(KEY, String(future));
+    if (diff <= 0) {
+      daysEl.textContent = "00";
+      hoursEl.textContent = "00";
+      minutesEl.textContent = "00";
+      secondsEl.textContent = "00";
+      return;
     }
-    root.classList.remove("is-open");
-    root.setAttribute("aria-hidden", "true");
-    document.documentElement.style.overflow = "";
-  };
 
-  // Закрытие по клику
-  root.querySelectorAll("[data-xmas-close]").forEach(el => {
-    el.addEventListener("click", close);
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    daysEl.textContent = String(days).padStart(2, "0");
+    hoursEl.textContent = String(hours).padStart(2, "0");
+    minutesEl.textContent = String(minutes).padStart(2, "0");
+    secondsEl.textContent = String(seconds).padStart(2, "0");
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  closeBtn.addEventListener("click", () => {
+    modal.style.opacity = "0";
+    modal.style.pointerEvents = "none";
+    setTimeout(() => modal.remove(), 300);
   });
-
-  // Закрытие по Esc
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && root.classList.contains("is-open")) close();
-  });
-
-  // Открываем чуть позже, чтобы не мигало при загрузке
-  window.addEventListener("load", () => setTimeout(open, 250));
 })();
