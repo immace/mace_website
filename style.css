@@ -593,143 +593,120 @@ footer {
 .lang-switch:hover{ text-decoration: underline; }
 /* ▲ */
 
-/* 🎄 Christmas Reconstruction Notice */
-.xmas{
+/* ===============================
+   🎄 Reconstruction Modal
+================================ */
+
+.recon {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  display: none;
-  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
-}
-.xmas.is-open{ display: block; }
-
-.xmas__backdrop{
-  position: absolute;
-  inset: 0;
-  background: rgba(7, 8, 10, 0.72);
-  backdrop-filter: blur(8px);
-}
-
-.xmas__card{
-  position: relative;
-  width: min(560px, 92vw);
-  margin: 10vh auto 0;
-  padding: 18px 18px 16px;
-  border-radius: 18px;
-  color: #e9edf2;
-
-  /* холодный обсидиан + мягкий рождественский акцент */
-  background:
-    radial-gradient(900px 220px at 10% 0%, rgba(163,193,217,0.12), transparent 60%),
-    radial-gradient(900px 260px at 90% 120%, rgba(170, 255, 220, 0.07), transparent 65%),
-    linear-gradient(180deg, #0a0b0d 0%, #1c1e22 100%);
-
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 24px 80px rgba(0,0,0,0.55);
-  overflow: hidden;
-}
-
-.xmas__top{
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
+  justify-content: center;
+  background: radial-gradient(
+      1200px 600px at 50% -10%,
+      rgba(180, 210, 255, 0.08),
+      transparent 60%
+    ),
+    rgba(6, 7, 9, 0.82);
+  backdrop-filter: blur(10px);
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
 }
 
-.xmas__badge{
+.recon__card {
+  width: min(520px, 90vw);
+  padding: 32px 28px;
+  border-radius: 22px;
+  text-align: center;
+  color: #e9edf2;
+
+  background:
+    radial-gradient(500px 200px at 20% 0%, rgba(180,210,255,0.12), transparent 60%),
+    radial-gradient(400px 200px at 80% 100%, rgba(200,255,230,0.08), transparent 65%),
+    linear-gradient(180deg, #0a0b0d, #1c1e22);
+
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.65);
+}
+
+.recon__badge {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 6px 12px;
   font-size: 12px;
-  letter-spacing: .06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(233,237,242,0.8);
+  color: rgba(233,237,242,0.75);
+  border-radius: 999px;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.08);
-  padding: 6px 10px;
-  border-radius: 999px;
 }
 
-.xmas__close{
-  border: none;
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.xmas__close:hover{ background: rgba(255,255,255,0.12); }
-
-.xmas__title{
-  margin: 6px 0 6px;
-  font-weight: 700;
+.recon__title {
+  margin: 0 0 10px;
   font-size: 22px;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 
-.xmas__text{
-  margin: 0 0 14px;
+.recon__text {
+  margin: 0 0 26px;
+  font-size: 15px;
+  line-height: 1.6;
   color: rgba(233,237,242,0.78);
-  line-height: 1.55;
 }
 
-.xmas__actions{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 12px;
+/* Countdown */
+.recon__timer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
 }
 
-.xmas__btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.10);
+.recon__unit {
+  padding: 14px 8px;
+  border-radius: 14px;
   background: rgba(255,255,255,0.05);
-  color: #e9edf2;
-  cursor: pointer;
-  font-weight: 650;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
-.xmas__btn--primary{
+.recon__unit .num {
+  display: block;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.recon__unit .label {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(233,237,242,0.6);
+}
+
+/* Button */
+.recon__btn {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+
   background: #ffffff;
   color: #0a0b0d;
-  border-color: rgba(255,255,255,0.18);
-}
-.xmas__btn:hover{ background: rgba(255,255,255,0.10); }
-.xmas__btn--primary:hover{ background: rgba(255,255,255,0.92); }
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 
-.xmas__foot{
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.xmas__remember{
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: rgba(233,237,242,0.72);
+.recon__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(255,255,255,0.25);
 }
-.xmas__remember input{ transform: translateY(1px); }
 
-/* аккуратные “огоньки” сверху, без колхоза */
-.xmas__lights{
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(10px 10px at 10% 8%, rgba(255, 240, 200, 0.55), transparent 60%),
-    radial-gradient(9px 9px at 22% 12%, rgba(170, 255, 220, 0.38), transparent 60%),
-    radial-gradient(10px 10px at 35% 7%, rgba(255, 200, 220, 0.35), transparent 60%),
-    radial-gradient(9px 9px at 48% 11%, rgba(200, 220, 255, 0.38), transparent 60%),
-    radial-gradient(10px 10px at 62% 7%, rgba(255, 240, 200, 0.45), transparent 60%),
-    radial-gradient(9px 9px at 76% 12%, rgba(170, 255, 220, 0.34), transparent 60%),
-    radial-gradient(10px 10px at 90% 8%, rgba(255, 200, 220, 0.30), transparent 60%);
-  opacity: .6;
-}
