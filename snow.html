@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Glass M + Snow</title>
+  <title>Glass M + Snow (Mobile Shake + Desktop Rotate)</title>
   <style>
     html, body { margin:0; height:100%; background:#07080a; overflow:hidden; }
     #app { position:fixed; inset:0; }
@@ -11,7 +11,7 @@
       position: fixed; left: 12px; top: 12px; z-index: 10;
       display:flex; gap:10px; align-items:center;
       font: 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color: rgba(255,255,255,.9);
+      color: rgba(255,255,255,.92);
       user-select:none;
     }
     .btn {
@@ -21,10 +21,9 @@
       color: #fff; cursor:pointer;
       backdrop-filter: blur(10px);
     }
-    .hint { opacity:.75; }
+    .hint { opacity:.75; max-width: 66vw; }
   </style>
 
-  <!-- Import maps (works on modern browsers) -->
   <script type="importmap">
   {
     "imports": {
@@ -51,7 +50,7 @@ const container = document.getElementById("app");
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.01, 50);
-camera.position.set(0, 0.2, 2.6);
+camera.position.set(0, 0.15, 2.6);
 
 const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -71,18 +70,17 @@ controls.maxDistance = 4.0;
 controls.enablePan = false;
 
 // Lighting / environment
-scene.add(new THREE.AmbientLight(0xffffff, 0.25));
-const key = new THREE.DirectionalLight(0xffffff, 1.1);
+scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+const key = new THREE.DirectionalLight(0xffffff, 1.15);
 key.position.set(2, 3, 2);
 scene.add(key);
 
-let envMap = null;
+// Environment HDR for premium glass reflections
 new RGBELoader()
   .setPath("https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/equirectangular/")
   .load("royal_esplanade_1k.hdr", (tex) => {
     tex.mapping = THREE.EquirectangularReflectionMapping;
-    envMap = tex;
-    scene.environment = envMap;
+    scene.environment = tex;
   });
 
 // Group for letter
@@ -93,43 +91,64 @@ scene.add(group);
 const glassMat = new THREE.MeshPhysicalMaterial({
   color: new THREE.Color("#ffffff"),
   metalness: 0.0,
-  roughness: 0.06,
-  transmission: 1.0,     // glass
-  thickness: 0.35,       // optical depth
+  roughness: 0.055,
+  transmission: 1.0,
+  thickness: 0.36,
   ior: 1.52,
-  reflectivity: 0.6,
+  reflectivity: 0.62,
   clearcoat: 1.0,
   clearcoatRoughness: 0.06,
-  envMapIntensity: 1.2
+  envMapIntensity: 1.25
 });
 
-// Inner tint (subtle embedded red/gold feel)
+// Inner tint (subtle embedded color)
 const innerMat = new THREE.MeshPhysicalMaterial({
   color: new THREE.Color("#b10f1d"),
-  metalness: 0.15,
+  metalness: 0.16,
   roughness: 0.18,
-  transmission: 0.35,
-  thickness: 0.2,
+  transmission: 0.32,
+  thickness: 0.22,
   ior: 1.35,
   reflectivity: 0.35,
-  envMapIntensity: 0.9
+  envMapIntensity: 0.95
 });
+
+// Helper: fit letter to view (prevents "giant SVG" problem)
+function fitLetterToView(targetHeight = 1.2) {
+  const b = new THREE.Box3().setFromObject(group);
+  const s = new THREE.Vector3();
+  b.getSize(s);
+
+  if (s.y <= 0) return;
+
+  // normalize scale by height
+  const k = targetHeight / s.y;
+  group.scale.multiplyScalar(k);
+
+  // center in world
+  b.setFromObject(group);
+  const c = new THREE.Vector3();
+  b.getCenter(c);
+  group.position.sub(c);
+
+  // tiny aesthetic offset
+  group.position.y -= 0.05;
+}
 
 // Load SVG and extrude to 3D
 async function loadLetter() {
   const loader = new SVGLoader();
   const svgData = await new Promise((resolve, reject) => {
+    // Put your SVG here: /assets/m.svg
     loader.load("assets/m.svg", resolve, undefined, reject);
   });
 
-  // Convert SVG paths to shapes
   const shapes = [];
   for (const p of svgData.paths) {
     const toShapes = SVGLoader.createShapes(p);
     for (const s of toShapes) shapes.push(s);
   }
 
-  // Extrude settings (depth gives thickness)
   const extrude = new THREE.ExtrudeGeometry(shapes, {
     depth: 0.35,
     bevelEnabled: true,
@@ -138,15 +157,12 @@ async function loadLetter() {
     bevelSegments: 8,
     curveSegments: 32
   });
-
   extrude.computeVertexNormals();
   extrude.center();
 
   const glassMesh = new THREE.Mesh(extrude, glassMat);
-  glassMesh.castShadow = false;
-  glassMesh.receiveShadow = false;
 
-  // Inner volume (slightly smaller) for the “embedded color”
+  // Inner volume (slightly smaller)
   const innerGeo = extrude.clone();
   innerGeo.scale(0.96, 0.96, 0.85);
   innerGeo.center();
@@ -154,20 +170,22 @@ async function loadLetter() {
 
   group.add(glassMesh, innerMesh);
 
-  // Scale up nicely
-  group.scale.set(1.4, 1.4, 1.4);
+  // IMPORTANT: normalize size so SVG won't be huge
+  // For vertical screens we want a bit taller hero object
+  const isPortrait = innerHeight >= innerWidth;
+  fitLetterToView(isPortrait ? 1.25 : 1.0);
 }
+
 await loadLetter();
 
-// --- Snow particles (simple physics inside bounding box) ---
+// --- Snow particles (simple physics inside bounding box approximation) ---
 const SNOW_COUNT = 1800;
 
 const snowGeo = new THREE.SphereGeometry(0.008, 8, 8);
 const snowMat = new THREE.MeshStandardMaterial({
   color: 0xffffff,
   roughness: 0.35,
-  metalness: 0.0,
-  emissive: new THREE.Color("#000000")
+  metalness: 0.0
 });
 
 const snow = new THREE.InstancedMesh(snowGeo, snowMat, SNOW_COUNT);
@@ -175,22 +193,22 @@ snow.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 group.add(snow);
 
 // Particle state
-const positions = new Array(SNOW_COUNT).fill(0).map(() => new THREE.Vector3());
-const velocity  = new Array(SNOW_COUNT).fill(0).map(() => new THREE.Vector3());
+const positions = Array.from({ length: SNOW_COUNT }, () => new THREE.Vector3());
+const velocity  = Array.from({ length: SNOW_COUNT }, () => new THREE.Vector3());
 
 const tmpM = new THREE.Matrix4();
 const tmpP = new THREE.Vector3();
 const tmpQ = new THREE.Quaternion();
 const tmpS = new THREE.Vector3(1,1,1);
 
-// Bounding box (approx container) — recalculated each frame from letter bounds
 const box = new THREE.Box3();
 const size = new THREE.Vector3();
 
-// Initialize snow positions inside an approximate volume
 function seedSnow() {
   box.setFromObject(group);
   box.getSize(size);
+
+  // pad keeps particles inside
   const pad = 0.08;
   const min = box.min.clone().addScalar(pad);
   const max = box.max.clone().addScalar(-pad);
@@ -210,11 +228,11 @@ function seedSnow() {
 }
 seedSnow();
 
-// Gravity vector: from device orientation OR from group rotation (desktop)
+// Gravity vector: device tilt OR group rotation
 let deviceGravity = new THREE.Vector3(0, -1, 0);
 let haveDeviceMotion = false;
 
-// iOS permission
+// iOS permission button
 const motionBtn = document.getElementById("motionBtn");
 motionBtn.addEventListener("click", async () => {
   try {
@@ -222,24 +240,21 @@ motionBtn.addEventListener("click", async () => {
       const res = await DeviceMotionEvent.requestPermission();
       if (res !== "granted") return;
     }
-    // Device orientation
+
     window.addEventListener("deviceorientation", (e) => {
-      // gamma: left/right, beta: front/back (degrees)
+      // gamma: left/right, beta: front/back
       const beta = (e.beta ?? 0) * Math.PI/180;
       const gamma = (e.gamma ?? 0) * Math.PI/180;
-
-      // Map tilt to gravity
       deviceGravity.set(Math.sin(gamma), -Math.cos(beta), Math.sin(beta)).normalize();
       haveDeviceMotion = true;
     }, { passive:true });
 
-    // Shake / acceleration boost
     window.addEventListener("devicemotion", (e) => {
       const a = e.accelerationIncludingGravity;
       if (!a) return;
       const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
       if (mag > 16) {
-        // impulse to make snow jump
+        // shake impulse
         for (let k=0; k<80; k++) {
           const i = (Math.random()*SNOW_COUNT)|0;
           velocity[i].addScaledVector(new THREE.Vector3(
@@ -260,36 +275,31 @@ motionBtn.addEventListener("click", async () => {
 // Physics params
 const clock = new THREE.Clock();
 const damping = 0.985;
-const gravityStrength = 0.55; // feel
+const gravityStrength = 0.55;
 const bounce = 0.45;
 
-// Helper: compute gravity from letter orientation (desktop)
-const worldUp = new THREE.Vector3(0, 1, 0);
 function gravityFromRotation() {
-  // Use group rotation to define "down" direction: rotate worldDown into group space
   const q = group.getWorldQuaternion(new THREE.Quaternion());
   const down = new THREE.Vector3(0, -1, 0).applyQuaternion(q);
   return down.normalize();
 }
 
 function updateSnow(dt) {
-  // Update bounds each frame (letter can rotate)
   box.setFromObject(group);
+
   const pad = 0.08;
   const min = box.min.clone().addScalar(pad);
   const max = box.max.clone().addScalar(-pad);
 
-  // Choose gravity source
   const g = haveDeviceMotion ? deviceGravity : gravityFromRotation();
 
   for (let i=0; i<SNOW_COUNT; i++) {
-    // integrate
     velocity[i].addScaledVector(g, gravityStrength * dt);
     velocity[i].multiplyScalar(damping);
 
     positions[i].addScaledVector(velocity[i], dt);
 
-    // collide with bounding volume (approx)
+    // collide with bounding volume
     if (positions[i].x < min.x) { positions[i].x = min.x; velocity[i].x *= -bounce; }
     if (positions[i].x > max.x) { positions[i].x = max.x; velocity[i].x *= -bounce; }
     if (positions[i].y < min.y) { positions[i].y = min.y; velocity[i].y *= -bounce; }
@@ -297,7 +307,6 @@ function updateSnow(dt) {
     if (positions[i].z < min.z) { positions[i].z = min.z; velocity[i].z *= -bounce; }
     if (positions[i].z > max.z) { positions[i].z = max.z; velocity[i].z *= -bounce; }
 
-    // write instance matrix
     tmpP.copy(positions[i]);
     tmpM.compose(tmpP, tmpQ, tmpS);
     snow.setMatrixAt(i, tmpM);
@@ -305,20 +314,31 @@ function updateSnow(dt) {
   snow.instanceMatrix.needsUpdate = true;
 }
 
-// Resize
+// Keep letter nicely sized on resize/orientation change
+function refitOnResize() {
+  // reset transform, then re-fit
+  group.scale.set(1,1,1);
+  group.position.set(0,0,0);
+
+  const isPortrait = innerHeight >= innerWidth;
+  fitLetterToView(isPortrait ? 1.25 : 1.0);
+
+  // also reseed snow so it stays inside new bounds
+  seedSnow();
+}
+
 addEventListener("resize", () => {
   camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
+  refitOnResize();
 }, { passive:true });
 
 // Animate
 function tick() {
   const dt = Math.min(clock.getDelta(), 0.033);
-
   controls.update();
   updateSnow(dt);
-
   renderer.render(scene, camera);
   requestAnimationFrame(tick);
 }
