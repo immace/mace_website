@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   class TextScramble {
     constructor(el) {
       this.el = el;
-      this.chars = 'абвгдeёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      this.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       this.update = this.update.bind(this);
     }
     setText(newText) {
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     randomChar() { return this.chars[Math.floor(Math.random() * this.chars.length)]; }
   }
 
-  const phrases = ['Дима Мальцев', 'Мацэ́'];
+  const phrases = ['Dima Malcev', 'Macé'];
   const fxMain = new TextScramble(nameEl);
   const fxHeader = new TextScramble(headerNameEl);
   let counter = 0;
@@ -323,8 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== render =====
   const portfolio = document.getElementById('portfolio');
-  const currentLang = localStorage.getItem('lang') || decideInitialLang();
-  const tPost = I18N[currentLang].post;
+  const tPost = I18N.en.post;
 
   posts.forEach((post, idx) => {
     const wrapper = document.createElement('div');
