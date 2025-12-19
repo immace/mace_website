@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Glass M + Snow</title>
+  <style>
+    html, body { margin:0; height:100%; background:#07080a; overflow:hidden; }
+    #app { position:fixed; inset:0; }
+    .ui {
+      position: fixed; left: 12px; top: 12px; z-index: 10;
+      display:flex; gap:10px; align-items:center;
+      font: 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: rgba(255,255,255,.9);
+      user-select:none;
+    }
+    .btn {
+      padding: 10px 12px; border-radius: 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #fff; cursor:pointer;
+      backdrop-filter: blur(10px);
+    }
+    .hint { opacity:.75; }
+  </style>
+
+  <!-- Import maps (works on modern browsers) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.164.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="ui">
+    <button id="motionBtn" class="btn">Enable motion</button>
+    <div class="hint">Drag to rotate (desktop). Tilt / shake (phone) to move snow.</div>
+  </div>
+  <div id="app"></div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { SVGLoader } from "three/addons/loaders/SVGLoader.js";
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+
+const container = document.getElementById("app");
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.01, 50);
+camera.position.set(0, 0.2, 2.6);
+
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+container.appendChild(renderer.domElement);
+
+// Controls (desktop)
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.rotateSpeed = 0.6;
+controls.minDistance = 1.6;
+controls.maxDistance = 4.0;
+controls.enablePan = false;
+
+// Lighting / environment
+scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+const key = new THREE.DirectionalLight(0xffffff, 1.1);
+key.position.set(2, 3, 2);
+scene.add(key);
+
+let envMap = null;
+new RGBELoader()
+  .setPath("https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/equirectangular/")
+  .load("royal_esplanade_1k.hdr", (tex) => {
+    tex.mapping = THREE.EquirectangularReflectionMapping;
+    envMap = tex;
+    scene.environment = envMap;
+  });
+
+// Group for letter
+const group = new THREE.Group();
+scene.add(group);
+
+// Glass material (liquid-glass vibe)
+const glassMat = new THREE.MeshPhysicalMaterial({
+  color: new THREE.Color("#ffffff"),
+  metalness: 0.0,
+  roughness: 0.06,
+  transmission: 1.0,     // glass
+  thickness: 0.35,       // optical depth
+  ior: 1.52,
+  reflectivity: 0.6,
+  clearcoat: 1.0,
+  clearcoatRoughness: 0.06,
+  envMapIntensity: 1.2
+});
+
+// Inner tint (subtle embedded red/gold feel)
+const innerMat = new THREE.MeshPhysicalMaterial({
+  color: new THREE.Color("#b10f1d"),
+  metalness: 0.15,
+  roughness: 0.18,
+  transmission: 0.35,
+  thickness: 0.2,
+  ior: 1.35,
+  reflectivity: 0.35,
+  envMapIntensity: 0.9
+});
+
+// Load SVG and extrude to 3D
+async function loadLetter() {
+  const loader = new SVGLoader();
+  const svgData = await new Promise((resolve, reject) => {
+    loader.load("assets/m.svg", resolve, undefined, reject);
+  });
+
+  // Convert SVG paths to shapes
+  const shapes = [];
+  for (const p of svgData.paths) {
+    const toShapes = SVGLoader.createShapes(p);
+    for (const s of toShapes) shapes.push(s);
+  }
+
+  // Extrude settings (depth gives thickness)
+  const extrude = new THREE.ExtrudeGeometry(shapes, {
+    depth: 0.35,
+    bevelEnabled: true,
+    bevelThickness: 0.08,
+    bevelSize: 0.05,
+    bevelSegments: 8,
+    curveSegments: 32
+  });
+
+  extrude.computeVertexNormals();
+  extrude.center();
+
+  const glassMesh = new THREE.Mesh(extrude, glassMat);
+  glassMesh.castShadow = false;
+  glassMesh.receiveShadow = false;
+
+  // Inner volume (slightly smaller) for the “embedded color”
+  const innerGeo = extrude.clone();
+  innerGeo.scale(0.96, 0.96, 0.85);
+  innerGeo.center();
+  const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+
+  group.add(glassMesh, innerMesh);
+
+  // Scale up nicely
+  group.scale.set(1.4, 1.4, 1.4);
+}
+await loadLetter();
+
+// --- Snow particles (simple physics inside bounding box) ---
+const SNOW_COUNT = 1800;
+
+const snowGeo = new THREE.SphereGeometry(0.008, 8, 8);
+const snowMat = new THREE.MeshStandardMaterial({
+  color: 0xffffff,
+  roughness: 0.35,
+  metalness: 0.0,
+  emissive: new THREE.Color("#000000")
+});
+
+const snow = new THREE.InstancedMesh(snowGeo, snowMat, SNOW_COUNT);
+snow.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+group.add(snow);
+
+// Particle state
+const positions = new Array(SNOW_COUNT).fill(0).map(() => new THREE.Vector3());
+const velocity  = new Array(SNOW_COUNT).fill(0).map(() => new THREE.Vector3());
+
+const tmpM = new THREE.Matrix4();
+const tmpP = new THREE.Vector3();
+const tmpQ = new THREE.Quaternion();
+const tmpS = new THREE.Vector3(1,1,1);
+
+// Bounding box (approx container) — recalculated each frame from letter bounds
+const box = new THREE.Box3();
+const size = new THREE.Vector3();
+
+// Initialize snow positions inside an approximate volume
+function seedSnow() {
+  box.setFromObject(group);
+  box.getSize(size);
+  const pad = 0.08;
+  const min = box.min.clone().addScalar(pad);
+  const max = box.max.clone().addScalar(-pad);
+
+  for (let i=0; i<SNOW_COUNT; i++) {
+    positions[i].set(
+      THREE.MathUtils.lerp(min.x, max.x, Math.random()),
+      THREE.MathUtils.lerp(min.y, max.y, Math.random()),
+      THREE.MathUtils.lerp(min.z, max.z, Math.random())
+    );
+    velocity[i].set(
+      (Math.random()-0.5)*0.02,
+      (Math.random()-0.5)*0.02,
+      (Math.random()-0.5)*0.02
+    );
+  }
+}
+seedSnow();
+
+// Gravity vector: from device orientation OR from group rotation (desktop)
+let deviceGravity = new THREE.Vector3(0, -1, 0);
+let haveDeviceMotion = false;
+
+// iOS permission
+const motionBtn = document.getElementById("motionBtn");
+motionBtn.addEventListener("click", async () => {
+  try {
+    if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
+      const res = await DeviceMotionEvent.requestPermission();
+      if (res !== "granted") return;
+    }
+    // Device orientation
+    window.addEventListener("deviceorientation", (e) => {
+      // gamma: left/right, beta: front/back (degrees)
+      const beta = (e.beta ?? 0) * Math.PI/180;
+      const gamma = (e.gamma ?? 0) * Math.PI/180;
+
+      // Map tilt to gravity
+      deviceGravity.set(Math.sin(gamma), -Math.cos(beta), Math.sin(beta)).normalize();
+      haveDeviceMotion = true;
+    }, { passive:true });
+
+    // Shake / acceleration boost
+    window.addEventListener("devicemotion", (e) => {
+      const a = e.accelerationIncludingGravity;
+      if (!a) return;
+      const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
+      if (mag > 16) {
+        // impulse to make snow jump
+        for (let k=0; k<80; k++) {
+          const i = (Math.random()*SNOW_COUNT)|0;
+          velocity[i].addScaledVector(new THREE.Vector3(
+            (Math.random()-0.5), (Math.random()-0.2), (Math.random()-0.5)
+          ), 0.12);
+        }
+      }
+    }, { passive:true });
+
+    motionBtn.textContent = "Motion enabled";
+    motionBtn.style.opacity = 0.7;
+  } catch (err) {
+    motionBtn.textContent = "Motion not available";
+    motionBtn.style.opacity = 0.7;
+  }
+});
+
+// Physics params
+const clock = new THREE.Clock();
+const damping = 0.985;
+const gravityStrength = 0.55; // feel
+const bounce = 0.45;
+
+// Helper: compute gravity from letter orientation (desktop)
+const worldUp = new THREE.Vector3(0, 1, 0);
+function gravityFromRotation() {
+  // Use group rotation to define "down" direction: rotate worldDown into group space
+  const q = group.getWorldQuaternion(new THREE.Quaternion());
+  const down = new THREE.Vector3(0, -1, 0).applyQuaternion(q);
+  return down.normalize();
+}
+
+function updateSnow(dt) {
+  // Update bounds each frame (letter can rotate)
+  box.setFromObject(group);
+  const pad = 0.08;
+  const min = box.min.clone().addScalar(pad);
+  const max = box.max.clone().addScalar(-pad);
+
+  // Choose gravity source
+  const g = haveDeviceMotion ? deviceGravity : gravityFromRotation();
+
+  for (let i=0; i<SNOW_COUNT; i++) {
+    // integrate
+    velocity[i].addScaledVector(g, gravityStrength * dt);
+    velocity[i].multiplyScalar(damping);
+
+    positions[i].addScaledVector(velocity[i], dt);
+
+    // collide with bounding volume (approx)
+    if (positions[i].x < min.x) { positions[i].x = min.x; velocity[i].x *= -bounce; }
+    if (positions[i].x > max.x) { positions[i].x = max.x; velocity[i].x *= -bounce; }
+    if (positions[i].y < min.y) { positions[i].y = min.y; velocity[i].y *= -bounce; }
+    if (positions[i].y > max.y) { positions[i].y = max.y; velocity[i].y *= -bounce; }
+    if (positions[i].z < min.z) { positions[i].z = min.z; velocity[i].z *= -bounce; }
+    if (positions[i].z > max.z) { positions[i].z = max.z; velocity[i].z *= -bounce; }
+
+    // write instance matrix
+    tmpP.copy(positions[i]);
+    tmpM.compose(tmpP, tmpQ, tmpS);
+    snow.setMatrixAt(i, tmpM);
+  }
+  snow.instanceMatrix.needsUpdate = true;
+}
+
+// Resize
+addEventListener("resize", () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+}, { passive:true });
+
+// Animate
+function tick() {
+  const dt = Math.min(clock.getDelta(), 0.033);
+
+  controls.update();
+  updateSnow(dt);
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>
