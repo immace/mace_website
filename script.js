@@ -1,47 +1,5 @@
-// ===== i18n: словари, детект, переключатель =====
+// ===== i18n (EN-only): no RU for now =====
 const I18N = {
-  ru: {
-    htmlLang: 'ru',
-    title: 'Мацэ́ · Графический дизайнер',
-    cta: 'Создать дизайн →',
-    roles: [
-      'Графический дизайнер',
-      'Веб-дизайнер',
-      'Иллюстратор',
-      'Дизайнер шрифтов',
-      'Дизайнер айдентики',
-      'Дизайнер постеров'
-    ],
-    modal: {
-      startTitle: 'Начать проект',
-      startSub: 'Выберите услугу, укажите ник Telegram и получите бриф',
-      what: 'Что хотите создать?',
-      tg: 'Telegram аккаунт',
-      optLogo: 'Логотип / айдентика',
-      optFont: 'Шрифт (display / text)',
-      optPattern: 'Дизайн на лекало / принты',
-      optWeb: 'Дизайн сайта / UI',
-      optOther: 'Другое (опишите)',
-      otherPh: 'Опишите задачу (нейминг, презентация, мерч)',
-      tgPh: '@immalcev',
-      tgErr: 'Недействительный ник Telegram',
-      hint: 'После отправки начнётся загрузка персонального брифа',
-      submit: 'Получить бриф',
-      close: 'Закрыть'
-    },
-    contacts: {
-      ig: 'Instagram @immalcev',
-      tg: 'Telegram @immalcev',
-      mail: 'Email mace4681@gmail.com'
-    },
-    footerName: 'Мацэ',
-    post: {
-      descSoon: 'описание: скоро',
-      catMap: { 'Постер':'Постер', 'Айдентика':'Айдентика', 'Логотип':'Логотип', 'Обложка':'Обложка' }
-    },
-    switchLabel: 'EN' // показываем целевую локаль
-  },
-
   en: {
     htmlLang: 'en',
     title: 'Macé · Graphic Designer',
@@ -79,44 +37,23 @@ const I18N = {
     footerName: 'Macé',
     post: {
       descSoon: 'description: soon',
+      // IMPORTANT: your filenames/categories are RU — we map RU category to EN label
       catMap: { 'Постер':'Poster', 'Айдентика':'Identity', 'Логотип':'Logo', 'Обложка':'Cover' }
-    },
-    switchLabel: 'RU'
+    }
   }
 };
 
-function isLikelyRussia() {
-  // эвристика без внешних сервисов (если нужен 100% IP-гео — лучше сделать на сервере)
-  const langs = navigator.languages || [navigator.language || ''];
-  const hasRu = langs.some(l => /^ru\b/i.test(l || ''));
-  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '');
-  const isRuTZ = /Europe\/Kaliningrad|Europe\/Moscow|Europe\/Samara|Asia\/(Yekaterinburg|Omsk|Krasnoyarsk|Irkutsk|Yakutsk|Vladivostok|Sakhalin|Magadan|Kamchatka)/.test(tz);
-  const locale = (Intl.DateTimeFormat().resolvedOptions().locale || '');
-  const regionRU = /-RU\b/i.test(locale);
-  return hasRu && (isRuTZ || regionRU);
-}
+function applyLangEN(){
+  const t = I18N.en;
 
-function decideInitialLang(){
-  const saved = localStorage.getItem('lang');
-  if (saved === 'ru' || saved === 'en') return saved;
-  // По умолчанию — EN для всех, кроме России
-  return isLikelyRussia() ? 'ru' : 'en';
-}
-
-function applyLang(lang){
-  const t = I18N[lang] || I18N.en;
   document.documentElement.setAttribute('lang', t.htmlLang);
   document.title = t.title;
-
-  // header switch label (показываем, куда переключимся)
-  const btn = document.getElementById('lang-switch');
-  if (btn) btn.textContent = t.switchLabel;
 
   // CTA
   const cta = document.getElementById('spm-open');
   if (cta) cta.textContent = t.cta;
 
-  // Roles (перезапустим набор фраз)
+  // Roles
   window.__roles_i18n = t.roles;
 
   // Modal texts
@@ -125,13 +62,11 @@ function applyLang(lang){
 
   setTxt('#spm-title', t.modal.startTitle);
   setTxt('.spm-sub', t.modal.startSub);
-  // секции
-  // "Что хотите создать?"
+
   const labelEls = document.querySelectorAll('.spm-label');
   if (labelEls[0]) labelEls[0].textContent = t.modal.what;
   if (labelEls[1]) labelEls[1].textContent = t.modal.tg;
 
-  // опции
   const opts = document.querySelectorAll('.spm-option span');
   if (opts[0]) opts[0].textContent = t.modal.optLogo;
   if (opts[1]) opts[1].textContent = t.modal.optFont;
@@ -139,7 +74,6 @@ function applyLang(lang){
   if (opts[3]) opts[3].textContent = t.modal.optWeb;
   if (opts[4]) opts[4].textContent = t.modal.optOther;
 
-  // placeholders / buttons
   const other = q('#spm-other'); if (other) other.placeholder = t.modal.otherPh;
   const tg = q('#spm-tg'); if (tg) tg.placeholder = t.modal.tgPh;
   setTxt('#spm-tg-error', t.modal.tgErr);
@@ -154,40 +88,31 @@ function applyLang(lang){
   if (contacts[2]) contacts[2].setAttribute('aria-label', t.contacts.mail);
 
   // Footer
-  const foot = document.getElementById('footer-name'); if (foot) foot.textContent = t.footerName;
+  const foot = document.getElementById('footer-name');
+  if (foot) foot.textContent = t.footerName;
 
-  // Перерисовать подписи постов, если уже сгенерированы
+  // If posts already rendered — translate category labels
   document.querySelectorAll('.post .post-title').forEach(el=>{
     const ru = el.getAttribute('data-ru') || el.textContent.trim();
     const map = t.post.catMap;
-    const translated = map[ru] || ru;
-    el.textContent = translated;
+    el.textContent = map[ru] || ru;
   });
   document.querySelectorAll('.post-description').forEach(el=>{
-    const nameEl = el.querySelector('.post-name');
     const descEl = el.querySelector('.post-desc');
-    if (nameEl && descEl) { descEl.textContent = t.post.descSoon; }
+    if (descEl) descEl.textContent = t.post.descSoon;
   });
 }
 
-function setLang(lang){
-  localStorage.setItem('lang', lang);
-  applyLang(lang);
-}
+// Init EN once
+(function initEnglishOnly(){
+  // Force EN for now
+  localStorage.setItem('lang', 'en');
+  applyLangEN();
 
-// Инициализация переключателя
-(function initLangSwitch(){
+  // If you have a language switch button in HTML — hide it for now (optional)
   const btn = document.getElementById('lang-switch');
-  const initial = decideInitialLang();
-  setLang(initial);
-  if (btn) {
-    btn.addEventListener('click', ()=>{
-      const current = (localStorage.getItem('lang') || initial) === 'ru' ? 'ru' : 'en';
-      setLang(current === 'ru' ? 'en' : 'ru');
-    });
-  }
+  if (btn) btn.style.display = 'none';
 })();
-
 
 // ===== main interactions (name scramble, roles, sticky header, portfolio render) =====
 document.addEventListener('DOMContentLoaded', () => {
